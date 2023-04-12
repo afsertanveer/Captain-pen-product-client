@@ -1,0 +1,50 @@
+[
+    {
+        "username":"superadmin",
+        "password":"abcd",
+        "name":"Super Admin",
+        "role":"0",
+        "assigned":"0",
+        "create_at":"2023-03-26"
+    },
+    {
+        "username":"admin01",
+        "password":"1234",
+        "name":"Admin One",
+        "role":"1",
+        "assigned":"0",
+        "create_at":"2023-03-26"
+    },
+    {
+        "username":"admin02",
+        "password":"1234",
+        "name":"Admin Two",
+        "role":"1",
+        "assigned":"0",
+        "create_at":"2023-03-26"
+    },
+    {
+        "username":"admin03",
+        "password":"1234",
+        "name":"Admin Three",
+        "role":"1",
+        "assigned":"0",
+        "create_at":"2023-03-26"
+    },
+    {
+        "username":"admin04",
+        "password":"1234",
+        "name":"Admin Four",
+        "role":"1",
+        "assigned":"0",
+        "create_at":"2023-03-26"
+    },
+    {
+        "username":"admin05",
+        "password":"1234",
+        "name":"Admin Five",
+        "role":"1",
+        "assigned":"0",
+        "create_at":"2023-03-26"
+    }
+]

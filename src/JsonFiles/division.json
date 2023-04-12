@@ -1,0 +1,36 @@
+{
+    "divisions": [
+      {
+        "value": "1",
+        "label": "Barishal"
+      },
+      {
+        "value": "2",
+        "label": "Chattogram"
+      },
+      {
+        "value": "3",
+        "label": "Dhaka"
+      },
+      {
+        "value": "4",
+        "label": "Khulna"
+      },
+      {
+        "value": "5",
+        "label": "Rajshahi"
+      },
+      {
+        "value": "6",
+        "label": "Rangpur"
+      },
+      {
+        "value": "7",
+        "label": "Sylhet"
+      },
+      {
+        "value": "8",
+        "label": "Mymensingh"
+      }
+    ]
+  }
