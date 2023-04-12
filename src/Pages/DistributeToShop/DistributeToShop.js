@@ -24,6 +24,8 @@ const DistributeToShop = () => {
   const [updateError, setUpdateError] = useState("");
   const [paymenetError, setPaymentError] = useState("");
   const [transactionId, setTransactionId] = useState(0);
+  const [dueInfo,setDueInfo] = useState([]);
+  const [isDueAvailable,setIsDueAvailable] = useState(false);
 
   const addProduct = (e) => {
     e.preventDefault();
@@ -134,7 +136,22 @@ const DistributeToShop = () => {
     setProducts([]);
     setDisable("enabled");
   };
-
+  const selectShop = e =>{
+    const shop = e.target.value;
+    fetch(`http://localhost:5000/due?shop_id=${shop}`,{
+      method:"GET",
+      headers:{
+        "content-type":"application/json"
+      }
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.length>0){
+        setDueInfo(data);
+        setIsDueAvailable(true);
+      }
+    })
+  }
   const handleSubmit = (event) => {
     event.preventDefault();
     const currentDate = new Date();
@@ -148,6 +165,7 @@ const DistributeToShop = () => {
     const formData = new FormData();
     formData.append("image", image);
     let transaction = {};
+    let dueEntry = {};
     const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`;
     fetch(url, {
       method: "POST",
@@ -158,12 +176,21 @@ const DistributeToShop = () => {
           transaction = {
           transaction_id: transactionId,
           shop_id: recieverId,
+          seller_id:senderId,
           total_bill:totalBill,
           due:due,
           bill_img:imgData.data.url,
           issue_date:currentDate
         }
+        const updatedDue = ((parseFloat(dueInfo[0]? dueInfo[0].due : 0) + parseFloat(due)).toFixed(2)).toString();
+        dueEntry = {
+          shop_id:recieverId,
+          seller_id:senderId,
+          due:updatedDue,
+          issue_date:currentDate
+        }
         selected.forEach((item) => {
+          item.transaction_id = transactionId;
           item.sender_id = senderId;
           item.reciever_id = recieverId;
           item.recieved_date = currentDate;
@@ -193,7 +220,43 @@ const DistributeToShop = () => {
             body:JSON.stringify(transaction)
           })
           .then(res=>res.json())
-          .then(data=>{})
+          .then(data=>{
+            if (data.acknowledged) {
+              if(isDueAvailable){
+                const id = dueInfo[0]?._id;
+                fetch(`http://localhost:5000/due/${id}`,{
+                  method:"PUT",
+                  headers:{
+                    "content-type":"application/json"
+                  },
+                  body:JSON.stringify(dueEntry)
+                })
+                .then(res=>res.json())
+                .then(updateDueData=>{
+                  if(updateDueData.acknowledged){
+                    setUpdateError("");
+                    setPaymentError("");
+                  }
+                })
+              }else{
+                fetch('http://localhost:5000/due',{
+                  method:"POST",
+                  headers:{
+                    "content-type":"application/json"
+                  },
+                  body:JSON.stringify(dueEntry)
+                })
+                .then(res=>res.json())
+                .then(dueData=>{
+                  if(dueData.acknowledged){
+                    setUpdateError("");
+                    setPaymentError("");
+                  }
+                })
+              }
+              
+            }
+          })
           .catch(err=>setUpdateError(err))
         } else {
           toast.error(`${updateError}`);
@@ -254,7 +317,6 @@ const DistributeToShop = () => {
             }
             
           });
-          console.log(max);
           setTransactionId(max+1);
         }
       });
@@ -372,9 +434,10 @@ const DistributeToShop = () => {
           {productList.length > 0 && (
             <>
               <label className="label mt-4">
-                <span className="label-text font-bold">Assign to </span>
+                <span className="label-text font-bold">Sell to </span>
               </label>
               <select
+                onChange={selectShop}
                 name="selectAsm"
                 className=" input input-bordered w-1/2 mb-4"
                 required

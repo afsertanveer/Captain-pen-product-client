@@ -30,6 +30,7 @@ import ShowShopDistribution from "../Pages/ShowShopDistribution/ShowShopDistribu
 import ChangePassword from "../Shared/ChangePassword/ChangePassword";
 import AddCV from './../Pages/AddCV/AddCV';
 import ShowCV from "../Pages/AddCV/ShowCV";
+import ShopTransaction from './../Pages/ShopTransaction/ShopTransaction';
 
 const router = createBrowserRouter([
   {
@@ -148,6 +149,10 @@ const router = createBrowserRouter([
       {
         path: "/distribute-product-to-shop",
         element: <DistributeToShop></DistributeToShop>,
+      },
+      {
+        path: "/shop-transaction",
+        element: <ShopTransaction></ShopTransaction>,
       },
       {
         path: "/available-product",

@@ -119,6 +119,9 @@ const Sidebar = () => {
           <Link to="/distribution-to-shop">Show Shop Distribution</Link>
         </li>
         <li>
+          <Link to="/shop-transaction">My Shop Transaction</Link>
+        </li>
+        <li>
           <Link to="/add-cv">Add CV</Link>
         </li>
         <li>
