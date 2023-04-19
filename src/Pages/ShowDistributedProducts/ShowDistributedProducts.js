@@ -4,6 +4,7 @@ import Loader from "../../Loader/Loader";
 
 const ShowDistributedProducts = () => {
   const [products, setProducts] = useState([]);
+  const [users,setUsers] = useState([]);
   const role = localStorage.getItem('role');
   const id = localStorage.getItem('user_id');
   const navigate = useNavigate();
@@ -50,6 +51,16 @@ const ShowDistributedProducts = () => {
         }
       });
     }
+    fetch("http://localhost:5000/users", {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    }).then(res=>res.json())
+    .then(data=>{
+      setUsers(data)
+      setIsLoading(false);
+    })
   }, [id,role,navigate]);
   return (
     <div>
@@ -67,6 +78,7 @@ const ShowDistributedProducts = () => {
               <th>Product Name</th>
               <th>Distributed Amount</th>
               {role==='0' && <th>Reciever</th>}
+              {role==='2' && <th>Reciever</th>}
               <th>Date</th>
             </tr>
           </thead>
@@ -77,6 +89,7 @@ const ShowDistributedProducts = () => {
                   <td>{it.product_name}</td>
                   <td>{it.distributed_amount}</td>
                   {role==='0' && <td>{it.userDetails[0].name}</td>}
+                  {role==='2' && <td>{users?.filter(us=>us._id===it.reciever_id)[0]?.name}</td>}
                   <td>{it.recieved_date.split('T')[0]}</td>
                 </tr>
               ))}

@@ -31,6 +31,7 @@ import ChangePassword from "../Shared/ChangePassword/ChangePassword";
 import AddCV from './../Pages/AddCV/AddCV';
 import ShowCV from "../Pages/AddCV/ShowCV";
 import ShopTransaction from './../Pages/ShopTransaction/ShopTransaction';
+import ReturnSr from "../Pages/ReturnSr/ReturnSr";
 
 const router = createBrowserRouter([
   {
@@ -141,6 +142,10 @@ const router = createBrowserRouter([
       {
         path: "/distribute-product-to-sr",
         element: <DistributeToSr></DistributeToSr>,
+      },
+      {
+        path: "/return-product-from-sr",
+        element: <ReturnSr></ReturnSr>
       },
       {
         path: "/show-distributed-product",

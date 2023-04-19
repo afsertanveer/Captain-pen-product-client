@@ -102,7 +102,7 @@ const AddSR = () => {
         form.reset();
     }
     return (
-        <div className="card   p-10 mt-10 lg:ml-40 lg:p-20 shadow-2xl bg-base-100">
+        <div className="card  px-6 py-10 mt-10 lg:ml-40 lg:px-10 lg:py-15 mx-3 shadow-2xl bg-base-100">
         <form onSubmit={addAdmin}>
           <p className="text-2xl text-center  font-bold">Add Saler Representative</p>
           <div className="form-control">

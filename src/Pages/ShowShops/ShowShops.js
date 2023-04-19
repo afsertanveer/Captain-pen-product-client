@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../Loader/Loader";
 
 const ShowShops = () => {
   const username = localStorage.getItem("username");
@@ -17,20 +18,7 @@ const ShowShops = () => {
       localStorage.clear();
       navigate("/");
     }
-
-    fetch("http://localhost:5000/shop", {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) =>{ 
-        setIsLoading(false)
-        setShops(data)
-    });
-
-    fetch("http://localhost:5000/shop", {
+    fetch(`http://localhost:5000/shop?managed_by=${userId}`, {
       method: "GET",
       headers: {
         "content-type": "application/json",
@@ -38,19 +26,8 @@ const ShowShops = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setIsLoading(false)
-        let myShops = [];
-        if(role==='0'){
-          myShops = data;
-        }else{
-          data.forEach(d => {
-            if(d.managed_by===userId){
-                myShops.push(d);
-            }
-        });
-        }
-        setShops(myShops)
-    
+        setShops(data)
+        setIsLoading(false)    
     });
 
     fetch("http://localhost:5000/district", {
@@ -79,8 +56,8 @@ const ShowShops = () => {
     })
       .then((res) => res.json())
       .then((data) =>{
+        setThana(data)        
         setIsLoading(false)
-        setThana(data)
       });
   }, [username, role, navigate,userId]);
   return (
@@ -88,11 +65,7 @@ const ShowShops = () => {
       <div className="text-center">
         <p className="text-4xl font-bold mb-4">Shops</p>
       </div>
-      {isLoading && <>
-        <div className=" flex justify-center items-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
-      </div>
-      </>}
+      {isLoading && <Loader></Loader>}
       <div className="overflow-x-auto">
         <table className="table w-full">
           <thead>

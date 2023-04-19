@@ -188,7 +188,7 @@ const AddShop = () => {
     userId,
   ]);
   return (
-    <div className="card   p-10 mt-10 lg:ml-40 lg:p-20 shadow-2xl bg-base-100">
+    <div className="card   p-10 mt-10 lg:ml-40 lg:p-20 shadow-2xl bg-base-100 w-full lg:w-3/4 ">
       <form onSubmit={handleAddShop}>
         <p className="text-2xl text-center  font-bold">Add Shop</p>
         <div className="form-control">

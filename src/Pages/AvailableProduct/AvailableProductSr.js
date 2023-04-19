@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../Loader/Loader";
 
 const AvailableProductSr = () => {
   const [products, setProducts] = useState([]);
@@ -7,8 +8,10 @@ const AvailableProductSr = () => {
   const role = localStorage.getItem("role");
   const userId = localStorage.getItem("user_id");
   const navigate = useNavigate();
+  const [isLoading,setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     if (role === "0" || role === "1") {
       localStorage.clear();
       navigate("/");
@@ -23,6 +26,7 @@ const AvailableProductSr = () => {
       .then((data) => {
         data = data.filter((d) => d._id.reciever_id === userId);
         setProducts(data);
+        setIsLoading(false);
       });
     fetch("http://localhost:5000/group-by-products-sender-shop", {
       method: "GET",
@@ -35,6 +39,7 @@ const AvailableProductSr = () => {
         if (data.length > 0) {
           const sStock = data?.filter((d) => d._id.sender_id === userId);
           setSentStock(sStock);
+          setIsLoading(false);
         }
       });
   }, [userId, navigate, role]);
@@ -43,6 +48,7 @@ const AvailableProductSr = () => {
       <div className="text-center">
         <p className="text-4xl font-bold mb-4">My Available Products</p>
       </div>
+      {isLoading && <Loader></Loader>}
       {products.length > 0 ? (
         <>
           <div className="overflow-x-auto">
