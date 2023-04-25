@@ -66,7 +66,7 @@ const ShowRegion = () => {
                     {it?.assigned === "" ? (
                       <>
                         <Link to={`/assign-admin/${it._id}`}>
-                          <button className="btn btn-primary w-1/2  mr-2">
+                          <button className="btn btn-primary  mr-2">
                             Assign Admin
                           </button>
                         </Link>

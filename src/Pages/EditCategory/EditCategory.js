@@ -14,10 +14,10 @@ const EditCategory = () => {
       }
   },[username,role,navigate])
   const layeritem = useLoaderData();
-  const layeritemId = layeritem[0]._id;
-  const id = layeritem[0].item_id;
+  const layeritemId = layeritem[0]?._id;
+  const id = layeritem[0]?.item_id;
   let layers = [[]];
-  layers = layeritem[0].layers;
+  layers = layeritem[0]?.layers;
   const [item,setItem] = useState([]);
   const [newLayer,setNewLayer] = useState(layers);
   const layerNew = [...newLayer];
@@ -75,7 +75,7 @@ const EditCategory = () => {
         Edit Existing Category for {item.length>0 && item[0].name}{layers.length}
       </h2>
       {
-        newLayer.map((layer,idx)=><div key={idx} >
+        newLayer?.map((layer,idx)=><div key={idx} >
             <input 
             type="text"
             id={`layer${idx}`}
@@ -85,7 +85,7 @@ const EditCategory = () => {
             <button onClick={()=>updateCategory(idx)} className="btn btn-primary w-1/2 lg:w-1/4">Update</button>
             <div key={idx} className="p-3 flex  justify-start items-center flex-wrap gap-3">
             {
-                layer.map((lyr,indx)=>{
+                layer?.map((lyr,indx)=>{
                     return <div key={indx} className="border border-black bg-orange-200 p-3 mr-3">
                 <span  className="mr-2 text-xl  text-slate-700">{lyr}</span>
                 <button onClick={()=>handleDeleteLayer(idx,indx)}   className="rounded-xl px-4 py-1 bg-slate-500 ">X</button>

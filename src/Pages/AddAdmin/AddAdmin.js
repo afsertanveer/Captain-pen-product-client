@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -6,6 +6,7 @@ const AddAdmin = () => {
   const username = localStorage.getItem("username");
   const role = localStorage.getItem("role");
   const navigate = useNavigate();
+  const [usernameError, setUsernameError] = useState(" ");
   useEffect(() => {
     if (username === null || role !== "0") {
       localStorage.clear();
@@ -14,7 +15,26 @@ const AddAdmin = () => {
   });
   const setPassword = (event) => {
     const getUsername = event.target.value;
-    document.getElementById("password").value = getUsername;
+    fetch(`http://localhost:5000/users?username=${getUsername}`, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.length > 0) {
+          setUsernameError(
+            "Change the username! The current one is already in the list"
+          );
+        }
+      });
+    if (getUsername.length < 11 || getUsername.length > 11) {
+      setUsernameError("Phone number length needs to be 11 digit");
+    } else {
+      document.getElementById("password").value = getUsername;
+      setUsernameError("");
+    }
   };
   const addAdmin = (event) => {
     event.preventDefault();
@@ -78,6 +98,15 @@ const AddAdmin = () => {
             className=" input input-bordered w-1/2"
             required
           />
+          {usernameError === "" ? (
+            <span className="text-sm font-bold text-success">
+              Username Found
+            </span>
+          ) : (
+            <span className="text-sm font-bold text-error">
+              {usernameError}
+            </span>
+          )}
         </div>
         <div className="form-control">
           <label className="label">

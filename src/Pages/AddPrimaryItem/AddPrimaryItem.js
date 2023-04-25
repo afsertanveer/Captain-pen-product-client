@@ -30,6 +30,7 @@ const AddPrimaryItem = () => {
         .then(data=>{
             if(data.acknowledged){
                 toast.success("New Primary Item is added");
+                navigate('/show-items')
             }
         })
     }

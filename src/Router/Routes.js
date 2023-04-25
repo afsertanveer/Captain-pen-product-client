@@ -32,6 +32,7 @@ import AddCV from './../Pages/AddCV/AddCV';
 import ShowCV from "../Pages/AddCV/ShowCV";
 import ShopTransaction from './../Pages/ShopTransaction/ShopTransaction';
 import ReturnSr from "../Pages/ReturnSr/ReturnSr";
+import AddCategoryTry from "../Pages/AddCategory/AddCategoryTry";
 
 const router = createBrowserRouter([
   {
@@ -106,9 +107,16 @@ const router = createBrowserRouter([
         path: "/show-items",
         element: <ShowItems></ShowItems>,
       },
+      // {
+      //   path: "/add-category/:id",
+      //   element: <AddCategory></AddCategory>,
+      //   loader: ({ params }) => {
+      //     return fetch(`http://localhost:5000/items/${params.id}`);
+      //   },
+      // },
       {
         path: "/add-category/:id",
-        element: <AddCategory></AddCategory>,
+        element: <AddCategoryTry></AddCategoryTry>,
         loader: ({ params }) => {
           return fetch(`http://localhost:5000/items/${params.id}`);
         },
@@ -124,7 +132,7 @@ const router = createBrowserRouter([
         path: "/edit-category/:id",
         element: <EditCategory></EditCategory>,
         loader: ({ params }) => {
-          return fetch(`http://localhost:5000/item-layers/${params.id}`);
+          return fetch(`http://localhost:5000/item-layers?item_id=${params.id}`);
         },
       },
       {
