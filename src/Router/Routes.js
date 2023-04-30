@@ -1,12 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import Main from "../Layout/Main";
 import AddAdmin from "../Pages/AddAdmin/AddAdmin";
-import AddCategory from "../Pages/AddCategory/AddCategory";
 import AddPrimaryItem from "../Pages/AddPrimaryItem/AddPrimaryItem";
 import AddRegion from "../Pages/AddRegion/AddRegion";
 import Login from "../Pages/Login/Login";
 import ShowItems from "../Pages/ShowItems.js/ShowItems";
-import EditCategory from "./../Pages/EditCategory/EditCategory";
 import AddProduct from "./../Pages/AddProduct/AddProduct";
 import ShowProducts from "../Pages/ShowProducts/ShowProducts";
 import DistributeProducts from "./../Pages/DistributeProducts/DistributeProducts";
@@ -32,7 +30,9 @@ import AddCV from './../Pages/AddCV/AddCV';
 import ShowCV from "../Pages/AddCV/ShowCV";
 import ShopTransaction from './../Pages/ShopTransaction/ShopTransaction';
 import ReturnSr from "../Pages/ReturnSr/ReturnSr";
-import AddCategoryTry from "../Pages/AddCategory/AddCategoryTry";
+import ViewCategories from './../Pages/ViewCategories/ViewCategories';
+import AddCategory from './../Pages/AddCategory/AddCategory';
+import AddSecondaryCategory from "../Pages/AddCategory/AddSecondaryCategory";
 
 const router = createBrowserRouter([
   {
@@ -107,18 +107,18 @@ const router = createBrowserRouter([
         path: "/show-items",
         element: <ShowItems></ShowItems>,
       },
-      // {
-      //   path: "/add-category/:id",
-      //   element: <AddCategory></AddCategory>,
-      //   loader: ({ params }) => {
-      //     return fetch(`http://localhost:5000/items/${params.id}`);
-      //   },
-      // },
       {
         path: "/add-category/:id",
-        element: <AddCategoryTry></AddCategoryTry>,
+        element: <AddCategory></AddCategory>,
         loader: ({ params }) => {
           return fetch(`http://localhost:5000/items/${params.id}`);
+        },
+      },
+      {
+        path: "/add-category-secondary/:id",
+        element: <AddSecondaryCategory></AddSecondaryCategory>,
+        loader: ({ params }) => {
+          return fetch(`http://localhost:5000/item-layers?item_id=${params.id}`);
         },
       },
       {
@@ -129,8 +129,8 @@ const router = createBrowserRouter([
         },
       },
       {
-        path: "/edit-category/:id",
-        element: <EditCategory></EditCategory>,
+        path: "/view-category/:id",
+        element: <ViewCategories></ViewCategories>,
         loader: ({ params }) => {
           return fetch(`http://localhost:5000/item-layers?item_id=${params.id}`);
         },

@@ -2,20 +2,19 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useLoaderData, useNavigate } from "react-router-dom";
 
-const AddCategory = () => {
+const AddSecondaryCategory = () => {
   const username = localStorage.getItem("username");
   const navigate = useNavigate();
+  const layerIdx = parseInt(localStorage.getItem('itemIndex'));
   const item = useLoaderData();
   const itemId = item[0]._id;
   const [itemLayerData, setItemLayerData] = useState([]);
-  // let newCategories = [...Array(3)].map(e=>e=[0])
-  let newCategories =[[]];
   useEffect(() => {
     if (username === null) {
       localStorage.clear();
       navigate("/");
     }
-    fetch(`http://localhost:5000/item-layers?item_id=${itemId}`, {
+    fetch(`http://localhost:5000/item-layers/${itemId}`, {
       method: "GET",
       headers: {
         "content-type": "application/json",
@@ -24,25 +23,23 @@ const AddCategory = () => {
       .then((res) => res.json())
       .then((data) => {        
         if (data.length > 0) {
-          console.log(data);
           setItemLayerData(data);
         }
       });
-    
-  }, [navigate, username, itemId]);
+  }, [navigate, username, item,itemId]);
+  let newCategories;
   const submitData = () => {
     const categoryName = document.getElementById("category").value;
     document.getElementById("category").value = "";
-    let itemLayers = {
-
-    } 
-    if(itemLayerData.length>0){
+      newCategories = itemLayerData[0].layers;
+      if(newCategories[1][layerIdx][0]===0){
+              
+        newCategories[1][layerIdx]=[categoryName]
       
-      console.log("DB- Layer",itemLayerData[0].layers);
-      newCategories=itemLayerData[0].layers;
-      newCategories[0].push(categoryName);
-      newCategories[1][itemLayerData[0].layers[0].length-1]=[0];
-      console.log("next",newCategories);     
+    }
+    else{
+        newCategories[1][layerIdx].push(categoryName)
+    }      
       fetch(`http://localhost:5000/item-layers/${itemLayerData[0]._id}`, {
         method: "PUT",
         headers: {
@@ -57,35 +54,12 @@ const AddCategory = () => {
             navigate('/show-items')
           }
         });
-    }else{
-      newCategories[0]=[categoryName]
-      newCategories[1]=[[0]];
-      console.log("first",newCategories);
-      itemLayers = {
-        item_id:itemId,
-        layers: newCategories,
-      };
-      
-      fetch("http://localhost:5000/item-layers", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(itemLayers),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.acknowledged) {
-          toast.success("Successfully Added all the layers");
-          navigate('/show-items')
-        }
-      });
-    }
+    
   };
   return (
     <div className="px-10">
       <h2 className="my-10 px-20 text-4xl text-center font-semibold">
-        Add Category for {item[0].name}
+        Add Category for {item[0].layers[0][layerIdx]}
       </h2>
       <div className="form-control">
         <input
@@ -109,5 +83,5 @@ const AddCategory = () => {
   );
 };
 
-export default AddCategory;
+export default AddSecondaryCategory;
 

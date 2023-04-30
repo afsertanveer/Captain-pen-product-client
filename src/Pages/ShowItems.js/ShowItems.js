@@ -40,9 +40,8 @@ const ShowItems = () => {
                 <tr key={it._id}>
                   <td>{it.name}</td>
                   <td>
-                  <Link to={`/edit-item/${it._id}`}><button className="btn btn-primary w-1/2 lg:w-1/4 mr-2">Edit</button> </Link>
                   <Link to={`/add-category/${it._id}`}>  <button className="btn btn-primary w-1/2 lg:w-1/4 mr-2">Add Category</button></Link>
-                  <Link to={`/edit-category/${it._id}`}>  <button className="btn btn-primary w-1/2 lg:w-1/4 mr-2">Edit Category</button></Link>
+                  <Link to={`/view-category/${it._id}`}>  <button className="btn btn-primary w-1/2 lg:w-1/4 mr-2">View Category</button></Link>
                   </td>
                 </tr>
               ))}
