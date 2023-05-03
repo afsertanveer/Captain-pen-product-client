@@ -24,7 +24,9 @@ const AddSR = () => {
         },
       })
         .then((res) => res.json())
-        .then((data) => setRegions(data));
+        .then((data) =>{
+          setRegions(data);
+        });
     } else if (role === "1") {
       fetch(`http://localhost:5000/region?assigned=${userId}`, {
         method: "GET",
@@ -34,6 +36,7 @@ const AddSR = () => {
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           setRegions(data);
         });
     } else {
@@ -54,7 +57,10 @@ const AddSR = () => {
   const getRegion = (event) => {
     const regionId = event.target.value;
     setSingleRegion(regionId);
-    fetch(`http://localhost:5000/users?role=2&region_id=${regionId}`, {
+      if(username==="superadmin"){
+        setManagedBy(regions.filter(rg=>rg.assigned===userId)[0].assigned)
+      }else{
+        fetch(`http://localhost:5000/users?region_id=${regionId}`, {
       method: "GET",
       headers: {
         "content-type": "application/json",
@@ -64,6 +70,8 @@ const AddSR = () => {
       .then((data) => {
         setManagedBy(data[0]?._id);
       });
+      }
+    
   };
   const setPassword = (event) => {
     const getUsername = event.target.value;
@@ -95,7 +103,7 @@ const AddSR = () => {
     const assigned = "0";
     let currentData = new Date();
     const created_at = currentData.toISOString().split("T")[0];
-    const role = "3";
+    const userRole = "3";
 
     if (managedBy === undefined || usernameError!=='') {
       toast.error("Admin/ASM is not set to region");
@@ -104,7 +112,7 @@ const AddSR = () => {
         username,
         password,
         name,
-        role,
+        role:userRole,
         assigned,
         region_id: singleRegion,
         managed_by: managedBy,        
@@ -120,6 +128,7 @@ const AddSR = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.acknowledged) {
+            navigate('/');
             toast.success("A sales represantative is successfully addded");
           }
         })
@@ -128,7 +137,7 @@ const AddSR = () => {
     }
   };
   return (
-    <div className="card  px-6 py-10 mt-10 lg:ml-40 lg:px-10 lg:py-15 mx-3 shadow-2xl bg-base-100">
+    <div className="card  px-6 py-10 mt-10 lg:mx-40 lg:px-10 lg:py-15 mx-3 shadow-2xl bg-base-100">
       <form onSubmit={AddSR}>
         <p className="text-2xl text-center  font-bold">
           Add Saler Representative
@@ -184,7 +193,7 @@ const AddSR = () => {
               className=" input input-bordered w-1/2 mb-4"
               required
             >
-              <option></option>
+              <option></option>              
               {regions.length > 0 &&
                 regions.map((region) => (
                   <option key={region._id} value={region._id}>

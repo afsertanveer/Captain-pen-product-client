@@ -1,15 +1,13 @@
 import React, { useEffect } from "react";
-import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import {  useLoaderData, useNavigate } from "react-router-dom";
 
-const ViewCategories = () => {
+const ViewSecondaryCategory = () => {
   const itemLayers = useLoaderData();
   const username = localStorage.getItem("username");
+  const layerIdx = parseInt(localStorage.getItem('itemIndex'));
   const role = localStorage.getItem("role");
   const navigate = useNavigate();
-  const setIndex = (idx)=>{
-    
-    localStorage.setItem('itemIndex',idx);
-  }
+  
   useEffect(() => {
     if (username === null || (role !== "0" && role !== "1")) {
       localStorage.clear();
@@ -32,20 +30,11 @@ const ViewCategories = () => {
           </thead>
           <tbody>
             {itemLayers[0]?.layers[0]?.length > 0 &&
-              itemLayers[0].layers[0].map((it,idx) => (
+              itemLayers[0].layers[1][layerIdx].map((it,idx) => (
                 <tr key={idx}>
                   <td>{it}</td>
                   <td>
-                    <Link onClick={()=>setIndex(idx)} to={`/add-category-secondary/${itemLayers[0].item_id}`}>
-                      <button className="btn btn-primary w-1/2 lg:w-1/4 mr-2">
-                        Add Category
-                      </button>
-                    </Link>
-                    <Link onClick={()=>setIndex(idx)} to={`/view-secondary-category/${itemLayers[0].item_id}`}>
-                      <button className="btn btn-primary w-1/2 lg:w-1/4 mr-2">
-                        View Category
-                      </button>
-                    </Link>
+                    <button className="btn btn-outline w-20">EDIT</button>
                   </td>
                 </tr>
               ))}
@@ -56,4 +45,4 @@ const ViewCategories = () => {
   );
 };
 
-export default ViewCategories;
+export default ViewSecondaryCategory;

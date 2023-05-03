@@ -71,7 +71,7 @@ const AddAdmin = () => {
     form.reset();
   };
   return (
-    <div className="card  px-4 mt-10 lg:ml-40 lg:p-20 shadow-2xl bg-base-100">
+    <div className="card  px-4 mt-10 lg:mx-40 lg:p-20 shadow-2xl bg-base-100">
       <form onSubmit={addAdmin}>
         <p className="text-2xl text-center  font-bold">Add Admin</p>
         <div className="form-control">

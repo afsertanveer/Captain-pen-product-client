@@ -24,7 +24,6 @@ const AddCategory = () => {
       .then((res) => res.json())
       .then((data) => {        
         if (data.length > 0) {
-          console.log(data);
           setItemLayerData(data);
         }
       });
@@ -36,13 +35,10 @@ const AddCategory = () => {
     let itemLayers = {
 
     } 
-    if(itemLayerData.length>0){
-      
-      console.log("DB- Layer",itemLayerData[0].layers);
+    if(itemLayerData.length>0){      
       newCategories=itemLayerData[0].layers;
       newCategories[0].push(categoryName);
       newCategories[1][itemLayerData[0].layers[0].length-1]=[0];
-      console.log("next",newCategories);     
       fetch(`http://localhost:5000/item-layers/${itemLayerData[0]._id}`, {
         method: "PUT",
         headers: {
@@ -60,7 +56,6 @@ const AddCategory = () => {
     }else{
       newCategories[0]=[categoryName]
       newCategories[1]=[[0]];
-      console.log("first",newCategories);
       itemLayers = {
         item_id:itemId,
         layers: newCategories,

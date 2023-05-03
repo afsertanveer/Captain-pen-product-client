@@ -46,7 +46,7 @@ const ShowProducts = () => {
                 <tr key={it._id}>
                   <td>{it.product_name}</td>
                   <td>{it.product_code}</td>
-                  <td>{it.itemDetails[0].name}</td>
+                  <td>{it.itemDetails.length>0? it.itemDetails[0].name : ""}</td>
                   <td>{it.unit_price}</td>
                   <td>{it.total_pieces}</td>
                 </tr>

@@ -33,6 +33,10 @@ import ReturnSr from "../Pages/ReturnSr/ReturnSr";
 import ViewCategories from './../Pages/ViewCategories/ViewCategories';
 import AddCategory from './../Pages/AddCategory/AddCategory';
 import AddSecondaryCategory from "../Pages/AddCategory/AddSecondaryCategory";
+import ViewSecondaryCategory from './../Pages/ViewCategories/ViewSecondaryCategory';
+import MyASM from "../Pages/MyASM/MyASM";
+import SuperSR from "../Pages/MySR/SuperSR";
+import DistributeToSuperSr from './../Pages/DistributeToSr/DistributeToSuperSr';
 
 const router = createBrowserRouter([
   {
@@ -96,6 +100,14 @@ const router = createBrowserRouter([
         element: <MySR></MySR>
       },
       {
+        path: "/super-sr",
+        element: <SuperSR></SuperSR>
+      },
+      {
+        path: "/my-asm",
+        element: <MyASM></MyASM>
+      },
+      {
         path: "/add-primary-item",
         element: <AddPrimaryItem></AddPrimaryItem>,
       },
@@ -136,6 +148,13 @@ const router = createBrowserRouter([
         },
       },
       {
+        path: "/view-secondary-category/:id",
+        element: <ViewSecondaryCategory></ViewSecondaryCategory>,
+        loader: ({ params }) => {
+          return fetch(`http://localhost:5000/item-layers?item_id=${params.id}`);
+        },
+      },
+      {
         path: "/show-product",
         element: <ShowProducts></ShowProducts>,
       },
@@ -150,6 +169,10 @@ const router = createBrowserRouter([
       {
         path: "/distribute-product-to-sr",
         element: <DistributeToSr></DistributeToSr>,
+      },
+      {
+        path: "/distribute-product-super-sr",
+        element: <DistributeToSuperSr></DistributeToSuperSr>,
       },
       {
         path: "/return-product-from-sr",

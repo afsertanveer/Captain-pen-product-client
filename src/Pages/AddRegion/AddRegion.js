@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 const AddRegion = () => {
   const username = localStorage.getItem("username");
   const role = localStorage.getItem("role");
+  const userId = localStorage.getItem("user_id");
   const navigate = useNavigate();
   const [division, setDivision] = useState([]);
   const [district, setDistrict] = useState([]);
@@ -103,10 +104,6 @@ const AddRegion = () => {
     })
       .then((res) => res.json())
       .then((data) => setDhakaThana(data));
-      
-
-   
-
   }, [selectedDivision, navigate, username, role,selectedDistricts]);
 
   const getDivision = (event) => {
@@ -119,7 +116,7 @@ const AddRegion = () => {
   };
 
   return (
-    <div className="card   p-10 mt-10 lg:ml-40 lg:p-20 shadow-2xl bg-base-100">
+    <div className="card   p-10 mt-10 lg:mx-40 lg:p-20 shadow-2xl bg-base-100">
       <form onSubmit={handleAddRegion}>
         <p className="text-2xl text-center  font-bold">Add Region</p>
         <div className="form-control">
@@ -197,6 +194,7 @@ const AddRegion = () => {
                   {admin.name}
                 </option>
               ))}
+              <option value={userId}>SuperAdmin</option>
           </select>
         </div>
         <div className="form-control mt-6">

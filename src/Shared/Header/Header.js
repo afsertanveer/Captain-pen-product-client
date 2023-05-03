@@ -12,7 +12,7 @@ const Header = () => {
       >
         Menu
       </label>
-      <Link to={`${username===null? '/':'/home'}`} className="btn btn-ghost normal-case text-xl" ><img src={imgLogo} alt="logo" className="w-[80px] h-[40px] lg:w-[200px] lg:h-[100px]" /></Link>
+      <Link to={`${username===null? '/':'/home'}`} className=" normal-case text-xl" ><img src={imgLogo} alt="logo" className="w-[80px] h-[40px] lg:w-[200px] lg:h-[100px]" /></Link>
     </div>
   );
 };

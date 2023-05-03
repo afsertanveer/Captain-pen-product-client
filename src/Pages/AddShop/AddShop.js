@@ -49,9 +49,11 @@ const AddShop = () => {
     const shopName = form.shop_name.value;
     const contactNo = form.contact_no.value;
     const ownerName = form.owner_name.value;
+    const address = form.address.value;
     const shop = {
       shop_name: shopName,
       contact_no: contactNo,
+      address,
       owner_name: ownerName,
       region_id: selectedRegion[0]._id,
       division: selectedRegion[0].division,
@@ -188,7 +190,7 @@ const AddShop = () => {
     userId,
   ]);
   return (
-    <div className="card   p-10 mt-10 lg:ml-40 lg:p-20 shadow-2xl bg-base-100 w-full lg:w-3/4 ">
+    <div className="card   p-10 mt-10 lg:mx-40 lg:p-20 shadow-2xl bg-base-100 w-full lg:w-3/4 ">
       <form onSubmit={handleAddShop}>
         <p className="text-2xl text-center  font-bold">Add Shop</p>
         <div className="form-control">
@@ -210,6 +212,18 @@ const AddShop = () => {
           <input
             type="text"
             name="contact_no"
+            placeholder="Phone"
+            className=" input input-bordered w-1/2"
+            required
+          />
+        </div>
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text font-bold">Address</span>
+          </label>
+          <input
+            type="text"
+            name="address"
             placeholder="Phone"
             className=" input input-bordered w-1/2"
             required

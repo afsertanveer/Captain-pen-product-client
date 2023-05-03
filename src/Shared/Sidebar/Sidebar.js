@@ -31,6 +31,9 @@ const Sidebar = () => {
           <Link to="/view-users">View Users</Link>
         </li>
         <li>
+          <Link to="/super-sr">My SR</Link>
+        </li>
+        <li>
           <Link to="/add-primary-item">Add Primary Item</Link>
         </li>
         <li>
@@ -43,7 +46,7 @@ const Sidebar = () => {
           <Link to="/show-product">Show Products</Link>
         </li>
         <li>
-          <Link to="/distribute-product">Distribute Products to Admin</Link>
+          <Link to="/distribute-product-super-sr">Distribute Products to SR</Link>
         </li>
         <li>
           <Link to="/show-distributed-product">Show Distribute Products</Link>
@@ -59,6 +62,9 @@ const Sidebar = () => {
         </li>
         <li>
           <Link to="/add-sr">Add SR</Link>
+        </li>
+        <li>
+          <Link to="/my-asm">My ASM</Link>
         </li>
         <li>
           <Link to="/show-product">Show Products</Link>

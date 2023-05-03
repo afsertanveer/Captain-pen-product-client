@@ -16,16 +16,18 @@ const AddProduct = () => {
   const [item, setItem] = useState([]);
   const [selectedItem,setSelectedItem] = useState(null);
   const [itemLayers,setItemLayers] = useState([]);
-  const [selectedLayer,setSelectedLayer] = useState([]);
+  const [category,setCategory] = useState('');
+  const [secondaryCategory,setSecondaryCategory] = useState('');
+  const [index,setIndex] = useState(-1);
   const handleItemChange = event =>{ 
     const sItem = event.target.value;
     setSelectedItem(sItem);
-    setSelectedLayer([]);
   }
   const handleItemLayer = event =>{
-    const seletcedItemLayer = event.target.value;
-    const selectedLayerArray = [...selectedLayer,seletcedItemLayer];
-    setSelectedLayer(selectedLayerArray);
+    const seletcedItemLayer = parseInt(event.target.value);
+    console.log(seletcedItemLayer);
+    setCategory(itemLayers[0].layers[0].filter((layer,idx)=>idx===seletcedItemLayer)[0]);
+    setIndex(seletcedItemLayer);
 
     
   }
@@ -40,11 +42,11 @@ const AddProduct = () => {
       product_name:productName,
       product_code:productCode,
       item_id:selectedItem,
-      layers:selectedLayer,
+      category,
+      secondary_category:secondaryCategory,
       unit_price:unitPrice,
       total_pieces:totalPieces
     };
-    console.log(product);
     fetch('http://localhost:5000/products',{
       method:"POST",
       headers:{
@@ -55,7 +57,20 @@ const AddProduct = () => {
     .then(res=>res.json())
     .then(data=>{
       if(data.acknowledged){
-                toast.success("New Product is added");
+        fetch('http://localhost:5000/core-products',{
+          method:"POST",
+          headers:{
+            "content-type":"application/json"
+          },
+          body:JSON.stringify(product)
+        })
+        .then(res=>res.json())
+        .then(corePro=>{
+          if(corePro.acknowledged){
+            toast.success("New Product is added");
+            navigate('/show-product')
+          }
+        })
       }
     })
     .catch(err=>toast.error(`${err}`))
@@ -102,18 +117,23 @@ const AddProduct = () => {
             </select>
         </div>
         <div className="my-4 flex">
+        <select onChange={handleItemLayer}  className=" input input-bordered w-1/2 mr-5">
+        <option value={null} defaultChecked>----Select Category ------</option>
         {
-          itemLayers.length>0 && itemLayers[0].layers.length>0 && itemLayers[0].layers.map((itemLayer,index)=>{
-            return <select onChange={handleItemLayer} key={index} className=" input input-bordered w-1/2 mr-5">
-              <option value={null} defaultChecked>----Select Item ------</option>
-              {
-                
-                itemLayer.length>0 && itemLayer.map((layer,idx)=><option key={idx} value={layer}>{layer}</option>
-                 )
-              }
-            </select>
-            
+          itemLayers.length>0 && itemLayers[0].layers.length>0 && itemLayers[0].layers[0].map((layer,idx)=>{
+            return <option key={idx} value={idx}>{layer}</option>
           })
+        }
+        </select>
+        {
+          index!==-1 && itemLayers[0].layers[1][index][0]!==0 && <select onChange={(e)=>setSecondaryCategory(e.target.value)}  className=" input input-bordered w-1/2 mr-5">
+          <option value={null} defaultChecked>----Select Secondary Category ------</option>
+          {
+            itemLayers.length>0 && itemLayers[0].layers.length>0  && itemLayers[0].layers[1][index].map((layer,idx)=>{
+              return <option key={idx} value={layer!==0? layer: ''}>{layer!==0? layer: ''}</option>
+            })
+          }
+          </select>
         }
         </div>
         <div className="form-control mb-3">

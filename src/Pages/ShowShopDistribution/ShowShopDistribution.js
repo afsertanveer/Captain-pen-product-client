@@ -27,8 +27,8 @@ const ShowShopDistribution = () => {
         if(data.length>0){
             const currentArray = data.filter(d=>d.sender_id===id);
             setProducts(currentArray);
-            setIsLoading(false);
         }
+        setIsLoading(false);
       });
 
       fetch('http://localhost:5000/shop',{
@@ -39,7 +39,7 @@ const ShowShopDistribution = () => {
       })
       .then(res=>res.json())
       .then(data=>setShops(data))
-
+      
   }, [id,role,navigate]);
   return (
     <div>

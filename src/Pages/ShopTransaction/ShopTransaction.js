@@ -95,8 +95,9 @@ const ShopTransaction = () => {
       .then((data) => {
         if (data.length > 0) {
           setShopTransactions(data);
-          setIsLoading(false);
         }
+        
+        setIsLoading(false);
       });
     fetch(`http://localhost:5000/shop?managed_by=${userId}`, {
       method: "GET",

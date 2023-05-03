@@ -121,7 +121,7 @@ const AddASM = () => {
  
   };
   return (
-    <div className="card   p-10 mt-10 lg:ml-40 lg:p-20 shadow-2xl bg-base-100">
+    <div className="card   p-10 mt-10 lg:mx-40 lg:p-20 shadow-2xl bg-base-100">
       <form onSubmit={AddASM}>
         <p className="text-2xl text-center  font-bold">Add ASM</p>
         <div className="form-control">

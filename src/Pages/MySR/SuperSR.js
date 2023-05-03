@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const MySR = () => {
+const SuperSR = () => {
   const username = localStorage.getItem("username");
   const role = localStorage.getItem("role");
   const userId = localStorage.getItem('user_id');
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   useEffect(() => {
-    if (username === null || role !== "2") {
+    if (username === null || role !== "0") {
       localStorage.clear();
       navigate("/");
     }
@@ -25,7 +25,7 @@ const MySR = () => {
   return (
     <div>
       <div className="text-center">
-        <p className="text-4xl font-bold">MY SR</p>
+        <p className="text-4xl font-bold">My SR</p>
       </div>
       <div className="overflow-x-auto">
         <table className="table w-full">
@@ -60,4 +60,4 @@ const MySR = () => {
   );
 };
 
-export default MySR;
+export default SuperSR;
