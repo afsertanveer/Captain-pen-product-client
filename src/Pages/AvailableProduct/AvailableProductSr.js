@@ -51,8 +51,8 @@ const AvailableProductSr = () => {
       {isLoading && <Loader></Loader>}
       {products.length > 0 ? (
         <>
-          <div className="overflow-x-auto">
-            <table className="table w-full">
+          <div className="overflow-x-auto px-0 lg:px-4">
+            <table className="table table-zebra w-full">
               <thead>
                 <tr>
                   <th>Product Name</th>

@@ -1,39 +1,77 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../Loader/Loader";
 
-const ShowAllShops = () => {
+const ShopUnderAdmin = () => {
   const username = localStorage.getItem("username");
   const role = localStorage.getItem("role");
+  const userId = localStorage.getItem("user_id");
   const navigate = useNavigate();
   const [shops, setShops] = useState([]);
   const [district, setDistrict] = useState([]);
   const [thana, setThana] = useState([]);
   const [subD, setSubD] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    if (username === null || role !== "0") {
+    
+  let totShop = [];
+    setIsLoading(true);
+    if (username === null || role !== "1") {
       localStorage.clear();
       navigate("/");
     }
-
-    fetch("http://localhost:5000/shop", {
+    fetch(`http://localhost:5000/users`, {
       method: "GET",
       headers: {
         "content-type": "application/json",
       },
     })
       .then((res) => res.json())
-      .then((data) =>{ 
-        setShops(data)
-    });
-
-    fetch("http://localhost:5000/shop", {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setShops(data));
+      .then((data) => {
+        if (data.length > 0) {
+          let asms = [];
+          asms = data.filter((d) => d.managed_by === userId);
+          const srs = [];
+          for (let i = 0; i < asms.length; i++) {
+            for (let j = 0; j < data.length; j++) {
+              if (asms[i]._id === data[j].managed_by) {
+                srs.push(data[j]);
+              }
+            }
+          }
+          if (srs.length > 0) {
+            for (let i = 0; i < srs.length; i++) {
+              fetch(`http://localhost:5000/shop?managed_by=${srs[i]._id}`, {
+                method: "GET",
+                headers: {
+                  "content-type": "application/json",
+                },
+              })
+                .then((res) => res.json())
+                .then((shopData) => {
+                  if(shopData.length>0){
+                    shopData.forEach(element => {
+                        totShop.push(element)
+                    });
+                  }
+                });
+            }
+            setShops(totShop);
+          }
+          setIsLoading(false);
+        }
+      });
+    // fetch(`http://localhost:5000/use?managed_by=${userId}`, {
+    //   method: "GET",
+    //   headers: {
+    //     "content-type": "application/json",
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setShops(data)
+    //     setIsLoading(false)
+    // });
 
     fetch("http://localhost:5000/district", {
       method: "GET",
@@ -60,13 +98,17 @@ const ShowAllShops = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => setThana(data));
-  }, [username, role, navigate]);
+      .then((data) => {
+        setThana(data);
+        setIsLoading(false);
+      });
+  }, [username, role, navigate, userId]);
   return (
     <div>
       <div className="text-center">
-        <p className="text-4xl font-bold">All shops</p>
+        <p className="text-4xl font-bold mb-4">Shops</p>
       </div>
+      {isLoading && <Loader></Loader>}
       <div className="overflow-x-auto px-0 lg:px-4">
         <table className="table table-zebra w-full">
           <thead>
@@ -93,10 +135,12 @@ const ShowAllShops = () => {
                         .label}
                   </td>
                   <td>
-                    {
-                    it.thana? (thana?.length>0 && thana?.filter(th=>th.value===it.thana)[0]?.label) : (subD?.length>0 && subD?.filter(sub=>sub.value===it.subdistrict)[0].label)
-                    
-                    }
+                    {it.thana
+                      ? thana?.length > 0 &&
+                        thana?.filter((th) => th.value === it.thana)[0]?.label
+                      : subD?.length > 0 &&
+                        subD?.filter((sub) => sub.value === it.subdistrict)[0]
+                          .label}
                   </td>
                 </tr>
               ))}
@@ -107,4 +151,4 @@ const ShowAllShops = () => {
   );
 };
 
-export default ShowAllShops;
+export default ShopUnderAdmin;

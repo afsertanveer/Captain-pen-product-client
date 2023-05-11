@@ -1,3 +1,24 @@
-tr,td,th{
+td, th {
   text-align: center;
+  border: 1px solid #ddd !important;
+  padding: 8px;
+}
+tbody  tr:hover {
+  background-color: aqua !important;
+}
+
+th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #04AA6D !important;
+  color: white;
+}
+a:hover{
+  background-color: aqua;
+}
+a:active {
+  color: yellow;
+  background-color: transparent;
+  text-decoration: underline;
 }

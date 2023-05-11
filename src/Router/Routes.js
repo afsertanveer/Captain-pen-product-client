@@ -37,6 +37,10 @@ import ViewSecondaryCategory from './../Pages/ViewCategories/ViewSecondaryCatego
 import MyASM from "../Pages/MyASM/MyASM";
 import SuperSR from "../Pages/MySR/SuperSR";
 import DistributeToSuperSr from './../Pages/DistributeToSr/DistributeToSuperSr';
+import SrUnderAdmin from "../Pages/MySR/SrUnderAdmin";
+import ShopUnderAdmin from './../Pages/ShowShops/ShopUnderAdmin';
+import SalesReport from "../Shared/Reports/SalesReport";
+import CashCollection from "../Shared/Reports/CashCollection";
 
 const router = createBrowserRouter([
   {
@@ -100,6 +104,10 @@ const router = createBrowserRouter([
         element: <MySR></MySR>
       },
       {
+        path: "/sr-under-me",
+        element: <SrUnderAdmin></SrUnderAdmin>
+      },
+      {
         path: "/super-sr",
         element: <SuperSR></SuperSR>
       },
@@ -118,6 +126,10 @@ const router = createBrowserRouter([
       {
         path: "/show-items",
         element: <ShowItems></ShowItems>,
+      },
+      {
+        path: "/shop-under-me",
+        element: <ShopUnderAdmin></ShopUnderAdmin>,
       },
       {
         path: "/add-category/:id",
@@ -205,6 +217,14 @@ const router = createBrowserRouter([
       {
         path: "/change-password",
         element: <ChangePassword></ChangePassword>
+      },
+      {
+        path: "/sales-report",
+        element: <SalesReport></SalesReport>
+      },
+      {
+        path: "/cash-collection-report",
+        element: <CashCollection></CashCollection>
       },
     ],
   },

@@ -36,7 +36,6 @@ const AddSR = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setRegions(data);
         });
     } else {

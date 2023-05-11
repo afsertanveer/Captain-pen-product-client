@@ -154,7 +154,7 @@ const DistributeToSuperSr = () => {
         </div>
       </div>
       {productList.length > 0 && (
-        <div className="overflow-x-auto my-20">
+        <div className="overflow-x-auto px-0 lg:px-4 my-20">
           <table className="table table-compact w-full">
             <thead>
               <tr>

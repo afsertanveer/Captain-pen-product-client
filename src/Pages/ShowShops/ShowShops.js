@@ -66,9 +66,9 @@ const ShowShops = () => {
         <p className="text-4xl font-bold mb-4">Shops</p>
       </div>
       {isLoading && <Loader></Loader>}
-      <div className="overflow-x-auto">
-        <table className="table w-full">
-          <thead>
+      <div className="overflow-x-auto px-0 lg:px-4 px-0 lg:px-4">
+        <table className="table table-zebra w-full">
+          <thead >
             <tr>
               <th>Shop Name</th>
               <th>Contact Number</th>

@@ -25,8 +25,8 @@ const ShowProducts = () => {
       <div className="text-center">
         <p className="text-4xl font-bold">All Products</p>
       </div>
-      <div className="overflow-x-auto">
-        <table className="table w-full">
+      <div className="overflow-x-auto px-0 lg:px-4">
+        <table className="table table-zebra w-full">
           {/* head */}
           <thead>
             <tr>

@@ -231,10 +231,10 @@ const DistributeToSr = () => {
             </button>
           </>
         )}
-        <div className={`${customClassTwo} overflow-x-auto`}>
+        <div className={`${customClassTwo} overflow-x-auto px-0 lg:px-4`}>
           {selectedProductList.length > 0 && (
             <>
-              <table className="table w-full">
+              <table className="table table-zebra w-full">
                 <thead>
                   <tr>
                     <th>Product Name</th>

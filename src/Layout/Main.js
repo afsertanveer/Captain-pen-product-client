@@ -3,8 +3,9 @@ import Header from "../Shared/Header/Header";
 import Sidebar from "../Shared/Sidebar/Sidebar";
 
 const Main = () => {
+  
   return (
-    <div>
+    <div >
       <Header></Header>
       <Sidebar></Sidebar>
     </div>

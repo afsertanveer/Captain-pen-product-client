@@ -24,11 +24,8 @@ const DistributeToShop = () => {
   const [updateError, setUpdateError] = useState("");
   const [paymenetError, setPaymentError] = useState("");
   const [transactionId, setTransactionId] = useState(0);
-  const [dueInfo, setDueInfo] = useState([]);
-  const [discount,setDiscount] = useState(0);
-  const [isDueAvailable, setIsDueAvailable] = useState(false);
-  const [saveTotal,setSaveTotal] = useState(0);
-  let imgLinks = [];
+  const [dueInfo,setDueInfo] = useState([]);
+  const [isDueAvailable,setIsDueAvailable] = useState(false);
 
   const addProduct = (e) => {
     e.preventDefault();
@@ -42,11 +39,8 @@ const DistributeToShop = () => {
     } else {
       getCurTotal = 0;
     }
-    const curTotal = parseFloat(total + getCurTotal)
-      .toFixed(2)
-      .toString();
+    const curTotal = (parseFloat(total + getCurTotal).toFixed(2)).toString();
     document.getElementById("total").value = curTotal;
-    setSaveTotal(curTotal);
     if (searchedProduct === "") {
       toast.error("Search your product please!");
     } else if (numofPieces === "") {
@@ -142,156 +136,186 @@ const DistributeToShop = () => {
     setProducts([]);
     setDisable("enabled");
   };
-  const selectShop = (e) => {
+  const selectShop = e =>{
     const shop = e.target.value;
-    fetch(`http://localhost:5000/due?shop_id=${shop}`, {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-      },
+    fetch(`http://localhost:5000/due?shop_id=${shop}`,{
+      method:"GET",
+      headers:{
+        "content-type":"application/json"
+      }
     })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.length > 0) {
-          setDueInfo(data);
-          setIsDueAvailable(true);
-        }
-      });
-  };
-
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.length>0){
+        setDueInfo(data);
+        setIsDueAvailable(true);
+      }
+    })
+  }
   const handleSubmit = (event) => {
     event.preventDefault();
     const currentDate = new Date();
     const senderId = localStorage.getItem("user_id");
     const recieverId = event.target.selectAsm.value;
-    const totalBill = parseFloat(document.getElementById("total").value);
-    let paid=0;
-    if(document.getElementById("pay").value!==''){
-       paid = parseFloat(document.getElementById("pay").value);
-    }
-    const due = totalBill - paid;
-    const selected = [...selectedProductList];
-    let img = event.target.attach_image1.files;
+    const totalBill = parseFloat(document.getElementById('total').value);
+    const paid = parseFloat(document.getElementById('pay').value);
+    const due = totalBill - paid ;
+    const selected = [...selectedProductList];    
+    let img1 = event.target.attach_image1.files[0];
+    let img2 = event.target.attach_image2.files[0];
+    let img3 = event.target.attach_image3.files[0];
+    let img4 = event.target.attach_image4.files[0];
+    
     let formData = new FormData();
+    formData.append("image", img1);
+    let billImg1;
 
     const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`;
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+    .then((res) => res.json())
+      .then((imgData) => {
+        console.log("dhuke",imgData);
+        billImg1=imgData.data.url;
+    })
+    .catch(err=>console.log(err))
+    let billImg2;
+     formData = new FormData();
+    formData.append("image", img2);
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+    .then((res) => res.json())
+      .then((imgData) => {
+        billImg2=imgData.data.url;
+    })
 
+    let billImg3;
+     formData = new FormData();
+    formData.append("image", img3);
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+    .then((res) => res.json())
+      .then((imgData) => {
+        billImg3=imgData.data.url;
+    })
+    let billImg4;
+     formData = new FormData();
+    formData.append("image", img4);
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+    .then((res) => res.json())
+      .then((imgData) => {
+        billImg4=imgData.data.url;     
+      
+    })
+    setTimeout(function() {
+      //your code to be executed after 1 second      
+    console.log(billImg1,billImg2,billImg3,billImg4);
     let transaction = {};
     let dueEntry = {};
-    const numbOfImages = img.length;
-    if(numbOfImages<=4){
-      for(let i=0;i<img.length;i++){     
-      
-        formData.append("image", img[i]);
-            fetch(url, {
-            method: "POST",
-            body: formData,
-          })
-            .then((res) => res.json())
-            .then((imgData) => {
-             imgLinks.push(imgData.data.url);
-            });
-      
-      }
-      
-        setTimeout(()=>{
-          transaction = {
-            transaction_id: transactionId,
-            shop_id: recieverId,
-            seller_id: senderId,
-            total_bill: totalBill,
-            due: due,
-            discount,
-            bill_img: imgLinks,
-            issue_date: currentDate,
-          };
-          const updatedDue = (
-            parseFloat(dueInfo[0] ? dueInfo[0].due : 0) + parseFloat(due)
-          )
-            .toFixed(2)
-            .toString();
-          dueEntry = {
-            shop_id: recieverId,
-            seller_id: senderId,
-            due: updatedDue,
-            issue_date: currentDate,
-          };
-          selected.forEach((item) => {
-            item.transaction_id = transactionId;
-            item.sender_id = senderId;
-            item.reciever_id = recieverId;
-            item.recieved_date = currentDate;
-          });
-          setSelectedProductList(selected);
-          selectedProductList.forEach((item) => {
-            fetch("http://localhost:5000/distributed-product-to-shop", {
-              method: "POST",
-              headers: {
-                "content-type": "application/json",
-              },
-              body: JSON.stringify(item),
-            })
-              .then((res) => res.json())
-              .then((data) => {})
-              .catch((error) => setUpdateError(error));
-          });
-          if (updateError === "") {
-            toast.success("Succesfully distributed and stock updated");
-  
-            fetch("http://localhost:5000/transaction", {
-              method: "POST",
-              headers: {
-                "content-type": "application/json",
-              },
-              body: JSON.stringify(transaction),
-            })
-              .then((res) => res.json())
-              .then((data) => {
-                if (data.acknowledged) {
-                  if (isDueAvailable) {
-                    const id = dueInfo[0]?._id;
-                    fetch(`http://localhost:5000/due/${id}`, {
-                      method: "PUT",
-                      headers: {
-                        "content-type": "application/json",
-                      },
-                      body: JSON.stringify(dueEntry),
-                    })
-                      .then((res) => res.json())
-                      .then((updateDueData) => {
-                        if (updateDueData.acknowledged) {
-                          setUpdateError("");
-                          setPaymentError("");
-                        }
-                      });
-                  } else {
-                    fetch("http://localhost:5000/due", {
-                      method: "POST",
-                      headers: {
-                        "content-type": "application/json",
-                      },
-                      body: JSON.stringify(dueEntry),
-                    })
-                      .then((res) => res.json())
-                      .then((dueData) => {
-                        if (dueData.acknowledged) {
-                          setUpdateError("");
-                          setPaymentError("");
-                        }
-                      });
-                  }
-                }
-              })
-              .catch((err) => setUpdateError(err));
-          } else {
-            toast.error(`${updateError}`);
-          }
-          setSelectedProductList([]);
-          event.target.reset();
-        },10000)
-    }else{
-      toast.error("Cannot Upload more than 4 images");
+    transaction = {
+      transaction_id: transactionId,
+      shop_id: recieverId,
+      seller_id:senderId,
+      total_bill:totalBill,
+      due:due,
+      bill_img1:billImg1,
+      bill_img2:billImg2,
+      bill_img3:billImg3,
+      bill_img4:billImg4,
+      issue_date:currentDate
     }
+    const updatedDue = ((parseFloat(dueInfo[0]? dueInfo[0].due : 0) + parseFloat(due)).toFixed(2)).toString();
+    dueEntry = {
+      shop_id:recieverId,
+      seller_id:senderId,
+      due:updatedDue,
+      issue_date:currentDate
+    }
+    selected.forEach((item) => {
+      item.transaction_id = transactionId;
+      item.sender_id = senderId;
+      item.reciever_id = recieverId;
+      item.recieved_date = currentDate;
+    });
+    setSelectedProductList(selected);
+    selectedProductList.forEach((item) => {
+      fetch("http://localhost:5000/distributed-product-to-shop", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(item),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+        })
+        .catch((error) => setUpdateError(error));
+    });
+    if (updateError === "") {
+      toast.success("Succesfully distributed and stock updated");
+      
+      fetch("http://localhost:5000/transaction",{
+        method:"POST",
+        headers:{
+          "content-type":"application/json"
+        },
+        body:JSON.stringify(transaction)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if (data.acknowledged) {
+          if(isDueAvailable){
+            const id = dueInfo[0]?._id;
+            fetch(`http://localhost:5000/due/${id}`,{
+              method:"PUT",
+              headers:{
+                "content-type":"application/json"
+              },
+              body:JSON.stringify(dueEntry)
+            })
+            .then(res=>res.json())
+            .then(updateDueData=>{
+              if(updateDueData.acknowledged){
+                setUpdateError("");
+                setPaymentError("");
+              }
+            })
+          }else{
+            fetch('http://localhost:5000/due',{
+              method:"POST",
+              headers:{
+                "content-type":"application/json"
+              },
+              body:JSON.stringify(dueEntry)
+            })
+            .then(res=>res.json())
+            .then(dueData=>{
+              if(dueData.acknowledged){
+                setUpdateError("");
+                setPaymentError("");
+              }
+            })
+          }
+          
+        }
+      })
+      .catch(err=>setUpdateError(err))
+    } else {
+      toast.error(`${updateError}`);
+    }
+    setSelectedProductList([]);
+    event.target.reset();
+    }, 5000);
+    
   };
   const handlePay = (event) => {
     const pay = parseFloat(document.getElementById("pay").value);
@@ -301,22 +325,6 @@ const DistributeToShop = () => {
       document.getElementById("pay").value = "";
     }
   };
-  const handleDiscount = e =>{
-    const discountAmount =parseFloat( e.target.value);
-    if(isNaN(discountAmount)===false){
-      if(discountAmount>parseFloat(saveTotal)){
-        document.getElementById("discount").value = 0;        
-        document.getElementById('total').value= saveTotal;
-        setDiscount(0);
-      }else{
-        document.getElementById('total').value=parseFloat(saveTotal)-discountAmount;
-        setDiscount(discountAmount);
-      }
-    }else{
-      document.getElementById('total').value= saveTotal;
-    }
-    
-  }
   useEffect(() => {
     if (username === null || role !== "3") {
       localStorage.clear();
@@ -357,10 +365,11 @@ const DistributeToShop = () => {
           data?.forEach((e) => {
             const t_id = parseInt(e.transaction_id);
             if (t_id > max) {
-              max = t_id;
+              max = t_id;        
             }
+            
           });
-          setTransactionId(max + 1);
+          setTransactionId(max+1);
         }
       });
   }, [username, navigate, role, products, userId]);
@@ -463,18 +472,52 @@ const DistributeToShop = () => {
         </div>
         <div className="form-control">
           <label className="label mt-4">
-            <span className="label-text font-bold">Attach Chalan </span>
+            <span className="label-text font-bold">Attach Chalan 1</span>
           </label>
           <input
             name="attach_image1"
             id="attach_image1"
             type="file"
-            accept="image/*"
             className="input input-bordered w-1/2"
-            multiple
+            required
+          />          
+          <span className="text-red-400">Mandatory attachment required</span>
+        </div>
+        <div className="form-control">
+          <label className="label mt-4">
+            <span className="label-text font-bold">Attach Chalan 2</span>
+          </label>
+          <input
+            name="attach_image2"
+            id="attach_image2"
+            type="file"
+            className="input input-bordered w-1/2"
             required
           />
-          <span className="text-red-400">Mandatory attachment required</span>
+        </div>
+        <div className="form-control">
+          <label className="label mt-4">
+            <span className="label-text font-bold">Attach Chalan 3</span>
+          </label>
+          <input
+            name="attach_image3"
+            id="attach_image3"
+            type="file"
+            className="input input-bordered w-1/2"
+            required
+          />
+        </div>
+        <div className="form-control">
+          <label className="label mt-4">
+            <span className="label-text font-bold">Attach Chalan 4</span>
+          </label>
+          <input
+            name="attach_image4"
+            id="attach_image4"
+            type="file"
+            className="input input-bordered w-1/2"
+            required
+          />
         </div>
         <div className="form-control">
           {productList.length > 0 && (
@@ -499,22 +542,7 @@ const DistributeToShop = () => {
             </>
           )}
         </div>
-        <div className="form-control">          
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-bold">Discount</span>
-            </label>
-            <input
-              type="number"
-              placeholder="Discount"
-              onChange={handleDiscount}
-              className=" input input-bordered w-1/2 text-green-500"
-              name="discount"
-              id="discount"
-              min={1}
-              defaultValue={"0"}
-            />
-          </div>
+        <div className="form-control">
           <div className="form-control">
             <label className="label">
               <span className="label-text font-bold">Total</span>
@@ -526,7 +554,6 @@ const DistributeToShop = () => {
               name="total"
               id="total"
               min={1}
-              defaultValue={0}
               disabled
             />
           </div>

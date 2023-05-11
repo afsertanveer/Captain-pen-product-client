@@ -50,6 +50,7 @@ const AddShop = () => {
     const contactNo = form.contact_no.value;
     const ownerName = form.owner_name.value;
     const address = form.address.value;
+    const currentData = new Date();
     const shop = {
       shop_name: shopName,
       contact_no: contactNo,
@@ -61,6 +62,7 @@ const AddShop = () => {
       thana: selectedThana,
       subdistrict: selectedUpozilla,
       managed_by: managedBy,
+      created_at:currentData
     };
 
     fetch("http://localhost:5000/shop", {

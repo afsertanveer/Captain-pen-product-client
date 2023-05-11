@@ -138,11 +138,11 @@ const AddProduct = () => {
         </div>
         <div className="form-control mb-3">
           <label htmlFor="product_name" className="mb-2 text-xl font-bold">Unit Price</label>
-          <input type="text" name="unit_price" id="unit_price" placeholder="Unit Price" className=" input input-bordered w-1/2 mr-2" required />
+          <input type="number" name="unit_price" id="unit_price" placeholder="Unit Price" className=" input input-bordered w-1/2 mr-2" required />
         </div>
         <div className="form-control mb-3">
           <label htmlFor="product_name" className="mb-2 text-xl font-bold">Total Pieces</label>
-          <input type="text" name="total_pieces" id="total_pieces" placeholder="Number of Products" className=" input input-bordered w-1/2 mr-2" required />
+          <input type="number" name="total_pieces" id="total_pieces" placeholder="Number of Products" className=" input input-bordered w-1/2 mr-2" required />
         </div>
 
         <input type="submit" className="btn btn-outline" value="Add Product" />
