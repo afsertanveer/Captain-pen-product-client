@@ -54,6 +54,9 @@ const Sidebar = () => {
         <li className="ml-0 lg:mx-2">
           <Link to="/show-distributed-product">Show Distribute Products</Link>
         </li>
+        <li className="ml-0 lg:mx-2">
+          <Link to="/product-stock-report">Product Stock Report</Link>
+        </li>
       </>
     );
   }
@@ -83,6 +86,9 @@ const Sidebar = () => {
         </li>
         <li className="ml-0 lg:mx-2">
           <Link to="/show-distributed-product">Show Distribute Products</Link>
+        </li>
+        <li className="ml-0 lg:mx-2">
+          <Link to="/product-stock-report">Product Stock Report</Link>
         </li>
       </>
     );
@@ -184,7 +190,7 @@ const Sidebar = () => {
           </li>
           <li className="px-2">
             <Link
-              onClick={handleLogOut}
+              onClick={()=>handleLogOut()}
               className="btn  rounded-lg mt-2 bg-red-600 text-white font-extrabold"
             >
               Log Out

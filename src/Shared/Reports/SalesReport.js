@@ -7,6 +7,7 @@ const SalesReport = () => {
   const username = localStorage.getItem("username");
   const role = localStorage.getItem("role");
   const userId = localStorage.getItem("user_id");
+  const name = localStorage.getItem("name");
   const navigate = useNavigate();
   const [sales, SetSales] = useState([]);
   const [users, setUsers] = useState([]);
@@ -18,6 +19,7 @@ const SalesReport = () => {
   const [region, setRegions] = useState([]);
   const salesExcel = [];
   let unitPrice;
+  let serial=1;
   const setExcelDataBundle = () => {
     sales.forEach((s) => {
       const singleItem = {};
@@ -120,7 +122,25 @@ const SalesReport = () => {
             parseFloat(unitPrice) * parseFloat(s.distributed_amount)
           }  `;
         }
-        salesExcel.push(singleItem);
+        if(role==='1'){
+          if(singleItem.adminName===name){
+            salesExcel.push(singleItem);
+          }
+        }else if(role==='2'){
+          if(singleItem.asmName===name){
+            salesExcel.push(singleItem);
+            
+          }
+        }else if(role==='3'){
+          if(singleItem.srName===name){
+            salesExcel.push(singleItem);
+            
+          }
+
+        }else{
+          salesExcel.push(singleItem);
+          
+        }
       }
       flag = 0;
     });
@@ -130,7 +150,7 @@ const SalesReport = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    if (username === undefined) {
+    if (username === undefined || (role==='0' || role==='1' || role==='2' || role==='3' )===false) {
       localStorage.clear();
       navigate("/");
     }
@@ -238,8 +258,8 @@ const SalesReport = () => {
               salesExcel.map((se) => {
                 return role === "1" && se.adminName === fullName && (
                   <tr key={se.serialIndex}>
-                    <td>{se.serialIndex}</td>
-                    <td>{se.date}</td>
+                    <td>{serial++}</td>
+                    <td>{se.date.split('T')[0]}</td>
                     <td>{se.shopName}</td>
                     <td>{se.shopAddress}</td>
                     <td>
@@ -281,8 +301,8 @@ const SalesReport = () => {
               {
                 role==='0' && salesExcel.length>0 && salesExcel.map((se)=>{
                  return <tr key={se.serialIndex}>
-                    <td>{se.serialIndex}</td>
-                    <td>{se.date}</td>
+                    <td>{serial++}</td>
+                    <td>{se.date.split('T')[0]}</td>
                     <td>{se.shopName}</td>
                     <td>{se.shopAddress}</td>
                     <td>
@@ -318,9 +338,9 @@ const SalesReport = () => {
               {salesExcel.length > 0 &&
               salesExcel.map((se) => {
                 return role === "2" && se.asmName === fullName && (
-                  <tr key={se.serialIndex}>
+                  <tr key={serial++}>
                     <td>{se.serialIndex}</td>
-                    <td>{se.date}</td>
+                    <td>{se.date.split('T')[0]}</td>
                     <td>{se.shopName}</td>
                     <td>{se.shopAddress}</td>
                     <td>
@@ -361,11 +381,11 @@ const SalesReport = () => {
                 );
               })}
               {salesExcel.length > 0 &&
-              salesExcel.map((se) => {
+              salesExcel.slice(0).reverse().map((se) => {
                 return role === "3" && se.srName === fullName && (
-                  <tr key={se.serialIndex}>
+                  <tr key={serial++}>
                     <td>{se.serialIndex}</td>
-                    <td>{se.date}</td>
+                    <td>{se.date.split('T')[0]}</td>
                     <td>{se.shopName}</td>
                     <td>{se.shopAddress}</td>
                     <td>
@@ -388,6 +408,7 @@ const SalesReport = () => {
           </tbody>
         </table>
       </div>
+      <div className="mt-3  px-0 lg:px-4"> 
       <CSVLink
         data={salesExcel}
         filename={"sales.csv"}
@@ -396,6 +417,7 @@ const SalesReport = () => {
       >
         Download me
       </CSVLink>
+      </div>
     </div>
   );
 };

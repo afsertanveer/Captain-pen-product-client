@@ -12,7 +12,7 @@ const ShopTransaction = () => {
   const [transactionRecovery,setTransactionRecovery] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [modalProps,setModalProps] = useState({});
-  
+  // const [curDue,setCurDue] = useState(0)  
 
   const handleSearchShop = (e) => {
     const searchedShop = e.target.value.toLowerCase();
@@ -68,6 +68,7 @@ const ShopTransaction = () => {
     transactionRecovery?.forEach(tr=>{
       if(tr.shop_id===shopId){
         due = ((parseFloat(due)-parseFloat(tr.paying_amount)).toFixed(2)).toString();
+        // setCurDue(due)
       }
     })
     return due;
@@ -158,7 +159,7 @@ const ShopTransaction = () => {
                       </td>
                       <td>{dueAmountCalculation(it.shop_id,it.due)}</td>
                       <td>
-                        {it.due === "0" ? (
+                        {dueAmountCalculation(it.shop_id,it.due)==="0.00" ? (
                           <span className="font-bold text-xl text-success">
                             No Due
                           </span>

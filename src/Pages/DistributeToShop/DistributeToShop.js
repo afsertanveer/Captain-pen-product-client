@@ -287,6 +287,7 @@ const DistributeToShop = () => {
             toast.error(`${updateError}`);
           }
           setSelectedProductList([]);
+          navigate('/distribution-to-shop');
           event.target.reset();
         },10000)
     }else{

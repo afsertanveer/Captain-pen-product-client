@@ -41,6 +41,7 @@ import SrUnderAdmin from "../Pages/MySR/SrUnderAdmin";
 import ShopUnderAdmin from './../Pages/ShowShops/ShopUnderAdmin';
 import SalesReport from "../Shared/Reports/SalesReport";
 import CashCollection from "../Shared/Reports/CashCollection";
+import ProductStock from "../Shared/Reports/ProductStock";
 
 const router = createBrowserRouter([
   {
@@ -225,6 +226,10 @@ const router = createBrowserRouter([
       {
         path: "/cash-collection-report",
         element: <CashCollection></CashCollection>
+      },
+      {
+        path: "/product-stock-report",
+        element: <ProductStock></ProductStock>
       },
     ],
   },
