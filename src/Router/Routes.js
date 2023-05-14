@@ -42,6 +42,10 @@ import ShopUnderAdmin from './../Pages/ShowShops/ShopUnderAdmin';
 import SalesReport from "../Shared/Reports/SalesReport";
 import CashCollection from "../Shared/Reports/CashCollection";
 import ProductStock from "../Shared/Reports/ProductStock";
+import ShopReport from "../Shared/Reports/ShopReport";
+import ProductSalesReport from "../Shared/Reports/ProductSalesReport";
+import ProductSendAdminToASM from "../Shared/Reports/ProductSendAdminToASM";
+import ProductSendASMToSR from "../Shared/Reports/ProductSendASMToSR";
 
 const router = createBrowserRouter([
   {
@@ -224,6 +228,10 @@ const router = createBrowserRouter([
         element: <SalesReport></SalesReport>
       },
       {
+        path: "/shop-report",
+        element: <ShopReport></ShopReport>
+      },
+      {
         path: "/cash-collection-report",
         element: <CashCollection></CashCollection>
       },
@@ -231,6 +239,18 @@ const router = createBrowserRouter([
         path: "/product-stock-report",
         element: <ProductStock></ProductStock>
       },
+      {
+        path: "/product-sales-report",
+        element: <ProductSalesReport></ProductSalesReport>
+      },
+      {
+        path: "/admin-send-product-report",
+        element: <ProductSendAdminToASM></ProductSendAdminToASM>
+      },
+      {
+        path: "/asm-send-product-report",
+        element: <ProductSendASMToSR></ProductSendASMToSR>
+      }
     ],
   },
 ]);

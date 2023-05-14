@@ -19,6 +19,7 @@ const ProductStock = () => {
         const singleItem = {};
         singleItem.productName = allProducts[i].product_name;
         singleItem.category = allProducts[i].category;
+        singleItem.totalPieces = allProducts[i].total_pieces;
         if(allProducts[i].secondary_category!==""){
             singleItem.category = singleItem.category + ` => ${allProducts[i].secondary_category}`
         }
@@ -65,7 +66,7 @@ const ProductStock = () => {
   return (
     <div>
       <div className="text-center py-4 mx-0 lg:mx-4 bg-green-300 my-8 text-white">
-        <p className="text-4xl font-bold mb-4">Cash Collection</p>
+        <p className="text-4xl font-bold mb-4">Product Stock</p>
       </div>
       {isLoading && <Loader></Loader>}
       <div className="overflow-x-auto px-0 lg:px-4">
@@ -75,6 +76,7 @@ const ProductStock = () => {
               <th>SI No</th>
               <th>Product Name</th>
               <th>Category</th>
+              <th>Total Pieces</th>
               {role==='0' && <th>Unit Cost</th>}
             </tr>
           </thead>
@@ -85,6 +87,7 @@ const ProductStock = () => {
                     <td>{serial++}</td>
                     <td>{p.productName}</td>
                     <td>{p.category}</td>
+                    <td>{p.totalPieces}</td>
                     {role==='0' && <td>{p.unitCost}</td>}
                 </tr>
             })
@@ -92,7 +95,7 @@ const ProductStock = () => {
           </tbody>
         </table>
       </div>
-      {role===0 && <div className="mt-3  px-0 lg:px-4 flex justify-around items-center">
+      {role==='0' && <div className="mt-3  px-0 lg:px-4 flex justify-around items-center">
           <span className="text-xl font-semibold text-red-500">{`Total Products=> ${totalProduct}`}</span>
           <span className="text-xl font-semibold text-red-500">{`Total Cost=> ${totalCost}`}</span>
       </div>}

@@ -71,7 +71,6 @@ const AddASM = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data[0]?.assigned);
         setManagedBy(data[0]?.assigned);
       });
   };
@@ -100,7 +99,6 @@ const AddASM = () => {
         region_id: selected_region,
         managed_by: managedBy,
       };
-      console.log(user);
       fetch('http://localhost:5000/addAdmin',{
         method:"POST",
         headers:{

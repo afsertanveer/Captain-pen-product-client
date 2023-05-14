@@ -80,10 +80,11 @@ const CashCollection = () => {
             singleItem.zoneName = zoneName;
           }         
           singleItem.collectedCash = recoveries[i].paying_amount;
-          singleItem.totalDue = totalDue;
+          singleItem.prevDue = totalDue;
           totalCashCollection = parseFloat(
             totalCashCollection + parseFloat(recoveries[i].paying_amount)
-          );
+          );          
+          singleItem.curDue = parseFloat(totalDue)-  parseFloat(totalCashCollection);
           singleItem.totalCashCollection = totalCashCollection;
           singleItem.issueDate = recoveries[i].issue_date;
           singleItem.bill_link = recoveries[i].bill_link;
@@ -146,8 +147,9 @@ const CashCollection = () => {
           singleItem.zoneName = zoneName;
         }
         singleItem.collectedCash = 0;
-        singleItem.totalDue = totalDue;
+        singleItem.prevDue = totalDue;
         singleItem.totalCashCollection = totalCashCollection;
+        singleItem.curDue = parseFloat(totalDue)-  parseFloat(totalCashCollection);
         singleItem.issueDate = due.filter(
           (d) => d.shop_id === sh._id
         )[0]?.issue_date;
@@ -263,8 +265,9 @@ const CashCollection = () => {
               <th>Shop Name</th>
               <th>Shop Address</th>
               <th>Cash Collection</th>
-              <th>Due Amount</th>
+              <th>Previous Due</th>
               <th>Total Cash Collection</th>
+              <th>Current Due</th>
               {(role === "0" || role === "1") && <th>Zone Name</th>}
               {role !== "3" && <th>SR Name</th>}
               {(role === "0" || role === "1") && <th>ASM Name</th>}
@@ -286,8 +289,9 @@ const CashCollection = () => {
                         <td>{se.shopName}</td>
                         <td>{se.shopAddress}</td>
                         <td>{se.collectedCash}</td>
-                        <td>{se.totalDue}</td>
+                        <td>{se.prevDue}</td>
                         <td>{se.totalCashCollection}</td>
+                        <td>{se.curDue}</td>
                         {(role === "0" || role === "1") && (
                           <>
                             <td>{se.zoneName}</td>
@@ -322,8 +326,9 @@ const CashCollection = () => {
                       <td>{se.shopName}</td>
                       <td>{se.shopAddress}</td>
                       <td>{se.collectedCash}</td>
-                      <td>{se.totalDue}</td>
+                      <td>{se.prevDue}</td>
                       <td>{se.totalCashCollection}</td>
+                      <td>{se.curDue}</td>
                       <td>{se.zoneName}</td>
                       <td>{se.srName}</td>
                       <td>{se.asmName}</td>
@@ -356,8 +361,9 @@ const CashCollection = () => {
                       <td>{se.shopAddress}</td>
                       <td>{se.discount}</td>
                       <td>{se.collectedCash}</td>
-                      <td>{se.totalDue}</td>
+                      <td>{se.prevDue}</td>
                       <td>{se.totalCashCollection}</td>
+                      <td>{se.curDue}</td>
                       {(role === "0" || role === "1") && (
                         <>
                           <td>{se.zoneName}</td>
@@ -393,8 +399,9 @@ const CashCollection = () => {
                       <td>{se.shopName}</td>
                       <td>{se.shopAddress}</td>
                       <td>{se.collectedCash}</td>
-                      <td>{se.totalDue}</td>
+                      <td>{se.prevDue}</td>
                       <td>{se.totalCashCollection}</td>
+                      <td>{se.curDue}</td>
                       <td>
                         {se.bill_link !== "" ? (
                           <Link

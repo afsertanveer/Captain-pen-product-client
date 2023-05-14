@@ -57,6 +57,15 @@ const Sidebar = () => {
         <li className="ml-0 lg:mx-2">
           <Link to="/product-stock-report">Product Stock Report</Link>
         </li>
+        <li className="ml-0 lg:mx-2">
+          <Link to="/product-sales-report">Product Sales Report</Link>
+        </li>
+        <li className="ml-0 lg:mx-2">
+          <Link to="/admin-send-product-report">Distribution to ASM Report</Link>
+        </li>
+        <li className="ml-0 lg:mx-2">
+          <Link to="/asm-send-product-report">Distribution to SR Report</Link>
+        </li>
       </>
     );
   }
@@ -90,6 +99,15 @@ const Sidebar = () => {
         <li className="ml-0 lg:mx-2">
           <Link to="/product-stock-report">Product Stock Report</Link>
         </li>
+        <li className="ml-0 lg:mx-2">
+          <Link to="/product-sales-report">Product Sales Report</Link>
+        </li>
+        <li className="ml-0 lg:mx-2">
+          <Link to="/admin-send-product-report">Distribution to ASM Report</Link>
+        </li>
+        <li className="ml-0 lg:mx-2">
+          <Link to="/asm-send-product-report">Distribution to SR Report</Link>
+        </li>
       </>
     );
   }
@@ -116,6 +134,9 @@ const Sidebar = () => {
         </li>
         <li className="ml-0 lg:mx-2">
           <Link to="/show-distributed-product">Show Distribute Products</Link>
+        </li>
+        <li className="ml-0 lg:mx-2">
+          <Link to="/asm-send-product-report">Distribution to SR Report</Link>
         </li>
       </>
     );
@@ -178,6 +199,10 @@ const Sidebar = () => {
             <Link to="/addshop">Add Shop</Link>
           </li>
           {menuItems}
+
+          <li className="ml-0 lg:mx-2">
+            <Link to="/shop-report">Shop Report</Link>
+          </li>
 
           <li className="ml-0 lg:mx-2">
             <Link to="/sales-report">Sales Report</Link>
