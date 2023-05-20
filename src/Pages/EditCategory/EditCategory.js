@@ -95,7 +95,7 @@ const EditCategory = () => {
             </div>
         </div>)
       }
-      <button onClick={updateLayer} className="mr-4 btn btn-secondary">Submit</button>
+      <button onClick={updateLayer} className="mr-4 btn bg-green-900">Submit</button>
       
     </div>
   );

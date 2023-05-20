@@ -1,24 +1,73 @@
-td, th {
+td {
   text-align: center;
   border: 1px solid #ddd !important;
   padding: 8px;
 }
-tbody  tr:hover {
-  background-color: aqua !important;
-}
+
 
 th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: center;
+  border: 1px solid #ddd !important;
   background-color: #04AA6D !important;
   color: white;
 }
+ul li{
+  margin-bottom: 2px;
+
+}
 a:hover{
-  background-color: aqua;
+  background-color: black;
+}
+a{
+  font-size: 12px;
+  padding-top: 0px;
+  margin-top: 0px;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
 }
 a:active {
   color: yellow;
   background-color: transparent;
   text-decoration: underline;
+}
+button{
+  background-color:#1b5e20 !important ;
+  color:white !important;
+  border-color: black !important;
+}
+
+input [type=button], input[type=submit]{
+  background-color: #1b5e20 !important;
+  color: white !important;
+  border-color: black;
+}
+.rdrDefinedRangesWrapper{
+  display: none;
+}
+.rdrDay, .rdrNextPrevButton, .rdrNextButton{
+  background-color: white !important;
+  color: black;
+}
+.rdrMonthAndYearWrapper{
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0 0 0;
+}
+.rdrDateDisplayWrapper{
+  background-color: #04AA6D !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.rdrDateRangePickerWrapper{
+  max-height: 300px;
+  overflow-y: scroll;
+}
+.rdrMonthName{
+  padding: 0 0 !important;
+  text-align: center !important;
+}
+.rdrMonthAndYearWrapper{
+  padding: 0 0 !important;
 }

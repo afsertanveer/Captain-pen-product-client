@@ -45,16 +45,16 @@ const Login = () => {
     }
   }, [username, navigate]);
   return (
-    <div className="mb-5">
+    <div >
        <div className="flex justify-center items-center max-h-[500px]">
-        <img src={logo} alt="logo" className="w-1/4 h-1/4" />
+        <img src={logo} alt="logo" className="w-1/3 h-1/3 lg:w-1/6 lg:h-1/6" />
        </div>
       <div className="hero w-full">
-        <div className="hero-content grid gap-20 md:grid-cols-2 flex-col lg:flex-row">
-          <div className="text-center lg:text-left">
+        <div className="hero-content ">
+          <div className="text-center  lg:text-left">
             <img className="w-3/4" src={img} alt="login" />
           </div>
-          <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100  py-20">
+          <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100  py-12">
             <h1 className="text-5xl text-center font-bold">Login</h1>
             <form
               onSubmit={handleLogin}

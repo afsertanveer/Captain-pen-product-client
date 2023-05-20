@@ -74,7 +74,7 @@ const AddSecondaryCategory = () => {
       <br />
       <button
         onClick={submitData}
-        className="btn btn-secondary mb-3 w-1/2 lg:w-1/4"
+        className="btn bg-green-900 mb-3 w-1/2 lg:w-1/4"
       >
         Submit Data
       </button>
