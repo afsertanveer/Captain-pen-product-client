@@ -11,10 +11,13 @@ const ProductStock = () => {
   const [products,setProducts] = useState([]);
   const [totalProduct,setTotalProduct] = useState(0);
   const [totalCost,setTotalCost] = useState(0);
+  const [filteredProduct,setFilteredProduct] = useState(null);
+  const [filteredCategory,setFilteredCategory] = useState(null);
+  const [filteredSecondaryCategory,setFilteredSecondaryCategory] = useState(null);
   let serial = 1 ;
+  let excelData =[];
   const productExcelData = [];
-  const setExcelDataBundle = () => {
-    const allProducts = products;
+  const setExcelDataBundle = (allProducts) => {
     for(let i=0;i<allProducts.length;i++){
         const singleItem = {};
         singleItem.productName = allProducts[i].product_name;
@@ -28,8 +31,47 @@ const ProductStock = () => {
         }
         productExcelData.push(singleItem);
     }
+    return productExcelData;
   }
-  setExcelDataBundle();
+  excelData = setExcelDataBundle(products);
+  const filterData = (e) => {
+    e.preventDefault();
+    let url =`http://localhost:5000/product?`;
+    if(filteredProduct!==null){
+      url = url+`&product_name=${filteredProduct}`;
+    }
+    if(filteredCategory!==null){
+      url = url+`&category=${filteredCategory}`;
+    }
+    if(filteredSecondaryCategory!==null){
+      url = url+`&secondary_category=${filteredSecondaryCategory}`;
+    }
+   
+    fetch(url,{
+       method: "GET",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        let totNum= 0;
+        let piecesNum= 0;
+        setProducts(data)
+        excelData = setExcelDataBundle(products);
+        setFilteredProduct(null);
+        if(data.length>0){
+          for(let i=0;i<data.length;i++){
+              piecesNum =piecesNum + parseInt(data[i].total_pieces);
+               totNum = totNum + (parseInt(data[i].total_pieces)* parseInt(data[i].unit_price))
+          }
+      }
+      setTotalProduct(piecesNum);
+        setTotalCost(totNum);
+      });
+      e.target.reset();
+      document.getElementById('my-modal').checked = false;
+  };
+  const clearFilter = () => {
+    window.location.reload(false);
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -69,6 +111,68 @@ const ProductStock = () => {
         <p className="text-4xl font-bold mb-4">Product Stock</p>
       </div>
       {isLoading && <Loader></Loader>}
+      <div className="my-3  px-0 lg:px-4 flex justify-between items-center">
+        <CSVLink
+          data={excelData}
+          filename={"product-stock.csv"}
+          className="mt-3 btn bg-green-900 text-white "
+          target="_blank"
+        >
+          Download
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="ml-2 w-5 h-5"
+          >
+            <path
+              fillRule="evenodd"
+              d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </CSVLink>
+
+        <div className="flex flex-col lg:flex-row md:flex-row justify-end items-center">
+          <label
+            onClick={clearFilter}
+            className="btn bg-red-600 text-white mr-2 mb-2 md:mb-0 lg:mb-0"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-5 h-5 mr-2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+            Clear Filter
+          </label>
+          <label htmlFor="my-modal" className="btn bg-green-900 text-white">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-5 h-5 mr-2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
+              />
+            </svg>
+            Filters
+          </label>
+        </div>
+      </div>
       <div className="overflow-x-auto px-0 lg:px-4">
         <table className="table table-zebra w-full">
           <thead>
@@ -82,7 +186,7 @@ const ProductStock = () => {
           </thead>
           <tbody>
           {
-            productExcelData.length>0 && productExcelData.map(p=>{
+            excelData.length>0 && excelData.map(p=>{
                 return <tr key={serial}>
                     <td>{serial++}</td>
                     <td>{p.productName}</td>
@@ -99,27 +203,78 @@ const ProductStock = () => {
           <span className="text-xl font-semibold text-red-500">{`Total Products=> ${totalProduct}`}</span>
           <span className="text-xl font-semibold text-red-500">{`Total Cost=> ${totalCost}`}</span>
       </div>}
-      <div className="mt-3  px-0 lg:px-4">
-        <CSVLink
-          data={productExcelData}
-          filename={"product-stock.csv"}
-          className="mt-3 btn bg-green-900"
-          target="_blank"
-        >
-           Download{" "}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="ml-2 w-5 h-5"
-          >
-            <path
-              fillRule="evenodd"
-              d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </CSVLink>
+      <input type="checkbox" id="my-modal" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box  w-11/12 max-w-5xl ">
+          <h3 className="font-bold text-lg ">Filters</h3>
+          <form onSubmit={filterData} className="my-4" id="filter-form">
+            <label htmlFor="">Select Product</label>
+            <br />
+            <select
+              id="select_shop"
+              className="input input-bordered w-full lg:w-1/2"
+              placeholder="Select Shop"
+              onChange={(e) => setFilteredProduct(e.target.value===''? null : e.target.value)}
+            >
+              <option value={null}></option>
+              {products.length > 0 &&
+                products.map((sh) => (
+                  <option key={sh._id} value={sh.product_name}>
+                    {sh.product_name}
+                  </option>
+                ))}
+            </select>
+            <br />
+            <label htmlFor="">Select Category</label>
+            <br />
+            <select
+              id="select_category"
+              className="input input-bordered w-full lg:w-1/2"
+              placeholder="Select Shop"
+              onChange={(e) => setFilteredCategory(e.target.value===''? null : e.target.value)}
+            >
+              <option value={null}></option>
+              {products.length > 0 &&
+                [...new Set(products.map(p=>p.category))].filter(x=>x!=='').map(sh => (
+                    
+                    <option key={sh}  value={sh}>
+                    {sh}
+                  </option>
+                ))}
+            </select>
+            <br />
+            <label htmlFor="">Select Secondary Category</label>
+            <br />
+            <select
+              id="select_shop"
+              className="input input-bordered w-full lg:w-1/2"
+              placeholder="Select Shop"
+              onChange={(e) => setFilteredSecondaryCategory(e.target.value===''? null : e.target.value)}
+            >
+              <option value={null}></option>
+              {products.length > 0 &&
+                [...new Set(products.map(p=>p.secondary_category))].filter(x=>x!=='').map(sh => (
+                    
+                    <option key={sh}  value={sh}>
+                    {sh}
+                  </option>
+                ))}
+            </select>
+            <br />
+            <br />
+            <div  htmlFor="my-modal" className="mx-4 my-4 flex justify-end">
+              <input
+                type="submit"
+                className="btn bg-green-900 text-white mr-2"
+                value="Filter"
+              />
+
+              <label htmlFor="my-modal" className="btn bg-red-900">
+                Close
+              </label>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
