@@ -22,11 +22,6 @@ const Sidebar = () => {
           </Link>
         </li>
         <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/viewregion">
-            View Regions
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
           <Link className="py-[5px] my-[5PX]" to="/addadmin">
             Add Admin
           </Link>
@@ -79,6 +74,11 @@ const Sidebar = () => {
         <li className="ml-0 lg:mx-2">
           <Link className="py-[5px] my-[5PX]" to="/show-distributed-product">
             Show Distribute Products
+          </Link>
+        </li>
+        <li className="ml-0 lg:mx-2">
+          <Link className="py-[5px] my-[5PX]" to="/viewregion">
+            Zone Report
           </Link>
         </li>
         <li className="ml-0 lg:mx-2">

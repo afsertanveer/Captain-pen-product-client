@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
 import { Link, useNavigate } from "react-router-dom";
+import Loader from "../../Loader/Loader";
 
 const ShowRegion = () => {
   const username = localStorage.getItem("username");
@@ -8,12 +9,14 @@ const ShowRegion = () => {
   const navigate = useNavigate();
   const [regions, setRegions] = useState([]);
   const [users, setUsers] = useState([]);
+  const [isLoading,setIsLoading] = useState(false);
 
   const excelData =[];
   regions.forEach(rg=>{
     const singleData= {};
     singleData.name = rg.region_name;
     singleData.division = rg.division;
+    singleData.createdDate = rg.created_date.split("T")[0];
     let count =0;
     rg.districts.forEach(dist=>{
       if(count===0){
@@ -37,13 +40,6 @@ const ShowRegion = () => {
       })
 
     }
-    // if(typeof(rg.thana)!=='undefined'){
-    //   rg.thana(th=>{
-    //     singleData.thana = singleData.thana + " " + th.label;
-    //   })
-    // }else{
-    //   singleData.thana="";
-    // }
     users.forEach(us=>{
       if(us._id===rg.assigned){
         singleData.assigned_to = us.name;
@@ -52,6 +48,7 @@ const ShowRegion = () => {
     excelData.push(singleData);
   })
   useEffect(() => {
+    setIsLoading(true);
     if (username === null || (role !== "0" && role !== "1")) {
       localStorage.clear();
       navigate("/");
@@ -63,7 +60,10 @@ const ShowRegion = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => setRegions(data));
+      .then((data) => {
+        setRegions(data)
+        setIsLoading(false);
+      });
 
     fetch("http://localhost:5000/users", {
       method: "GET",
@@ -72,12 +72,39 @@ const ShowRegion = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => setUsers(data));
+      .then((data) => {
+        setUsers(data)
+        setIsLoading(false);
+      });
   }, [username, role, navigate]);
   return (
     <div>
-      <div className="text-center">
-        <p className="text-4xl font-bold mb-4">All Regions</p>
+      <div className="text-center py-4 mx-0 lg:mx-4 bg-green-300 my-8 text-white">
+        <p className="text-4xl font-bold mb-4">Product Stock</p>
+      </div>
+      {isLoading && <Loader></Loader>}
+      <div className="my-3  px-0 lg:px-4 flex justify-between items-center">
+        <CSVLink
+          data={excelData}
+          filename={"product-stock.csv"}
+          className="mt-3 btn bg-green-900 text-white "
+          target="_blank"
+        >
+          Download
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="ml-2 w-5 h-5"
+          >
+            <path
+              fillRule="evenodd"
+              d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </CSVLink>
+
       </div>
       <div className="overflow-x-auto px-0 lg:px-4">
         <table className="table table-zebra w-full">
@@ -88,6 +115,7 @@ const ShowRegion = () => {
               <th>Division</th>
               <th>Districts</th>
               <th>Assigned To</th>
+              <th>Created Date</th>
             </tr>
           </thead>
           <tbody>
@@ -118,31 +146,12 @@ const ShowRegion = () => {
                       users?.filter((us) => us._id === it.assigned)[0].name
                     )}
                   </td>
+                  <td>{it.created_date.split("T")[0]}</td>
                 </tr>
               ))}
           </tbody>
         </table>
       </div>
-      <CSVLink
-        data={excelData}
-        filename={"region.csv"}
-        className="mt-3 btn bg-green-900"
-        target="_blank"
-      >
-         Download{" "}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="ml-2 w-5 h-5"
-          >
-            <path
-              fillRule="evenodd"
-              d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"
-              clipRule="evenodd"
-            />
-          </svg>
-      </CSVLink>
       
     </div>
   );

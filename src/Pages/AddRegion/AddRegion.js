@@ -22,6 +22,7 @@ const AddRegion = () => {
     event.preventDefault();
     const form = event.target;
     const regionName = form.region_name.value;
+    const curDate = new Date();
     let divName;
      division.forEach(div=>{
       if(div.value===selectedDivision){
@@ -32,7 +33,8 @@ const AddRegion = () => {
       region_name:regionName,
       division:divName,
       districts:selectedDistricts,
-      assigned:admin
+      assigned:admin,       
+      created_date:curDate
     }
     if(isDhaka){
       region.thana = selectedDhakaThana

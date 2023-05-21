@@ -190,15 +190,7 @@ const SalesReport = () => {
       selectedDate[0].endDate = convert(selectedDate[0].endDate)
     }
     setState(selectedDate);
-    console.log(
-      filteredShop,
-      filteredAdmin,
-      filteredASM,
-      filteredSR,
-      filteredZone,
-      state[0].startDate,
-      state[0].endDate
-    );
+   
     fetch(`http://localhost:5000/sales?shopName=${filteredShop}&adminName=${filteredAdmin}&asmName=${filteredASM}&zoneName=${filteredZone}&srName=${filteredSR}&startDate=${ state[0].startDate}&endDate=${state[0].endDate}`, {
       method: "GET",
     })
