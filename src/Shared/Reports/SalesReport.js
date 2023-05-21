@@ -337,7 +337,7 @@ const SalesReport = () => {
   }, [username, navigate, userId, role]);
   return (
     <div>
-      <div className="text-center">
+      <div className="text-center py-4 mx-0 lg:mx-4 bg-green-300 my-8 text-white">
         <p className="text-4xl font-bold mb-4">Sales</p>
       </div>
       {isLoading && <Loader></Loader>}

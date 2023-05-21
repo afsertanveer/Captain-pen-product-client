@@ -24,7 +24,7 @@ const ShopReport = () => {
   const [filteredAdmin, setFilteredAdmin] = useState(null);
   const [filteredASM, setFilteredASM] = useState(null);
   const [filteredSR, setFilteredSR] = useState(null);
-  let salesExcel = [];
+
   const [showCalendar, setShowCalendar] = useState(false);
   const [state, setState] = useState([
     {
@@ -33,6 +33,8 @@ const ShopReport = () => {
       key: "selection",
     },
   ]);
+
+  let salesExcel = [];
   let shopName;
   let shopAddress;
   let srName;

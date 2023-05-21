@@ -271,8 +271,8 @@ const ProductSalesReport = () => {
   }, [username, navigate, userId, role]);
   return (
     <div>
-      <div className="text-center">
-        <p className="text-4xl font-bold mb-4">Sales</p>
+      <div className="text-center py-4 mx-0 lg:mx-4 bg-green-300 my-8 text-white">
+        <p className="text-4xl font-bold mb-4">Product Sales Report</p>
       </div>
       {isLoading && <Loader></Loader>}
       <div className="my-3  px-0 lg:px-4 flex justify-between items-center">
