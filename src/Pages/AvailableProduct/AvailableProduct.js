@@ -9,7 +9,7 @@ const AvailableProduct = () => {
   const navigate = useNavigate();
  
   useEffect(() => {
-    if(role==='0' || role ==='1'){
+    if(role==='0' || role ==='1' || role===null){
         localStorage.clear();
         navigate('/');
       }

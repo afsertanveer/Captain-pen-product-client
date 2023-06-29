@@ -5,6 +5,8 @@ import { CSVLink } from "react-csv";
 import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import Pagination from "../Pagination/Pagination";
+import { toast } from "react-hot-toast";
 
 const SalesReport = () => {
   const username = localStorage.getItem("username");
@@ -33,7 +35,9 @@ const SalesReport = () => {
       key: "selection",
     },
   ]);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagiNationData, setPagiNationData] = useState({});
+  const [open,setOpen] = useState(true);
   let serial = 1;
   const setExcelBundleData = (salesData) => {
     let excelData = [];
@@ -190,14 +194,16 @@ const SalesReport = () => {
       selectedDate[0].endDate = convert(selectedDate[0].endDate)
     }
     setState(selectedDate);
-   
-    fetch(`http://localhost:5000/sales?shopName=${filteredShop}&adminName=${filteredAdmin}&asmName=${filteredASM}&zoneName=${filteredZone}&srName=${filteredSR}&startDate=${ state[0].startDate}&endDate=${state[0].endDate}`, {
+    
+    fetch(`http://localhost:5000/filtered-sales?shopName=${filteredShop}&adminName=${filteredAdmin}&asmName=${filteredASM}&zoneName=${filteredZone}&srName=${filteredSR}&startDate=${ state[0].startDate}&endDate=${state[0].endDate}`, {
       method: "GET",
     })
       .then((res) => res.json())
       .then((data) => {
         setSales(data)
         salesExcel = setExcelBundleData(sales);
+        setPagiNationData({});
+        setOpen(false);
         setFilteredASM(null);
         setFilteredAdmin(null);
         setFilteredSR(null);
@@ -215,7 +221,73 @@ const SalesReport = () => {
       document.getElementById('my-modal').checked = false;
   };
 
-
+  const handlePageClick = (event) => {
+    let clickedPage = parseInt(event.selected) + 1;
+    if (event.selected > 0) {
+      
+      fetch(
+        `http://localhost:5000/sales?page=${clickedPage}`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data) => {
+        setSales(data.data)
+        salesExcel = setExcelBundleData(sales);
+        setFilteredASM(null);
+        setFilteredAdmin(null);
+        setFilteredSR(null);
+        setFilteredShop(null);
+        setFilteredZone(null);
+        setState([
+          {
+            startDate: null,
+            endDate: null,
+            key: "selection",
+          },
+        ]);
+      document.getElementById('my-modal').checked = false;
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+        setSales([]);
+        toast.error(e.response.data);
+      });
+    } else {
+      fetch(
+        `http://localhost:5000/sales?&page=1`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data ) => {
+        setSales(data.data)
+        salesExcel = setExcelBundleData(sales);
+        setFilteredASM(null);
+        setFilteredAdmin(null);
+        setFilteredSR(null);
+        setFilteredShop(null);
+        setFilteredZone(null);
+        setState([
+          {
+            startDate: null,
+            endDate: null,
+            key: "selection",
+          },
+        ]);
+      document.getElementById('my-modal').checked = false;
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+        setSales([]);
+        toast.error(e.response.data);
+      });
+    }
+  };
   useEffect(() => {
     setIsLoading(true);
     if (
@@ -326,15 +398,17 @@ const SalesReport = () => {
         setIsLoading(false);
       });
 
-    fetch("http://localhost:5000/sales", {
+    fetch(`http://localhost:5000/sales?page=${currentPage}`, {
       method: "GET",
     })
       .then((res) => res.json())
       .then((data) => {
-        setSales(data);
+        setSales(data.data);
+        setPagiNationData(data.paginateData);
+        setCurrentPage(1);
         setIsLoading(false);
       });
-  }, [username, navigate, userId, role]);
+  }, [username, navigate, userId, role,currentPage]);
   return (
     <div>
       <div className="text-center py-4 mx-0 lg:mx-4 bg-green-300 my-8 text-white">
@@ -403,8 +477,8 @@ const SalesReport = () => {
           </label>
         </div>
       </div>
-      <div className="overflow-x-scroll px-0 lg:px-4 mb-3">
-        <table className="table overflow-x-scroll table-zebra ">
+      <div className='overflow-x-auto w-full'>
+            <table className='mx-auto   w-full whitespace-nowrap rounded-lg bg-white divide-y  overflow-hidden'>
           <thead>
             <tr>
               <th>SI No</th>
@@ -594,7 +668,7 @@ const SalesReport = () => {
                   return (
                     role === "3" && (
                       <tr key={serial++}>
-                        <td>{se.serialIndex}</td>
+                        <td>{serial}</td>
                         <td>{se.date.split("T")[0]}</td>
                         <td>{se.shopName}</td>
                         <td>{se.shopAddress}</td>
@@ -786,6 +860,9 @@ const SalesReport = () => {
             </div>
           </form>
         </div>
+      </div>
+  <div className="my-6 pr-0 lg:pr-10">
+        {pagiNationData && open && salesExcel.length>0 && (<Pagination pageCount={pagiNationData.totalPages} currentPage={pagiNationData.currentPage} handlePageClick={(e) => handlePageClick(e)} />)}
       </div>
     </div>
   );

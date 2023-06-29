@@ -10,7 +10,7 @@ const RecievedProduct = () => {
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     setIsLoading(true);
-    if(role==='0' || role ==='1'){
+    if((role==='0' || role ==='1') || role===null ){
         localStorage.clear();
         navigate('/');
       }

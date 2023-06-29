@@ -25,8 +25,11 @@ const ShowDistributedProducts = () => {
       })
         .then((res) => res.json())
         .then((data) =>{
+          console.log(data);
           if(data.data.length>0){
-              setProducts(data.data);
+            console.log(data);
+              const currentArray = data.data.filter(d=>d.sender_id===id);
+              setProducts(currentArray);
               setPagiNationData(data.paginateData);
               setIsLoading(false);
           }
@@ -64,7 +67,8 @@ const ShowDistributedProducts = () => {
         .then((res) => res.json())
         .then((data) =>{
           if(data.data.length>0){
-              setProducts(data.data);
+              const currentArray = data.data.filter(d=>d.sender_id===id);
+              setProducts(currentArray);
               setPagiNationData(data.paginateData);
               setIsLoading(false);
           }
@@ -100,7 +104,7 @@ const ShowDistributedProducts = () => {
       navigate('/');
     }
     if(role==='2'){
-      fetch(`http://localhost:5000/paginate-distribution-details-sr/1?sender_id=${id}`, {
+      fetch(`http://localhost:5000/paginate-distribution-details-sr/1/sender_id=${id}`, {
       method: "GET",
       headers: {
         "content-type": "application/json",
@@ -108,10 +112,13 @@ const ShowDistributedProducts = () => {
     })
       .then((res) => res.json())
       .then((data) =>{
-        if(data.data.length>0){
-          setProducts(data.data);
-          setPagiNationData(data.paginateData);
-          setIsLoading(false);
+        
+        console.log(data);
+        if(data.length>0){
+          const currentArray = data.filter(d=>d.sender_id===id);
+          setProducts(currentArray);
+            setPagiNationData(data.paginateData);
+            setIsLoading(false);
         }
       });
     }else{

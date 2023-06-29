@@ -5,6 +5,7 @@ import { CSVLink } from "react-csv";
 import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import Pagination from "../Pagination/Pagination";
 
 const ProductSalesReport = () => {
   const username = localStorage.getItem("username");
@@ -33,6 +34,8 @@ const ProductSalesReport = () => {
       key: "selection",
     },
   ]);
+  const [pagiNationData, setPagiNationData] = useState({});
+  const [open,setOpen] = useState(true);
 
   const setExcelBundleData = (salesData) => {
     let excelData = [];    
@@ -124,14 +127,15 @@ const ProductSalesReport = () => {
     setState(selectedDate);
     
     fetch(
-      `http://localhost:5000/sales?shopName=${filteredShop}&adminName=${filteredAdmin}&asmName=${filteredASM}&zoneName=${filteredZone}&srName=${filteredSR}&startDate=${state[0].startDate}&endDate=${state[0].endDate}`,
+      `http://localhost:5000/filtered-sales?shopName=${filteredShop}&adminName=${filteredAdmin}&asmName=${filteredASM}&zoneName=${filteredZone}&srName=${filteredSR}&startDate=${state[0].startDate}&endDate=${state[0].endDate}`,
       {
         method: "GET",
       }
     )
       .then((res) => res.json())
       .then((data) => {
-        setSales(data);
+        setSales(data.data);
+        setOpen(false);
         salesExcel = setExcelBundleData(sales);
         setFilteredASM(null);
         setFilteredAdmin(null);
@@ -149,7 +153,45 @@ const ProductSalesReport = () => {
     e.target.reset();
     document.getElementById("my-modal").checked = false;
   };
-
+  const handlePageClick = (event) => {
+    let clickedPage = parseInt(event.selected) + 1;
+    if (event.selected > 0) {
+      
+      fetch(
+        `http://localhost:5000/sales?page=${clickedPage}`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data) => {
+        setSales(data.data)
+        salesExcel = setExcelBundleData(sales);
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+        setSales([]);
+      });
+    } else {
+      fetch(
+        `http://localhost:5000/sales?&page=1`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data ) => {
+        setSales(data.data)
+        salesExcel = setExcelBundleData(sales);
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+        setSales([]);
+      });
+    }
+  };
   useEffect(() => {
     setIsLoading(true);
     if (
@@ -265,7 +307,8 @@ const ProductSalesReport = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setSales(data);
+        setSales(data.data);
+        setPagiNationData(data.paginateData);
         setIsLoading(false);
       });
   }, [username, navigate, userId, role]);
@@ -337,8 +380,8 @@ const ProductSalesReport = () => {
           </label>
         </div>
       </div>
-      <div className="overflow-x-scroll px-0 lg:px-4 mb-3">
-        <table className="table overflow-x-scroll table-zebra ">
+      <div className='overflow-x-auto w-full'>
+            <table className='mx-auto   w-full whitespace-nowrap rounded-lg bg-white divide-y  overflow-hidden'>
           <thead>
             <tr>
               <th>SI No</th>
@@ -547,6 +590,9 @@ const ProductSalesReport = () => {
             </div>
           </form>
         </div>
+      </div>
+      <div className="my-6 pr-0 lg:pr-10">
+        {pagiNationData && open && salesExcel.length>0 && (<Pagination pageCount={pagiNationData.totalPages} currentPage={pagiNationData.currentPage} handlePageClick={(e) => handlePageClick(e)} />)}
       </div>
     </div>
   );

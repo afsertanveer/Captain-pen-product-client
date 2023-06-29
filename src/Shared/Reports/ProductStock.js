@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {  useNavigate } from "react-router-dom";
 import Loader from "../../Loader/Loader";
 import { CSVLink } from "react-csv";
+import Pagination from "../Pagination/Pagination";
 
 const ProductStock = () => {
   const username = localStorage.getItem("username");
@@ -33,6 +34,8 @@ const ProductStock = () => {
     }
     return productExcelData;
   }
+  const [pagiNationData, setPagiNationData] = useState({});
+  const [open,setOpen] = useState(true);
   excelData = setExcelDataBundle(products);
   const filterData = (e) => {
     e.preventDefault();
@@ -57,6 +60,7 @@ const ProductStock = () => {
         setProducts(data)
         excelData = setExcelDataBundle(products);
         setFilteredProduct(null);
+        setOpen(false);
         if(data.length>0){
           for(let i=0;i<data.length;i++){
               piecesNum =piecesNum + parseInt(data[i].total_pieces);
@@ -72,7 +76,45 @@ const ProductStock = () => {
   const clearFilter = () => {
     window.location.reload(false);
   };
-
+  const handlePageClick = (event) => {
+    let clickedPage = parseInt(event.selected) + 1;
+    if (event.selected > 0) {
+      
+      fetch(
+        `http://localhost:5000/paginate-product?page=${clickedPage}`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data) => {
+        setProducts(data.data)
+        excelData = setExcelDataBundle(products);
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+        setProducts([]);
+      });
+    } else {
+      fetch(
+        `http://localhost:5000/paginate-product?&page=1`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data ) => {
+        setProducts(data.data)
+        excelData = setExcelDataBundle(products);
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+        setProducts([]);
+      });
+    }
+  };
   useEffect(() => {
     setIsLoading(true);
     if (
@@ -91,7 +133,6 @@ const ProductStock = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setProducts(data);
         let tot= 0;
         let pieces = 0;
         if(data.length>0){
@@ -102,6 +143,18 @@ const ProductStock = () => {
         }
         setTotalProduct(pieces);
         setTotalCost(tot);
+        setIsLoading(false);
+      });
+    fetch(`http://localhost:5000/paginate-product`, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(data.data);
+        setPagiNationData(data.paginateData);
         setIsLoading(false);
       });
   }, [username, navigate, role]);
@@ -275,6 +328,9 @@ const ProductStock = () => {
             </div>
           </form>
         </div>
+      </div>
+      <div className="my-6 pr-0 lg:pr-10">
+        {pagiNationData && open && excelData.length>0 && (<Pagination pageCount={pagiNationData.totalPages} currentPage={pagiNationData.currentPage} handlePageClick={(e) => handlePageClick(e)} />)}
       </div>
     </div>
   );

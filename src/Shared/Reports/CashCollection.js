@@ -5,6 +5,7 @@ import { CSVLink } from "react-csv";
 import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import Pagination from "../Pagination/Pagination";
 
 const CashCollection = () => {
   const username = localStorage.getItem("username");
@@ -33,6 +34,8 @@ const CashCollection = () => {
       key: "selection",
     },
   ]);
+  const [pagiNationData, setPagiNationData] = useState({});
+  const [open,setOpen] = useState(true);
   let shopName;
   let shopAddress;
   let srName;
@@ -185,7 +188,7 @@ const CashCollection = () => {
     }
     setState(selectedDate);
    
-    fetch(`http://localhost:5000/cash-collection-report?shopName=${filteredShop}&adminName=${filteredAdmin}&asmName=${filteredASM}&zoneName=${filteredZone}&srName=${filteredSR}&startDate=${ state[0].startDate}&endDate=${state[0].endDate}`, {
+    fetch(`http://localhost:5000/filtered-cash-collection-report?shopName=${filteredShop}&adminName=${filteredAdmin}&asmName=${filteredASM}&zoneName=${filteredZone}&srName=${filteredSR}&startDate=${ state[0].startDate}&endDate=${state[0].endDate}`, {
       method: "GET",
     })
       .then((res) => res.json())
@@ -197,6 +200,7 @@ const CashCollection = () => {
         setFilteredSR(null);
         setFilteredShop(null);
         setFilteredZone(null);
+        setOpen(false);
         setState([
           {
             startDate: null,
@@ -207,6 +211,45 @@ const CashCollection = () => {
       });
       e.target.reset();
       document.getElementById('my-modal').checked = false;
+  };
+  const handlePageClick = (event) => {
+    let clickedPage = parseInt(event.selected) + 1;
+    if (event.selected > 0) {
+      
+      fetch(
+        `http://localhost:5000/cash-collection-report?page=${clickedPage}`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data) => {
+        setCashCollectionReport(data.data)
+        salesExcel = setExcelDataBundle(cashCollectionReport);
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+        setCashCollectionReport([]);
+      });
+    } else {
+      fetch(
+        `http://localhost:5000/cash-collection-report?&page=1`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data ) => {
+        setCashCollectionReport(data.data)
+        salesExcel = setExcelDataBundle(cashCollectionReport);
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+        setCashCollectionReport([]);
+      });
+    }
   };
   useEffect(() => {
     setIsLoading(true);
@@ -323,7 +366,8 @@ const CashCollection = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setCashCollectionReport(data);
+        setCashCollectionReport(data.data);
+        setPagiNationData(data.paginateData);
         setIsLoading(false);
       });
   }, [username, navigate, userId, role]);
@@ -593,6 +637,9 @@ const CashCollection = () => {
             </div>
           </form>
         </div>
+      </div>
+      <div className="my-6 pr-0 lg:pr-10">
+        {pagiNationData && open && salesExcel.length>0 && (<Pagination pageCount={pagiNationData.totalPages} currentPage={pagiNationData.currentPage} handlePageClick={(e) => handlePageClick(e)} />)}
       </div>
     </div>
   );

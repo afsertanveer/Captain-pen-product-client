@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../../Loader/Loader";
+import Pagination from "../../Shared/Pagination/Pagination";
 
 const ShowRegion = () => {
   const username = localStorage.getItem("username");
@@ -10,50 +11,95 @@ const ShowRegion = () => {
   const [regions, setRegions] = useState([]);
   const [users, setUsers] = useState([]);
   const [isLoading,setIsLoading] = useState(false);
+  const [pagiNationData, setPagiNationData] = useState({});
 
   const excelData =[];
-  regions.forEach(rg=>{
-    const singleData= {};
-    singleData.name = rg.region_name;
-    singleData.division = rg.division;
-    singleData.createdDate = rg.created_date.split("T")[0];
-    let count =0;
-    rg.districts.forEach(dist=>{
-      if(count===0){
-        singleData.district = dist.label;
-        count++;
-      }
-      else{
-        singleData.district= singleData.district +" " + dist.label;
-      }
-    })
-    count=0;
-    if(rg.hasOwnProperty('thana')===true){
-      rg.thana.forEach(dist=>{
+  let regionData = [];
+  const setExcelDataBundle = (zones) =>{
+    zones.forEach(rg=>{
+      const singleData= {};
+      singleData.name = rg.region_name;
+      singleData.division = rg.division;
+      singleData.createdDate = rg.created_date.split("T")[0];
+      let count =0;
+      rg.districts.forEach(dist=>{
         if(count===0){
-          singleData.thana = dist.label;
+          singleData.district = dist.label;
           count++;
         }
         else{
-          singleData.thana= singleData.thana +" " + dist.label;
+          singleData.district= singleData.district +" " + dist.label;
         }
       })
-
-    }
-    users.forEach(us=>{
-      if(us._id===rg.assigned){
-        singleData.assigned_to = us.name;
+      count=0;
+      if(rg.hasOwnProperty('thana')===true){
+        rg.thana.forEach(dist=>{
+          if(count===0){
+            singleData.thana = dist.label;
+            count++;
+          }
+          else{
+            singleData.thana= singleData.thana +" " + dist.label;
+          }
+        })
+  
       }
+      users.forEach(us=>{
+        if(us._id===rg.assigned){
+          singleData.assigned_to = us.name;
+        }
+      })
+      excelData.push(singleData);
     })
-    excelData.push(singleData);
-  })
+    return excelData
+  }
+  regionData = setExcelDataBundle(regions);
+  const handlePageClick = (event) => {
+    let clickedPage = parseInt(event.selected) + 1;
+    if (event.selected > 0) {
+      
+      fetch(
+        `http://localhost:5000/paginate-region?page=${clickedPage}`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data) => {
+        setRegions(data.data)
+        regionData = setExcelDataBundle(regions);
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+        setRegions([]);
+      });
+    } else {
+      fetch(
+        `http://localhost:5000/paginate-region?&page=1`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data ) => {
+        setRegions(data.data)
+        regionData = setExcelDataBundle(regions);
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+        setRegions([]);
+      });
+    }
+  };
   useEffect(() => {
     setIsLoading(true);
     if (username === null || (role !== "0" && role !== "1")) {
       localStorage.clear();
       navigate("/");
     }
-    fetch("http://localhost:5000/region", {
+    fetch("http://localhost:5000/paginate-region", {
       method: "GET",
       headers: {
         "content-type": "application/json",
@@ -61,7 +107,8 @@ const ShowRegion = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setRegions(data)
+        setRegions(data.data);
+        setPagiNationData(data.paginateData);
         setIsLoading(false);
       });
 
@@ -85,7 +132,7 @@ const ShowRegion = () => {
       {isLoading && <Loader></Loader>}
       <div className="my-3  px-0 lg:px-4 flex justify-between items-center">
         <CSVLink
-          data={excelData}
+          data={regionData}
           filename={"product-stock.csv"}
           className="mt-3 btn bg-green-900 text-white "
           target="_blank"
@@ -152,7 +199,9 @@ const ShowRegion = () => {
           </tbody>
         </table>
       </div>
-      
+      <div className="my-6 pr-0 lg:pr-10">
+        {pagiNationData&& excelData.length>0 && (<Pagination pageCount={pagiNationData.totalPages} currentPage={pagiNationData.currentPage} handlePageClick={(e) => handlePageClick(e)} />)}
+      </div>      
     </div>
   );
 };

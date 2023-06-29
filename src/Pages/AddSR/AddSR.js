@@ -139,7 +139,7 @@ const AddSR = () => {
     <div className="card  px-6 py-10 mt-10 lg:mx-40 lg:px-10 lg:py-15 mx-3 shadow-2xl bg-base-100">
       <form onSubmit={AddSR}>
         <p className="text-2xl text-center  font-bold">
-          Add Saler Representative
+          Add Sales Representative
         </p>
         <div className="form-control">
           <label className="label">
@@ -159,7 +159,7 @@ const AddSR = () => {
           </label>
           <input
             name="username"
-            type="number"
+            type="text"
             onChange={setPassword}
             placeholder="username"
             className=" input input-bordered w-1/2"

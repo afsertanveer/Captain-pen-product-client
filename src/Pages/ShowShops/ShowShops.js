@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../Loader/Loader";
+import Pagination from "../../Shared/Pagination/Pagination";
 
 const ShowShops = () => {
   const username = localStorage.getItem("username");
@@ -11,14 +12,50 @@ const ShowShops = () => {
   const [district, setDistrict] = useState([]);
   const [thana, setThana] = useState([]);
   const [subD, setSubD] = useState([]);
-  const [isLoading,setIsLoading] = useState(false);
+  const [isLoading,setIsLoading] = useState(false);  
+  const [pagiNationData,setPagiNationData] = useState({});
+  const handlePageClick = (event) => {
+    let clickedPage = parseInt(event.selected) + 1;
+    if (event.selected > 0) {
+      
+      fetch(
+        `http://localhost:5000/paginated-shops?page=${clickedPage}&managed_by=${userId}`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data) => {
+       setShops(data.shopdata);
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+      });
+    } else {
+      fetch(
+        `http://localhost:5000/paginated-shops?&page=1&managed_by=${userId}`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data ) => {
+       setShops(data.shopdata);
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+      });
+    }
+  };
   useEffect(() => {
     setIsLoading(true);
     if (username === null ||(role!=="0" && role!=='3')) {
       localStorage.clear();
       navigate("/");
     }
-    fetch(`http://localhost:5000/shop?managed_by=${userId}`, {
+    fetch(`http://localhost:5000/paginated-shops?page=1&managed_by=${userId}`, {
       method: "GET",
       headers: {
         "content-type": "application/json",
@@ -26,8 +63,9 @@ const ShowShops = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setShops(data)
-        setIsLoading(false)    
+        setShops(data.shopdata);
+        setPagiNationData(data.paginateData);
+        setIsLoading(false);
     });
 
     fetch("http://localhost:5000/district", {
@@ -66,8 +104,8 @@ const ShowShops = () => {
         <p className="text-4xl font-bold mb-4">Shops</p>
       </div>
       {isLoading && <Loader></Loader>}
-      <div className="overflow-x-auto px-0 lg:px-4 px-0 lg:px-4">
-        <table className="table table-zebra w-full">
+      <div className='overflow-x-auto w-full'>
+            <table className='mx-auto   w-full whitespace-nowrap rounded-lg bg-white divide-y  overflow-hidden'>
           <thead >
             <tr>
               <th>Shop Name</th>
@@ -102,6 +140,9 @@ const ShowShops = () => {
           </tbody>
         </table>
       </div>
+      <div className="my-6 pr-0 lg:pr-10">
+          {pagiNationData && (<Pagination pageCount={pagiNationData.totalPages} currentPage={pagiNationData.currentPage} handlePageClick={(e) => handlePageClick(e)} />)}
+        </div>
     </div>
   );
 };

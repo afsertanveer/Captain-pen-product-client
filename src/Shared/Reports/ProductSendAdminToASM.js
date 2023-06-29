@@ -5,6 +5,7 @@ import { CSVLink } from "react-csv";
 import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import Pagination from "../Pagination/Pagination";
 
 const ProductSendAdminToASM = () => {
   const username = localStorage.getItem("username");
@@ -31,6 +32,8 @@ const ProductSendAdminToASM = () => {
       key: "selection",
     },
   ]);
+  const [pagiNationData, setPagiNationData] = useState({});
+  const [open,setOpen] = useState(true);
   let excelData =[];
   let adminName;
   let count = 1;
@@ -121,7 +124,7 @@ const ProductSendAdminToASM = () => {
     }
     setState(selectedDate);
    
-    fetch(`http://localhost:5000/admin-send-asm?productName=${filteredProduct}&adminName=${filteredAdmin}&asmName=${filteredASM}&zoneName=${filteredZone}&category=${filteredCategory}&startDate=${ state[0].startDate}&endDate=${state[0].endDate}`, {
+    fetch(`http://localhost:5000/filtered-admin-send-asm?productName=${filteredProduct}&adminName=${filteredAdmin}&asmName=${filteredASM}&zoneName=${filteredZone}&category=${filteredCategory}&startDate=${ state[0].startDate}&endDate=${state[0].endDate}`, {
       method: "GET",
     })
       .then((res) => res.json())
@@ -133,6 +136,7 @@ const ProductSendAdminToASM = () => {
         setFilteredProduct(null);
         setFilteredCategory(null)
         setFilteredZone(null);
+        setOpen(false);
         setState([
           {
             startDate: null,
@@ -143,6 +147,45 @@ const ProductSendAdminToASM = () => {
       });
       e.target.reset();
       document.getElementById('my-modal').checked = false;
+  };
+  const handlePageClick = (event) => {
+    let clickedPage = parseInt(event.selected) + 1;
+    if (event.selected > 0) {
+      
+      fetch(
+        `http://localhost:5000/admin-send-asm?page=${clickedPage}`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data) => {
+        setSendProduct(data.data)
+        excelData = setExcelDataBundle(sendProduct);
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+        setSendProduct([]);
+      });
+    } else {
+      fetch(
+        `http://localhost:5000/admin-send-asm?&page=1`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data ) => {
+        setSendProduct(data.data)
+        excelData = setExcelDataBundle(sendProduct);
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+        setSendProduct([]);
+      });
+    }
   };
   useEffect(() => {
     setIsLoading(true);
@@ -214,7 +257,8 @@ const ProductSendAdminToASM = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setSendProduct(data);
+        setSendProduct(data.data);
+        setPagiNationData(data.paginateData)
         setIsLoading(false);
       });
   }, [username, navigate, role,userId]);
@@ -465,6 +509,9 @@ const ProductSendAdminToASM = () => {
             </div>
           </form>
         </div>
+      </div>
+      <div className="my-6 pr-0 lg:pr-10">
+        {pagiNationData && open && excelData.length>0 && (<Pagination pageCount={pagiNationData.totalPages} currentPage={pagiNationData.currentPage} handlePageClick={(e) => handlePageClick(e)} />)}
       </div>
     </div>
   );

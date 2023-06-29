@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../Loader/Loader";
+import Pagination from "../../Shared/Pagination/Pagination";
 
 const ShopUnderAdmin = () => {
   const username = localStorage.getItem("username");
@@ -12,15 +13,49 @@ const ShopUnderAdmin = () => {
   const [thana, setThana] = useState([]);
   const [subD, setSubD] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [pagiNationData,setPagiNationData] = useState({});  
+  const handlePageClick = (event) => {
+    let clickedPage = parseInt(event.selected) + 1;
+    if (event.selected > 0) {
+      
+      fetch(`http://localhost:5000/admin-shops/${userId}?page=${clickedPage}`, {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setShops(data.data);
+          setPagiNationData(data.paginateData);
+        }).catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+      });
+    } else {
+      fetch(`http://localhost:5000/admin-shops/${userId}`, {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setShops(data.data);
+          setPagiNationData(data.paginateData);
+        }).catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+      });
+    }
+  };
   useEffect(() => {
-    
-  let totShop = [];
     setIsLoading(true);
     if (username === null || role !== "1") {
       localStorage.clear();
       navigate("/");
     }
-    fetch(`http://localhost:5000/users`, {
+    fetch(`http://localhost:5000/admin-shops/${userId}`, {
       method: "GET",
       headers: {
         "content-type": "application/json",
@@ -28,38 +63,8 @@ const ShopUnderAdmin = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.length > 0) {
-          let asms = [];
-          asms = data.filter((d) => d.managed_by === userId);
-          const srs = [];
-          for (let i = 0; i < asms.length; i++) {
-            for (let j = 0; j < data.length; j++) {
-              if (asms[i]._id === data[j].managed_by) {
-                srs.push(data[j]);
-              }
-            }
-          }
-          if (srs.length > 0) {
-            for (let i = 0; i < srs.length; i++) {
-              fetch(`http://localhost:5000/shop?managed_by=${srs[i]._id}`, {
-                method: "GET",
-                headers: {
-                  "content-type": "application/json",
-                },
-              })
-                .then((res) => res.json())
-                .then((shopData) => {
-                  if(shopData.length>0){
-                    shopData.forEach(element => {
-                        totShop.push(element)
-                    });
-                  }
-                });
-            }
-            setShops(totShop);
-          }
-          setIsLoading(false);
-        }
+        setShops(data.data);
+        setPagiNationData(data.paginateData);
       });
     // fetch(`http://localhost:5000/use?managed_by=${userId}`, {
     //   method: "GET",
@@ -147,6 +152,9 @@ const ShopUnderAdmin = () => {
           </tbody>
         </table>
       </div>
+      <div className="my-6 pr-0 lg:pr-10">
+          {pagiNationData && (<Pagination pageCount={pagiNationData.totalPages} currentPage={pagiNationData.currentPage} handlePageClick={(e) => handlePageClick(e)} />)}
+        </div>
     </div>
   );
 };

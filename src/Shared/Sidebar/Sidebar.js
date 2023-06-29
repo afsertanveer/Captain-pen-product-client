@@ -265,8 +265,8 @@ const Sidebar = () => {
   }
 
   const handleLogOut = () => {
+    navigate("/");    
     localStorage.clear();
-    navigate("/");
   };
   
   const [buttonName,setButtonName] = useState('Menu');

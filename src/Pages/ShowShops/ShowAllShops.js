@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Pagination from "../../Shared/Pagination/Pagination";
 
 const ShowAllShops = () => {
   const username = localStorage.getItem("username");
@@ -9,13 +10,49 @@ const ShowAllShops = () => {
   const [district, setDistrict] = useState([]);
   const [thana, setThana] = useState([]);
   const [subD, setSubD] = useState([]);
+  const [pagiNationData,setPagiNationData] = useState({});
+  const handlePageClick = (event) => {
+    let clickedPage = parseInt(event.selected) + 1;
+    if (event.selected > 0) {
+      
+      fetch(
+        `http://localhost:5000/paginated-shops?page=${clickedPage}`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data) => {
+       setShops(data.shopdata);
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+      });
+    } else {
+      fetch(
+        `http://localhost:5000/paginated-shops?&page=1`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data ) => {
+       setShops(data.shopdata);
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+      });
+    }
+  };
   useEffect(() => {
     if (username === null || role !== "0") {
       localStorage.clear();
       navigate("/");
     }
 
-    fetch("http://localhost:5000/shop", {
+    fetch("http://localhost:5000/paginated-shops?page=1", {
       method: "GET",
       headers: {
         "content-type": "application/json",
@@ -23,7 +60,8 @@ const ShowAllShops = () => {
     })
       .then((res) => res.json())
       .then((data) =>{ 
-        setShops(data)
+        setShops(data.shopdata);
+        setPagiNationData(data.paginateData);
     });
 
     fetch("http://localhost:5000/shop", {
@@ -64,11 +102,11 @@ const ShowAllShops = () => {
   }, [username, role, navigate]);
   return (
     <div>
-      <div className="text-center">
+      <div className="text-center my-6">
         <p className="text-4xl font-bold">All shops</p>
       </div>
-      <div className="overflow-x-auto px-0 lg:px-4">
-        <table className="table table-zebra w-full">
+      <div className='overflow-x-auto w-full'>
+            <table className='mx-auto   w-full whitespace-nowrap rounded-lg bg-white divide-y  overflow-hidden'>
           <thead>
             <tr>
               <th>Shop Name</th>
@@ -103,6 +141,9 @@ const ShowAllShops = () => {
           </tbody>
         </table>
       </div>
+      <div className="my-6 pr-0 lg:pr-10">
+          {pagiNationData && (<Pagination pageCount={pagiNationData.totalPages} currentPage={pagiNationData.currentPage} handlePageClick={(e) => handlePageClick(e)} />)}
+        </div>
     </div>
   );
 };

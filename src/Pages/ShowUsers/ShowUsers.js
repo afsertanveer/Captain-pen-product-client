@@ -1,25 +1,65 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Pagination from "../../Shared/Pagination/Pagination";
 
 const ShowUsers = () => {
   const username = localStorage.getItem("username");
   const role = localStorage.getItem("role");
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
+  const [pagiNationData, setPagiNationData] = useState({});
+
+  const handlePageClick = (event) => {
+    let clickedPage = parseInt(event.selected) + 1;
+    if (event.selected > 0) {
+        fetch(
+          `http://localhost:5000/paginated-users?page=${clickedPage}`,{
+            method:"GET"
+          }
+        )
+        .then(res=>res.json())
+        .then((data) => {
+          setUsers(data.userData);
+          setPagiNationData(data.paginateData);
+        })
+        .catch((e) => {
+          console.log(e);
+          setPagiNationData({});
+        });
+    } else {
+      fetch(
+        `http://localhost:5000/paginated-users?&page=1`,{
+          method:"GET"
+        }
+      )
+      .then(res=>res.json())
+      .then((data ) => {
+        setUsers(data.userData);
+        setPagiNationData(data.paginateData);
+      })
+      .catch((e) => {
+        console.log(e);
+        setPagiNationData({});
+      });
+    }
+  };
   useEffect(() => {
     if (username === null || role !== "0") {
       localStorage.clear();
       navigate("/");
     }
-
-    fetch("http://localhost:5000/users", {
+      fetch(`http://localhost:5000/paginated-users?page=1`, {
       method: "GET",
       headers: {
         "content-type": "application/json",
       },
     })
       .then((res) => res.json())
-      .then((data) => setUsers(data));
+      .then((data) =>{
+        setUsers(data.userData)
+        setPagiNationData(data.paginateData);
+        });
+    
   }, [username, role, navigate]);
   return (
     <div>
@@ -56,6 +96,9 @@ const ShowUsers = () => {
           </tbody>
         </table>
       </div>
+      <div className="my-6 pr-0 lg:pr-10">
+          {pagiNationData && (<Pagination pageCount={pagiNationData.totalPages} currentPage={pagiNationData.currentPage} handlePageClick={(e) => handlePageClick(e)} />)}
+        </div>
     </div>
   );
 };
