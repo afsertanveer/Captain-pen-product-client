@@ -46,6 +46,7 @@ import ShopReport from "../Shared/Reports/ShopReport";
 import ProductSalesReport from "../Shared/Reports/ProductSalesReport";
 import ProductSendAdminToASM from "../Shared/Reports/ProductSendAdminToASM";
 import ProductSendASMToSR from "../Shared/Reports/ProductSendASMToSR";
+import AddUnit from "../Pages/Factory/AddUnit";
 
 const router = createBrowserRouter([
   {
@@ -250,6 +251,10 @@ const router = createBrowserRouter([
       {
         path: "/asm-send-product-report",
         element: <ProductSendASMToSR></ProductSendASMToSR>
+      },
+      {
+        path: "/add-unit",
+        element: <AddUnit></AddUnit>
       }
     ],
   },

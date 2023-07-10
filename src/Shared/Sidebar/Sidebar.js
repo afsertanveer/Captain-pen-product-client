@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import imgLogo from "../../assets/images/logo/logo-rmv.png";
+import './Sidebar.css';
 
 const Sidebar = () => {
   const role = localStorage.getItem("role");
@@ -11,6 +12,16 @@ const Sidebar = () => {
   if (role === "0") {
     menuItems = (
       <>
+        <li  className="ml-0 lg:mx-2 " >
+            <span className="hovmenu hover:bg-white hover:text-black">Factory
+            <div className="dr-menu">
+              <Link to="/add-unit">Add Unit</Link>
+              <Link to="/">Link 2</Link>
+              <Link to="#">Link 3</Link>
+            </div>
+            </span>
+          
+        </li>
         <li className="ml-0 lg:mx-2">
           <Link className="py-[5px] my-[5PX]" to="/show-all-shops">
             View All Shops
@@ -274,7 +285,7 @@ const Sidebar = () => {
   const handleMenuButton = ()=>{
     setCount(count+1);
     if(count%2===0){
-      setButtonName('x')
+      setButtonName('X')
     }else{
       setButtonName('Menu')
     }

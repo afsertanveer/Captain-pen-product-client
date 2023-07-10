@@ -28,6 +28,7 @@ const Login = () => {
             localStorage.setItem("role", data[0].role);
             localStorage.setItem("user_id", data[0]._id);
             localStorage.setItem("name", data[0].name);
+            localStorage.setItem("permission",data[0].assigned);
             navigate("/home");
           } else {
             toast.error("Wrong Password");
