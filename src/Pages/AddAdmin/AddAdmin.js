@@ -42,7 +42,7 @@ const AddAdmin = () => {
     const name = form.name.value;
     const username = form.username.value;
     const password = form.password.value;
-    const assigned = "0";
+    const assigned = form.permission.value;
     let currentData = new Date();
     const created_at = currentData.toISOString().split("T")[0];
     const role = "1";
@@ -121,7 +121,15 @@ const AddAdmin = () => {
             required
           />
         </div>
-
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text font-bold">Factory Permission</span>
+          </label>
+          <select name="permission" id="permission" className=" input input-bordered w-1/2 mb-4">
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
         <div className="form-control mt-6">
           <button className="btn btn-primary w-1/2 lg:w-1/4">Add Admin</button>
         </div>

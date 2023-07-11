@@ -72,3 +72,6 @@ input [type=button], input[type=submit]{
 .rdrMonthAndYearWrapper{
   padding: 0 0 !important;
 }
+.table-class th{
+  padding: 5px 10px;
+}

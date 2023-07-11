@@ -153,8 +153,8 @@ const ShowRegion = () => {
         </CSVLink>
 
       </div>
-      <div className="overflow-x-auto px-0 lg:px-4">
-        <table className="table table-zebra w-full">
+      <div className='table-class overflow-x-auto w-full'>
+        <table className='mx-auto w-full whitespace-nowrap rounded-lg bg-white divide-y  overflow-hidden'>
           {/* head */}
           <thead>
             <tr>

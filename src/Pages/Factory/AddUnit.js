@@ -1,16 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const AddUnit = () => {
-
+  const username = localStorage.getItem("username");
+  const permission = localStorage.getItem("permission");
+  const navigate = useNavigate();
   const addUnit = async (e) => {
     e.preventDefault();
     const form = e.target;
     const name = form.unit_name.value;
     const descr = form.description.value;
+    const active = "1";
     const unit ={
         unit:name,
-        description:descr
+        description:descr,active
     }
     // console.log(subject,file);
     await fetch(`http://localhost:5000/unit`,{
@@ -22,11 +26,19 @@ const AddUnit = () => {
     })
       .then((res) => res.json())
       .then(( data ) => {
-        console.log(data);
       toast.success("Unit Added Successfully");
       form.reset();
-    }).catch(err=>console.log(err))
+    }).catch(err=>{
+      toast.error("This unit already exists! Please check the list")
+    })
   };
+  useEffect(() => {
+    if (username === null || permission !== "1") {
+      localStorage.clear();
+      navigate("/");
+    }
+    
+  }, [username, permission, navigate]);
   return (
     <div>
       <div className="w-full lg:w-1/2 py-10 mt-10 bg-white flex flex-col mx-auto  px-4 border border-white rounded-lg  shadow-lg ">
@@ -44,7 +56,7 @@ const AddUnit = () => {
                 type="text"
                 name="unit_name"
                 id="unit_name"
-                placeholder="Subject Name"
+                placeholder="Unit Name"
                 required
               />
             </div>

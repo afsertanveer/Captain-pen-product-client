@@ -47,6 +47,8 @@ import ProductSalesReport from "../Shared/Reports/ProductSalesReport";
 import ProductSendAdminToASM from "../Shared/Reports/ProductSendAdminToASM";
 import ProductSendASMToSR from "../Shared/Reports/ProductSendASMToSR";
 import AddUnit from "../Pages/Factory/AddUnit";
+import ShowUnit from "../Pages/Factory/ShowUnit";
+import AddFactoryItem from "../Pages/Factory/AddFactoryItem";
 
 const router = createBrowserRouter([
   {
@@ -255,6 +257,14 @@ const router = createBrowserRouter([
       {
         path: "/add-unit",
         element: <AddUnit></AddUnit>
+      },
+      {
+        path: "/show-unit",
+        element: <ShowUnit></ShowUnit>
+      },
+      {
+        path: "/add-factory-item",
+        element: <AddFactoryItem></AddFactoryItem>
       }
     ],
   },

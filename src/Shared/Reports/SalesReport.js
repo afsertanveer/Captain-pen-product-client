@@ -477,7 +477,7 @@ const SalesReport = () => {
           </label>
         </div>
       </div>
-      <div className='overflow-x-auto w-full'>
+      <div className='table-class overflow-x-auto w-full'>
             <table className='mx-auto   w-full whitespace-nowrap rounded-lg bg-white divide-y  overflow-hidden'>
           <thead>
             <tr>

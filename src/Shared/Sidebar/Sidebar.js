@@ -7,21 +7,12 @@ import './Sidebar.css';
 const Sidebar = () => {
   const role = localStorage.getItem("role");
   const username = localStorage.getItem("username");
+  const permission = localStorage.getItem("permission");
   const navigate = useNavigate();
   let menuItems;
   if (role === "0") {
     menuItems = (
       <>
-        <li  className="ml-0 lg:mx-2 " >
-            <span className="hovmenu hover:bg-white hover:text-black">Factory
-            <div className="dr-menu">
-              <Link to="/add-unit">Add Unit</Link>
-              <Link to="/">Link 2</Link>
-              <Link to="#">Link 3</Link>
-            </div>
-            </span>
-          
-        </li>
         <li className="ml-0 lg:mx-2">
           <Link className="py-[5px] my-[5PX]" to="/show-all-shops">
             View All Shops
@@ -342,13 +333,25 @@ const Sidebar = () => {
               </svg>
             </Link>
           </li>
+          {
+          permission==="1" && <li  className="ml-0 lg:mx-2 " >
+          <span className="hovmenu hover:bg-white hover:text-black">Factory
+          <div className="dr-menu">
+            <Link to="/add-unit">Add Unit</Link>
+            <Link to="/show-unit">Show Units</Link>
+            <Link to="/add-factory-item">Add Factory Item</Link>
+          </div>
+          </span>
+        
+      </li>
+        }
           <li className="ml-0 lg:mx-2">
             <Link className="py-[5px] my-[5PX]" to="/addshop">
               Add Shop
             </Link>
           </li>
           {menuItems}
-
+          
           <li className="ml-0 lg:mx-2">
             <Link className="py-[5px] my-[5PX]" to="/shop-report">
               Shop Report

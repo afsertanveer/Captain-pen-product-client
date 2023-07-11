@@ -46,8 +46,8 @@ const SrUnderAdmin = () => {
         <p className="text-4xl font-bold">MY SR</p>
       </div>
       {
-        users.length>0 && <div className="overflow-x-auto px-0 lg:px-4">
-        <table className="table table-zebra w-full">
+        users.length>0 && <div className='table-class overflow-x-auto w-full'>
+        <table className='mx-auto w-full whitespace-nowrap rounded-lg bg-white divide-y  overflow-hidden'>
           <thead>
             <tr>
               <th>Name</th>
