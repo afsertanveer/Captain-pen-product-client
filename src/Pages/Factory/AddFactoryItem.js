@@ -5,6 +5,7 @@ import Loader from "../../Loader/Loader";
 
 const AddFactoryItem = () => {
   const username = localStorage.getItem("username");
+  const userId = localStorage.getItem("user_id");
   const permission = localStorage.getItem("permission");
   const navigate = useNavigate();
   const [units,setUnits] = useState([]);
@@ -23,7 +24,8 @@ const AddFactoryItem = () => {
         description:descr,active,
         unit_name:unitName,
         initial_amount:initialAmount,
-        created_at:currentData
+        added_by:userId,
+        created_at:currentData,
     }
     console.log(item);
     await fetch(`http://localhost:5000/factory-item`,{
