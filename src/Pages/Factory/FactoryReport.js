@@ -157,6 +157,11 @@ const FactoryReport = () => {
             <tr>
               <th>Name</th>
               <th>Date & Time</th>
+              <th>Increase Amount</th>
+              <th>Decrease Amount</th>
+              <th>Current Stock</th>
+              <th>Previous Stock</th>
+              <th>Done By</th>
             </tr>
           </thead>
           <tbody>
@@ -167,9 +172,13 @@ const FactoryReport = () => {
                   <td>
                     {moment(it.date_time).toString()}
                   </td>
+                  <td>{it.increase_amount}</td>
+                  <td>{it.decrease_amount}</td>
                   <td>
                     {it.current_stock}
                   </td>
+                  <td>{it.previous_stock}</td>
+                  <td>{it.user}</td>
                 </tr>
               ))}
           </tbody>
