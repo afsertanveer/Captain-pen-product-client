@@ -34,10 +34,10 @@ const AddFactoryItem = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(item),
-    })
-      .then((res) => res.json())
+    }).then((res) => res.json())
       .then(( data ) => {
-      toast.success("Item Added Successfully");
+          toast.success("Item Added Successfully");
+      
       form.reset();
     }).catch(err=>{
       toast.error("This unit already exists! Please check the list")

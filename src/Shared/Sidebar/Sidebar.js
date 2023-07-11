@@ -340,6 +340,8 @@ const Sidebar = () => {
             <Link to="/add-unit">Add Unit</Link>
             <Link to="/show-unit">Show Units</Link>
             <Link to="/add-factory-item">Add Factory Item</Link>
+            <Link to="/show-factory-item">Show Factory Item</Link>
+            <Link to="/factory-report">Factory Report</Link>
           </div>
           </span>
         
