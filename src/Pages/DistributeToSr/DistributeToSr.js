@@ -103,11 +103,11 @@ const DistributeToSr = () => {
       }else{
         setNumberOfPieces(totalNum);
       }
-    })
+    }).catch(err=>console.log(err))
     setCustomClass("none");
     setProducts([]);
     setDisable("enabled");
-  };
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -157,7 +157,7 @@ const DistributeToSr = () => {
       .then((data) =>{
         data = data?.filter(d=>d._id.reciever_id===userId);
         setProductList(data)
-      });
+      }).catch(err=>console.log(err))
 
     fetch("http://localhost:5000/users?role=3", {
       method: "GET",
@@ -169,7 +169,7 @@ const DistributeToSr = () => {
       .then((data) => {
         const newData = data?.filter(d=>d.managed_by===userId);
         setAsmUsers(newData)
-      });
+      }).catch(err=>console.log(err))
   }, [username, navigate, role,products,userId]);
 
   return (

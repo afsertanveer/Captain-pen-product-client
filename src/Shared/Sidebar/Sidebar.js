@@ -143,16 +143,6 @@ const Sidebar = () => {
             My Shop Transaction
           </Link>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/add-cv">
-            Add CV
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          {/* <Link className="py-[5px] my-[5PX]" to="/show-cv">
-            Show My CV
-          </Link> */}
-        </li>
       </>
     );
   }
@@ -291,11 +281,22 @@ const Sidebar = () => {
       <Link to="/show-product">Show Products</Link>
           </li>
         }
-          <li className="ml-0 lg:mx-2">
+          {
+            role==="3"? <>
+            <li className="ml-0 lg:mx-2">
             <Link className="py-[5px] my-[5PX]" to="/addshop">
               Add Shop
             </Link>
-          </li>
+          </li></>
+          :
+          <>
+          <li className="ml-0 lg:mx-2">
+          <Link className="py-[5px] my-[5PX]" to="/addshopbyothers">
+            Add Shop
+          </Link>
+        </li>
+        </>
+          }
           {menuItems}
           
           {

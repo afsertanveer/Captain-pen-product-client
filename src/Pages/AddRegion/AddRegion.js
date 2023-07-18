@@ -50,6 +50,7 @@ const AddRegion = () => {
         .then(data=>{
             if(data.acknowledged){
                 toast.success('A Region is added');
+                navigate('/viewregion');
             }
         })
         .catch(err=>toast.error("Duplicate Region found"))
@@ -77,7 +78,7 @@ const AddRegion = () => {
       .then((res) => res.json())
       .then((data) => {
         setDivision(data);
-      });
+      }).catch(err=>console.log(err));
       if(selectedDivision!==0){
         fetch(`http://localhost:5000/district/${selectedDivision}`, {
           method: "GET",
@@ -86,7 +87,7 @@ const AddRegion = () => {
           },
         })
           .then((res) => res.json())
-          .then((data) => setDistrict(data));
+          .then((data) => setDistrict(data)).catch(err=>console.log(err));
       }
        //admin who are not assigned any region yet
     fetch("http://localhost:5000/users-admin", {
@@ -96,7 +97,7 @@ const AddRegion = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => setAdminUsers(data));
+      .then((data) => setAdminUsers(data)).catch(err=>console.log(err));
 
     fetch("http://localhost:5000/thana", {
       method: "GET",
@@ -105,7 +106,7 @@ const AddRegion = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => setDhakaThana(data));
+      .then((data) => setDhakaThana(data)).catch(err=>console.log(err));
   }, [selectedDivision, navigate, username, role,selectedDistricts]);
 
   const getDivision = (event) => {

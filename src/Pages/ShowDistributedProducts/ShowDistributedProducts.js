@@ -89,7 +89,7 @@ const ShowDistributedProducts = () => {
             }
             setIsLoading(false);
           }
-        });
+        }).catch(err=>console.log(err));
       }
     }
   };
@@ -113,7 +113,7 @@ const ShowDistributedProducts = () => {
           setPagiNationData(data.paginateData);
           setIsLoading(false);
         }
-      });
+      }).catch(err=>console.log(err))
     }else{
       fetch("http://localhost:5000/paginate-distributed-product", {
       method: "GET",
@@ -134,7 +134,7 @@ const ShowDistributedProducts = () => {
           }
           setIsLoading(false);
         }
-      });
+      }).catch(err=>console.log(err))
     }
     fetch("http://localhost:5000/users", {
       method: "GET",
@@ -145,7 +145,7 @@ const ShowDistributedProducts = () => {
     .then(data=>{
       setUsers(data)
       setIsLoading(false);
-    })
+    }).catch(err=>console.log(err))
   }, [id,role,navigate]);
   return (
     <div>

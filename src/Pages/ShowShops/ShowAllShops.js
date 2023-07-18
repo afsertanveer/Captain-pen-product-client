@@ -62,7 +62,7 @@ const ShowAllShops = () => {
       .then((data) =>{ 
         setShops(data.shopdata);
         setPagiNationData(data.paginateData);
-    });
+    }).catch(err=>console.log(err));
 
     fetch("http://localhost:5000/shop", {
       method: "GET",
@@ -71,7 +71,7 @@ const ShowAllShops = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => setShops(data));
+      .then((data) => setShops(data)).catch(err=>console.log(err));
 
     fetch("http://localhost:5000/district", {
       method: "GET",
@@ -80,7 +80,7 @@ const ShowAllShops = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => setDistrict(data));
+      .then((data) => setDistrict(data)).catch(err=>console.log(err));
 
     fetch("http://localhost:5000/subdistrict", {
       method: "GET",
@@ -89,7 +89,7 @@ const ShowAllShops = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => setSubD(data));
+      .then((data) => setSubD(data)).catch(err=>console.log(err));
 
     fetch("http://localhost:5000/thana", {
       method: "GET",
@@ -98,7 +98,7 @@ const ShowAllShops = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => setThana(data));
+      .then((data) => setThana(data)).catch(err=>console.log(err));
   }, [username, role, navigate]);
   return (
     <div>

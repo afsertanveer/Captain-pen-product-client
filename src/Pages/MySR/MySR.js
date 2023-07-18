@@ -126,7 +126,7 @@ const MySR = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => setUsers(data?.filter(d=>d.managed_by===userId)));
+      .then((data) => setUsers(data?.filter(d=>d.managed_by===userId))).catch(err=>console.log(err));
   }, [username, role, navigate,userId]);
   return (
     <div>

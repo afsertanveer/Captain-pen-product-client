@@ -8,6 +8,7 @@ const AddSR = () => {
   const userId = localStorage.getItem("user_id");
   const navigate = useNavigate();
   const [regions, setRegions] = useState([]);
+  const [users,setUsers] = useState([]);
   const [singleRegion, setSingleRegion] = useState("");
   const [managedBy, setManagedBy] = useState("");
   const [usernameError,setUsernameError] = useState(" ");
@@ -26,7 +27,7 @@ const AddSR = () => {
         .then((res) => res.json())
         .then((data) =>{
           setRegions(data);
-        });
+        }).catch(err=>console.log(err));
     } else if (role === "1") {
       fetch(`http://localhost:5000/region?assigned=${userId}`, {
         method: "GET",
@@ -37,7 +38,7 @@ const AddSR = () => {
         .then((res) => res.json())
         .then((data) => {
           setRegions(data);
-        });
+        }).catch(err=>console.log(err));
     } else {
       fetch(`http://localhost:5000/users/${userId}`, {
         method: "GET",
@@ -49,15 +50,33 @@ const AddSR = () => {
         .then((data) => {
           setManagedBy(userId);
           setSingleRegion(data[0]?.region_id);
-        });
+        }).catch(err=>console.log(err))
     }
+    fetch(`http://localhost:5000/users?role=2`, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setUsers(data);
+        
+      }).catch(err=>console.log(err));
   }, [username, role, navigate, userId]);
 
   const getRegion = (event) => {
     const regionId = event.target.value;
     setSingleRegion(regionId);
       if(username==="superadmin"){
-        setManagedBy(regions.filter(rg=>rg.assigned===userId)[0].assigned)
+        const assignedPerson = regions.filter(rg=>rg._id===regionId)[0].assigned;
+        console.log(assignedPerson);
+        if(assignedPerson===userId){
+          setManagedBy(regions.filter(rg=>rg.assigned===userId)[0].assigned)
+        }else{
+          const id = users.filter(u=>u.region_id===regionId)[0]._id;
+          setManagedBy(id);
+        }
       }else{
         fetch(`http://localhost:5000/users?region_id=${regionId}`, {
       method: "GET",
@@ -68,7 +87,7 @@ const AddSR = () => {
       .then((res) => res.json())
       .then((data) => {
         setManagedBy(data[0]?._id);
-      });
+      }).catch(err=>console.log(err));
       }
     
   };
@@ -117,6 +136,7 @@ const AddSR = () => {
         managed_by: managedBy,        
         created_at,
       };
+      console.log(user);
       fetch("http://localhost:5000/addAdmin", {
         method: "POST",
         headers: {

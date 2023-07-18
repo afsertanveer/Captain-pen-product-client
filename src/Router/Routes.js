@@ -51,6 +51,7 @@ import ShowUnit from "../Pages/Factory/ShowUnit";
 import AddFactoryItem from "../Pages/Factory/AddFactoryItem";
 import ShowFactoryItem from "../Pages/Factory/ShowFactoryItem";
 import FactoryReport from "../Pages/Factory/FactoryReport";
+import AddAndAssignShop from "../Pages/AddShop/AddAndAssignShop";
 
 const router = createBrowserRouter([
   {
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
       {
         path:'/addshop',
         element:<AddShop></AddShop>
+      },
+      {
+        path:'/addshopbyothers',
+        element:<AddAndAssignShop></AddAndAssignShop>
       },
       {
         path: "/addregion",
