@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {  useNavigate } from "react-router-dom";
 import Loader from "../../Loader/Loader";
-import { CSVLink } from "react-csv";
 import Pagination from "../Pagination/Pagination";
+import { exportToCSV, fileName } from "../../utils/exportCSV";
 
 const ProductStock = () => {
   const username = localStorage.getItem("username");
@@ -10,6 +10,7 @@ const ProductStock = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [products,setProducts] = useState([]);
+  const [allProducts,setAllProducts] = useState([]);
   const [totalProduct,setTotalProduct] = useState(0);
   const [totalCost,setTotalCost] = useState(0);
   const [filteredProduct,setFilteredProduct] = useState(null);
@@ -17,6 +18,8 @@ const ProductStock = () => {
   const [filteredSecondaryCategory,setFilteredSecondaryCategory] = useState(null);
   let serial = 1 ;
   let excelData =[];
+  console.log(allProducts);
+  // let allExcelData = [];
   const productExcelData = [];
   const setExcelDataBundle = (allProducts) => {
     for(let i=0;i<allProducts.length;i++){
@@ -37,6 +40,19 @@ const ProductStock = () => {
   const [pagiNationData, setPagiNationData] = useState({});
   const [open,setOpen] = useState(true);
   excelData = setExcelDataBundle(products);
+  excelData = excelData.reduce((accumulator, current) => {
+    if (!accumulator.find((item) => item.productName=== current.productName)) {
+      accumulator.push(current);
+    }
+    return accumulator;
+  }, []);
+  // allExcelData = setExcelDataBundle(allProducts);
+  // allExcelData = allExcelData.reduce((accumulator, current) => {
+  //   if (!accumulator.find((item) => item.productName=== current.productName)) {
+  //     accumulator.push(current);
+  //   }
+  //   return accumulator;
+  // }, []);
   const filterData = (e) => {
     e.preventDefault();
     let url =`http://localhost:5000/product?`;
@@ -157,6 +173,14 @@ const ProductStock = () => {
         setPagiNationData(data.paginateData);
         setIsLoading(false);
       });
+    fetch(`http://localhost:5000/all-product-d`, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setAllProducts(data));
   }, [username, navigate, role]);
   return (
     <div>
@@ -165,11 +189,10 @@ const ProductStock = () => {
       </div>
       {isLoading && <Loader></Loader>}
       <div className="my-3  px-0 lg:px-4 flex justify-between items-center">
-        <CSVLink
-          data={excelData}
-          filename={"product-stock.csv"}
-          className="mt-3 btn bg-green-900 text-white "
-          target="_blank"
+      <div>
+      <button
+         onClick={(e) => exportToCSV(excelData, fileName)}
+          className="mt-3 ml-4 btn bg-green-900 text-white"          
         >
           Download
           <svg
@@ -184,7 +207,26 @@ const ProductStock = () => {
               clipRule="evenodd"
             />
           </svg>
-        </CSVLink>
+        </button>
+        {/* <button
+         onClick={(e) => exportToCSV(allExcelData, fileName)}
+          className="mt-3 ml-4 btn bg-green-900 text-white"          
+        >
+          All Download
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="ml-2 w-5 h-5"
+          >
+            <path
+              fillRule="evenodd"
+              d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button> */}
+      </div>
 
         <div className="flex flex-col lg:flex-row md:flex-row justify-end items-center">
           <label

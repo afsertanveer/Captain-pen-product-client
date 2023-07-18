@@ -80,7 +80,7 @@ const EditCategory = () => {
             type="text"
             id={`layer${idx}`}
             placeholder="Category Name"
-            className=" input input-bordered w-1/2 mr-2"
+            className=" input input-bordered w-full lg:w-1/2 mr-2"
             />
             <button onClick={()=>updateCategory(idx)} className="btn btn-primary w-1/2 lg:w-1/4">Update</button>
             <div key={idx} className="p-3 flex  justify-start items-center flex-wrap gap-3">

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../Loader/Loader";
-import { CSVLink } from "react-csv";
 import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import Pagination from "../Pagination/Pagination";
+import { exportToCSV, fileName } from "../../utils/exportCSV";
 
 const ProductSalesReport = () => {
   const username = localStorage.getItem("username");
@@ -14,6 +14,7 @@ const ProductSalesReport = () => {
   const name = localStorage.getItem("name");
   const navigate = useNavigate();
   const [sales, setSales] = useState([]);
+  const [allSales, setAllSales] = useState([]);
   const [adminUsers, setAdminUsers] = useState([]);
   const [asmUsers, setAsmUsers] = useState([]);
   const [sRUsers, setSRUsers] = useState([]);
@@ -26,6 +27,8 @@ const ProductSalesReport = () => {
   const [filteredASM, setFilteredASM] = useState(null);
   const [filteredSR, setFilteredSR] = useState(null);
   let salesExcel = [];
+  // let allsalesExcel = [];
+  console.log(allSales);
   const [showCalendar, setShowCalendar] = useState(false);
   const [state, setState] = useState([
     {
@@ -40,7 +43,7 @@ const ProductSalesReport = () => {
   const setExcelBundleData = (salesData) => {
     let excelData = [];    
     let count = 1;
-    salesData.forEach((s) => {
+     salesData.forEach((s) => {
       const singleItem = {};
       singleItem.serialIndex = count;
       singleItem.transactionId = s.transactionDetails.transaction_id;
@@ -70,7 +73,7 @@ const ProductSalesReport = () => {
     });
     return excelData;
   };
-  salesExcel = setExcelBundleData(sales);
+  salesExcel =   setExcelBundleData(sales);
   function convert(str) {
     var date = new Date(str),
       mnth = ("0" + (date.getMonth() + 1)).slice(-2),
@@ -192,6 +195,8 @@ const ProductSalesReport = () => {
       });
     }
   };
+  
+  // allsalesExcel = setExcelBundleData(allSales)
   useEffect(() => {
     setIsLoading(true);
     if (
@@ -310,8 +315,16 @@ const ProductSalesReport = () => {
         setSales(data.data);
         setPagiNationData(data.paginateData);
         setIsLoading(false);
-      });
-  }, [username, navigate, userId, role]);
+      }).catch(err=>console.log(err))
+    fetch("http://localhost:5000/all-sales", {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setAllSales(data)
+        setIsLoading(false);
+      }).catch(err=>console.log(err))
+  }, [username, navigate, userId, role,]);
   return (
     <div>
       <div className="text-center py-4 mx-0 lg:mx-4 bg-green-300 my-8 text-white">
@@ -319,26 +332,44 @@ const ProductSalesReport = () => {
       </div>
       {isLoading && <Loader></Loader>}
       <div className="my-3  px-0 lg:px-4 flex justify-between items-center">
-        <CSVLink
-          data={salesExcel}
-          filename={"sales.csv"}
-          className="mt-3 btn bg-green-900 text-white "
-          target="_blank"
+    <div>
+    <button
+        onClick={(e) => exportToCSV(salesExcel, fileName)}
+        className="mt-3 ml-4 btn bg-green-900 text-white"          
+      >
+        Download
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          className="ml-2 w-5 h-5"
         >
-          Download{" "}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="ml-2 w-5 h-5"
-          >
-            <path
-              fillRule="evenodd"
-              d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </CSVLink>
+          <path
+            fillRule="evenodd"
+            d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </button>
+      {/* <button
+        onClick={(e) => exportToCSV(allsalesExcel, fileName)}
+        className="mt-3 ml-4 btn bg-green-900 text-white"          
+      >
+        All Download
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          className="ml-2 w-5 h-5"
+        >
+          <path
+            fillRule="evenodd"
+            d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </button> */}
+    </div>
 
         <div className="flex flex-col lg:flex-row md:flex-row justify-end items-center">
           <label

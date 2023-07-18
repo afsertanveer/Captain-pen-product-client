@@ -149,7 +149,7 @@ const AddSR = () => {
             name="name"
             type="text"
             placeholder="Name"
-            className=" input input-bordered w-1/2"
+            className=" input input-bordered w-full lg:w-1/2"
             required
           />
          </div>
@@ -162,7 +162,7 @@ const AddSR = () => {
             type="text"
             onChange={setPassword}
             placeholder="username"
-            className=" input input-bordered w-1/2"
+            className=" input input-bordered w-full lg:w-1/2"
             required
           />
             {usernameError===''? <span className="text-sm font-bold text-success">Username Found</span> :<span className="text-sm font-bold text-error">{usernameError}</span> }
@@ -176,7 +176,7 @@ const AddSR = () => {
             id="password"
             type="text"
             placeholder="password"
-            className=" input input-bordered w-1/2"
+            className=" input input-bordered w-full lg:w-1/2"
             required
           />
         </div>
@@ -189,7 +189,7 @@ const AddSR = () => {
             <select
               name="select_region"
               onChange={getRegion}
-              className=" input input-bordered w-1/2 mb-4"
+              className=" input input-bordered w-full lg:w-1/2 mb-4"
               required
             >
               <option></option>              

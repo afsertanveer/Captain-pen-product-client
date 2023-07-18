@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { CSVLink } from "react-csv";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../../Loader/Loader";
 import Pagination from "../../Shared/Pagination/Pagination";
+import { exportToCSV, fileName } from "../../utils/exportCSV";
+
 
 const ShowRegion = () => {
   const username = localStorage.getItem("username");
@@ -12,9 +13,10 @@ const ShowRegion = () => {
   const [users, setUsers] = useState([]);
   const [isLoading,setIsLoading] = useState(false);
   const [pagiNationData, setPagiNationData] = useState({});
-
+  const [allRegion,setAllRegion] = useState([]);
   const excelData =[];
-  let regionData = [];
+  let allRegionData =[];
+
   const setExcelDataBundle = (zones) =>{
     zones.forEach(rg=>{
       const singleData= {};
@@ -53,7 +55,13 @@ const ShowRegion = () => {
     })
     return excelData
   }
-  regionData = setExcelDataBundle(regions);
+  allRegionData = setExcelDataBundle(allRegion);
+  const all = allRegionData.reduce((accumulator, current) => {
+    if (!accumulator.find((item) => item.name=== current.name)) {
+      accumulator.push(current);
+    }
+    return accumulator;
+  }, []);
   const handlePageClick = (event) => {
     let clickedPage = parseInt(event.selected) + 1;
     if (event.selected > 0) {
@@ -66,7 +74,6 @@ const ShowRegion = () => {
       .then(res=>res.json())
       .then((data) => {
         setRegions(data.data)
-        regionData = setExcelDataBundle(regions);
         setPagiNationData(data.paginateData);
       })
       .catch((e) => {
@@ -83,7 +90,6 @@ const ShowRegion = () => {
       .then(res=>res.json())
       .then((data ) => {
         setRegions(data.data)
-        regionData = setExcelDataBundle(regions);
         setPagiNationData(data.paginateData);
       })
       .catch((e) => {
@@ -111,6 +117,17 @@ const ShowRegion = () => {
         setPagiNationData(data.paginateData);
         setIsLoading(false);
       });
+    fetch("http://localhost:5000/region", {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setAllRegion(data);
+        setIsLoading(false);
+      });
 
     fetch("http://localhost:5000/users", {
       method: "GET",
@@ -126,18 +143,16 @@ const ShowRegion = () => {
   }, [username, role, navigate]);
   return (
     <div>
-      <div className="text-center py-4 mx-0 lg:mx-4 bg-green-300 my-8 text-white">
-        <p className="text-4xl font-bold mb-4">Product Stock</p>
+      <div className="text-center py-4 mx-0 lg:mx-4 bg-green-400 my-8 text-white">
+        <p className="text-4xl font-bold mb-4">Zone Reportk</p>
       </div>
       {isLoading && <Loader></Loader>}
-      <div className="my-3  px-0 lg:px-4 flex justify-between items-center">
-        <CSVLink
-          data={regionData}
-          filename={"product-stock.csv"}
-          className="mt-3 btn bg-green-900 text-white "
-          target="_blank"
+      <div className="my-3  px-0 lg:px-4 flex gap-4 items-center">
+        <button
+         onClick={(e) => exportToCSV(all, fileName)}
+          className="mt-3 btn bg-green-900 text-white"          
         >
-          Download
+          All  Download
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -150,7 +165,7 @@ const ShowRegion = () => {
               clipRule="evenodd"
             />
           </svg>
-        </CSVLink>
+        </button>
 
       </div>
       <div className='table-class overflow-x-auto w-full'>

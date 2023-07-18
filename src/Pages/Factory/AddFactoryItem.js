@@ -24,6 +24,7 @@ const AddFactoryItem = () => {
         description:descr,active,
         unit_name:unitName,
         initial_amount:initialAmount,
+        current_amount:initialAmount,
         added_by:userId,
         created_at:currentData,
     }
@@ -99,7 +100,7 @@ const AddFactoryItem = () => {
           <label className="label">
             <span className="label-text font-bold">Unit</span>
           </label>
-          <select name="unit" id="unit" className=" input input-bordered w-1/2 mb-4">
+          <select name="unit" id="unit" className=" input input-bordered w-full lg:w-1/2 mb-4">
             {
                 units.length>0 && units.map(u=><option key ={u._id} value={u.unit}>{u.unit}</option>)
             }

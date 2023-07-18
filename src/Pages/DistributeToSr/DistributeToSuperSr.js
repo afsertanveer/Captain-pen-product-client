@@ -142,7 +142,7 @@ const DistributeToSuperSr = () => {
             <input
               type="number"
               name=""
-              className="input input-bordered w-1/2 lg:w-1/3 font-extrabold"
+              className="input input-bordered w-full lg:w-1/2 lg:w-1/3 font-extrabold"
               placeholder="Type Amount"
               id="amount"
               required

@@ -410,7 +410,7 @@ const DistributeToShop = () => {
                 <input
                   type="number"
                   placeholder="Number of Pieces"
-                  className=" input input-bordered w-1/2"
+                  className=" input input-bordered w-full lg:w-1/2"
                   name="numOfPieces"
                   id="numOfPieces"
                   min={1}
@@ -423,7 +423,7 @@ const DistributeToShop = () => {
                 <input
                   type="number"
                   placeholder="Price Per Unit"
-                  className=" input input-bordered w-1/2"
+                  className=" input input-bordered w-full lg:w-1/2"
                   name="ppu"
                   id="ppu"
                   min={1}
@@ -471,7 +471,7 @@ const DistributeToShop = () => {
             id="attach_image1"
             type="file"
             accept="image/*"
-            className="input input-bordered w-1/2"
+            className="input input-bordered w-full lg:w-1/2"
             multiple
             required
           />
@@ -486,7 +486,7 @@ const DistributeToShop = () => {
               <select
                 onChange={selectShop}
                 name="selectAsm"
-                className=" input input-bordered w-1/2 mb-4"
+                className=" input input-bordered w-full lg:w-1/2 mb-4"
                 required
               >
                 <option></option>
@@ -509,7 +509,7 @@ const DistributeToShop = () => {
               type="number"
               placeholder="Discount"
               onChange={handleDiscount}
-              className=" input input-bordered w-1/2 text-green-500"
+              className=" input input-bordered w-full lg:w-1/2 text-green-500"
               name="discount"
               id="discount"
               min={1}
@@ -539,7 +539,7 @@ const DistributeToShop = () => {
               type="number"
               placeholder="Price Per Unit"
               onChange={handlePay}
-              className=" input input-bordered w-1/2 text-green-500"
+              className=" input input-bordered w-full lg:w-1/2 text-green-500"
               name="pay"
               id="pay"
               min={1}

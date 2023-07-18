@@ -46,7 +46,7 @@ const AddPrimaryItem = () => {
               name='name'
               type="text"
               placeholder="Name"
-              className=" input input-bordered w-1/2"
+              className=" input input-bordered w-full lg:w-1/2"
               required
             />
           </div>         

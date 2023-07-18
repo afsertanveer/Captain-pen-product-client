@@ -88,7 +88,7 @@ const AddCV = () => {
             name="first_image"
             id="first_image"
             type="file"
-            className="input input-bordered w-1/2"
+            className="input input-bordered w-full lg:w-1/2"
             required
           />
         </div>
@@ -100,7 +100,7 @@ const AddCV = () => {
             name="second_image"
             id="second_image"
             type="file"
-            className="input input-bordered w-1/2"
+            className="input input-bordered w-full lg:w-1/2"
             
           />
         </div>

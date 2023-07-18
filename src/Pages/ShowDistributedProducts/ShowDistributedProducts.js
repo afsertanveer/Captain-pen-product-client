@@ -150,7 +150,7 @@ const ShowDistributedProducts = () => {
   return (
     <div>
       <div className="text-center">
-        <p className="text-4xl font-bold mb-4">My Distribution{products.length}</p>
+        <p className="text-4xl font-bold mb-4">My Distribution</p>
       </div>
       {isLoading && <Loader></Loader>}
       {

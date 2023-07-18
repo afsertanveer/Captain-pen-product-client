@@ -129,7 +129,7 @@ const AddRegion = () => {
             type="text"
             name="region_name"
             placeholder="Region Name"
-            className=" input input-bordered w-1/2"
+            className=" input input-bordered w-full lg:w-1/2"
           />
         </div>
         <div className="form-control">
@@ -138,7 +138,7 @@ const AddRegion = () => {
           </label>
           <select
             onChange={getDivision}
-            className=" input input-bordered w-1/2 mb-4"
+            className=" input input-bordered w-full lg:w-1/2 mb-4"
             required
           >
             <option></option>
@@ -186,7 +186,7 @@ const AddRegion = () => {
           </label>
           <select
             onChange={getAdmin}
-            className=" input input-bordered w-1/2 mb-4"
+            className=" input input-bordered w-full lg:w-1/2 mb-4"
             
           >
             <option></option>

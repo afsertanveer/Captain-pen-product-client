@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../Loader/Loader";
-import { CSVLink } from "react-csv";
 import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import Pagination from "../Pagination/Pagination";
+import { exportToCSV, fileName } from "../../utils/exportCSV";
 
 const ProductSendASMToSR = () => {
   const username = localStorage.getItem("username");
@@ -16,6 +16,8 @@ const ProductSendASMToSR = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [sendProduct, setSendProduct] = useState([]);
+  const [allSendProduct, setAllSendProduct] = useState([]);
+ 
   const [region, setRegion] = useState([]);
   const [SrUsers, setSrUsers] = useState([]);
   const [asmUsers, setAsmUsers] = useState([]);
@@ -35,6 +37,8 @@ const ProductSendASMToSR = () => {
   const [pagiNationData, setPagiNationData] = useState({});
   const [open,setOpen] = useState(true);
   let excelData = [];
+  // let allExcelData = [];
+  console.log(allSendProduct);
   let asmName;
   let count = 1;
   const productSendAdminToASM = [];
@@ -292,7 +296,18 @@ const ProductSendASMToSR = () => {
         setSendProduct(data.data);
         setPagiNationData(data.paginateData);
         setIsLoading(false);
-      });
+      }).catch(err=>console.log(err))
+    fetch(`http://localhost:5000/all-asm-send-sr`, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setAllSendProduct(data);
+        setIsLoading(false);
+      }).catch(err=>console.log(err))
   }, [username, navigate, role, userId]);
   return (
     <div>
@@ -301,13 +316,12 @@ const ProductSendASMToSR = () => {
       </div>
       {isLoading && <Loader></Loader>}
       <div className="my-3  px-0 lg:px-4 flex justify-between items-center">
-        <CSVLink
-          data={excelData}
-          filename={"asmToSr.csv"}
-          className="mt-3 btn bg-green-900 text-white "
-          target="_blank"
+      <div>
+      <button
+         onClick={(e) => exportToCSV(excelData, fileName)}
+          className="mt-3 ml-4 btn bg-green-900 text-white"          
         >
-          Download{" "}
+          Download
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -320,7 +334,26 @@ const ProductSendASMToSR = () => {
               clipRule="evenodd"
             />
           </svg>
-        </CSVLink>
+        </button>
+        {/* <button
+         onClick={(e) => exportToCSV(setExcelDataBundle(allSendProduct), fileName)}
+          className="mt-3 ml-4 btn bg-green-900 text-white"          
+        >
+          All Download
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="ml-2 w-5 h-5"
+          >
+            <path
+              fillRule="evenodd"
+              d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button> */}
+      </div>
 
         <div className="flex flex-col lg:flex-row md:flex-row justify-end items-center">
           <label

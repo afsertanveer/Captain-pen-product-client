@@ -192,7 +192,7 @@ const AddShop = () => {
     userId,
   ]);
   return (
-    <div className="card   p-10 mt-10 lg:mx-40 lg:p-20 shadow-2xl bg-base-100 w-full lg:w-3/4 ">
+    <div className="card   p-10 mt-10 lg:mt-20 lg:mx-40 lg:p-20 shadow-2xl bg-base-100 w-full lg:w-3/4  ">
       <form onSubmit={handleAddShop}>
         <p className="text-2xl text-center  font-bold">Add Shop</p>
         <div className="form-control">
@@ -203,7 +203,7 @@ const AddShop = () => {
             type="text"
             name="shop_name"
             placeholder="Name"
-            className=" input input-bordered w-1/2"
+            className=" input input-bordered w-full lg:w-1/2"
             required
           />
         </div>
@@ -215,7 +215,7 @@ const AddShop = () => {
             type="text"
             name="contact_no"
             placeholder="Phone"
-            className=" input input-bordered w-1/2"
+            className=" input input-bordered w-full lg:w-1/2"
             required
           />
         </div>
@@ -227,7 +227,7 @@ const AddShop = () => {
             type="text"
             name="address"
             placeholder="Phone"
-            className=" input input-bordered w-1/2"
+            className=" input input-bordered w-full lg:w-1/2"
             required
           />
         </div>
@@ -239,7 +239,7 @@ const AddShop = () => {
             type="text"
             name="owner_name"
             placeholder="Owner's Name"
-            className=" input input-bordered w-1/2"
+            className=" input input-bordered w-full lg:w-1/2"
             required
           />
         </div>
@@ -251,7 +251,7 @@ const AddShop = () => {
             <select
               onChange={getRegion}
               name="select_region"
-              className=" input input-bordered w-1/2 mb-4"
+              className=" input input-bordered w-full lg:w-1/2 mb-4"
               required
             >
               <option></option>
@@ -274,7 +274,7 @@ const AddShop = () => {
                 onChange={getDistrict}
                 name="district"
                 id=""
-                className=" input input-bordered w-1/2 mb-4"
+                className=" input input-bordered w-full lg:w-1/2 mb-4"
                 required
               >
                 <option></option>
@@ -296,7 +296,7 @@ const AddShop = () => {
               </label>
               <select
                 onChange={getThana}
-                className=" input input-bordered w-1/2 mb-4"
+                className=" input input-bordered w-full lg:w-1/2 mb-4"
               >
                 <option></option>
                 {thana.length > 0 &&
@@ -317,7 +317,7 @@ const AddShop = () => {
                 </label>
                 <select
                   onChange={getUpozilla}
-                  className=" input input-bordered w-1/2 mb-4"
+                  className=" input input-bordered w-full lg:w-1/2 mb-4"
                 >
                   <option></option>
                   {upozilla.length > 0 &&

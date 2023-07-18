@@ -82,7 +82,7 @@ const AddAdmin = () => {
             name="name"
             type="text"
             placeholder="Name"
-            className=" input input-bordered w-1/2"
+            className=" input input-bordered w-full lg:w-1/2"
             required
           />
         </div>
@@ -95,7 +95,7 @@ const AddAdmin = () => {
             type="text"
             onChange={setPassword}
             placeholder="username"
-            className=" input input-bordered w-1/2"
+            className=" input input-bordered w-full lg:w-1/2"
             required
           />
           {usernameError === "" ? (
@@ -117,7 +117,7 @@ const AddAdmin = () => {
             id="password"
             type="text"
             placeholder="password"
-            className=" input input-bordered w-1/2"
+            className=" input input-bordered w-full lg:w-1/2"
             required
           />
         </div>
@@ -125,7 +125,7 @@ const AddAdmin = () => {
           <label className="label">
             <span className="label-text font-bold">Factory Permission</span>
           </label>
-          <select name="permission" id="permission" className=" input input-bordered w-1/2 mb-4">
+          <select name="permission" id="permission" className=" input input-bordered w-full lg:w-1/2 mb-4">
             <option value="0">No</option>
             <option value="1">Yes</option>
           </select>

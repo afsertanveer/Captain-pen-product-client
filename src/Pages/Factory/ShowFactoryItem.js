@@ -49,7 +49,6 @@ const ShowFactoryItem = () => {
   }
 
   const deactivateUnit = id =>{
-    console.log(id);
     fetch(`http://localhost:5000/factory-item/${id}`,{
       method:"PUT",
       headers: {
@@ -238,6 +237,7 @@ const ShowFactoryItem = () => {
               <th>Description</th>
               <th>Unit</th>
               <th>Initial Amount</th>
+              <th>Current Amount</th>
               <th>Date</th>
               <th>Increment Decrement</th>
               <th>Action</th>
@@ -253,6 +253,7 @@ const ShowFactoryItem = () => {
                   </td>
                   <td>{it.unit_name}</td>
                   <td>{it.initial_amount}</td>
+                  <td>{it.current_amount}</td>
                   <td>{it.created_at.split("T")[0]}</td>
                   <td>
                     <label className="btn bg-[#1b5e20] text-whiten mr-2" onClick={()=>setSingleItem(it)} htmlFor="increase-modal">+</label>
@@ -311,7 +312,7 @@ const ShowFactoryItem = () => {
           <label className="label">
             <span className="label-text font-bold">Unit</span>
           </label>
-          <select name="unit" id="unit"  className=" input input-bordered w-1/2 mb-4">
+          <select name="unit" id="unit"  className=" input input-bordered w-full lg:w-1/2 mb-4">
             {
                 units.length>0 && units.map(u=>
                   <option 

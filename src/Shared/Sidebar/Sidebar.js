@@ -24,48 +24,8 @@ const Sidebar = () => {
           </Link>
         </li>
         <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/addadmin">
-            Add Admin
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/add-asm">
-            Add ASM
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/add-sr">
-            Add SR
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/view-users">
-            View Users
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
           <Link className="py-[5px] my-[5PX]" to="/super-sr">
             My SR
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/add-primary-item">
-            Add Primary Item
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/show-items">
-            Show Items
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/addproduct">
-            Add Product
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/show-product">
-            Show Products
           </Link>
         </li>
         <li className="ml-0 lg:mx-2">
@@ -78,47 +38,13 @@ const Sidebar = () => {
             Show Distribute Products
           </Link>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/viewregion">
-            Zone Report
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/product-stock-report">
-            Product Stock Report
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/product-sales-report">
-            Product Sales Report
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/admin-send-product-report">
-            Distribution to ASM Report
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/asm-send-product-report">
-            Distribution to SR Report
-          </Link>
-        </li>
       </>
     );
   }
   if (role === "1") {
     menuItems = (
       <>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/add-asm">
-            Add ASM
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/add-sr">
-            Add SR
-          </Link>
-        </li>
+        
         <li className="ml-0 lg:mx-2">
           <Link className="py-[5px] my-[5PX]" to="/my-asm">
             My ASM
@@ -135,11 +61,6 @@ const Sidebar = () => {
           </Link>
         </li>
         <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/show-product">
-            Show Products
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
           <Link className="py-[5px] my-[5PX]" to="/distribute-product">
             Distribute Products To ASM
           </Link>
@@ -149,37 +70,12 @@ const Sidebar = () => {
             Show Distribute Products
           </Link>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/product-stock-report">
-            Product Stock Report
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/product-sales-report">
-            Product Sales Report
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/admin-send-product-report">
-            Distribution to ASM Report
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/asm-send-product-report">
-            Distribution to SR Report
-          </Link>
-        </li>
       </>
     );
   }
   if (role === "2") {
     menuItems = (
       <>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/add-sr">
-            Add SR
-          </Link>
-        </li>
         <li className="ml-0 lg:mx-2">
           <Link className="py-[5px] my-[5PX]" to="/my-sr">
             My SR
@@ -208,11 +104,6 @@ const Sidebar = () => {
         <li className="ml-0 lg:mx-2">
           <Link className="py-[5px] my-[5PX]" to="/show-distributed-product">
             Show Distribute Products
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/asm-send-product-report">
-            Distribution to SR Report
           </Link>
         </li>
       </>
@@ -258,9 +149,9 @@ const Sidebar = () => {
           </Link>
         </li>
         <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/show-cv">
+          {/* <Link className="py-[5px] my-[5PX]" to="/show-cv">
             Show My CV
-          </Link>
+          </Link> */}
         </li>
       </>
     );
@@ -299,7 +190,7 @@ const Sidebar = () => {
         <Outlet></Outlet>
         
       </div>
-      <div className="drawer-side overflow-hidden  w-1/3 lg:w-[216px]   lg:bg-green-900 text-white  font-semibold md:border-0 sm:border-0">
+      <div className="drawer-side overflow-hidden  w-1/2 lg:w-[240px]   lg:bg-green-900 text-white  font-semibold md:border-0 sm:border-0">
         <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
         <ul className="menu  pb-4 bg-green-900 border-0">
           <li className="flex flex-row justify-around items-center">
@@ -334,10 +225,14 @@ const Sidebar = () => {
             </Link>
           </li>
           {
-          permission==="1" && <li  className="ml-0 lg:mx-2 " >
-          <span className="hovmenu hover:bg-white hover:text-black">Factory
-          <div className="dr-menu">
-            <Link to="/add-unit">Add Unit</Link>
+          permission==="1" && <li  className="hover:mb-40 mx-0 lg:mx-2" >
+          <span className="hovmenu hover:bg-white hover:text-black ">Factory 
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="ml-2 inline-block w-7  h-7 font-extrabold">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+
+          <div className="dr-menu ">
+            <Link to="/addadmin">Add Unit</Link>
             <Link to="/show-unit">Show Units</Link>
             <Link to="/add-factory-item">Add Factory Item</Link>
             <Link to="/show-factory-item">Show Factory Item</Link>
@@ -347,6 +242,55 @@ const Sidebar = () => {
         
       </li>
         }
+        {
+          role!=='3' && <li  className={`${role==="0"? "hover:mb-32" : role==="1"? "hover:mb-16" : "hover:mb-8" } mx-0 lg:mx-2`} >
+          <span className="hovmenu hover:bg-white hover:text-black ">{role==="0"? "Users" :"Add Users"}
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="ml-2 inline-block w-7  h-7 font-extrabold">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+
+          <div className="dr-menu ">
+            { role==="0" && <Link to="/addadmin">Add Admin</Link>}
+            { (role==="0" || role==="1") && <Link to="/add-asm">Add ASM</Link>}
+           { role!=='3' && <Link to="/add-sr">Add SR</Link>}           
+           { role==="0" && <Link to="/view-users">View All Users</Link>}
+          </div>
+          </span>
+        
+      </li>
+        }
+        {
+          (role==='0') && <li  className={`hover:mb-16 mx-0 lg:mx-2`} >
+          <span className="hovmenu hover:bg-white hover:text-black ">Items
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="ml-2 inline-block w-7  h-7 font-extrabold">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+
+          <div className="dr-menu ">
+          <Link to="/add-primary-item">Add Primary Items</Link>
+          <Link to="/show-items">Show Items</Link>
+          </div>
+          </span>
+        
+      </li>
+        }
+        {
+          role==='0'?<li  className={`hover:mb-16 mx-0 lg:mx-2`} >
+          <span className="hovmenu hover:bg-white hover:text-black ">Products
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="ml-2 inline-block w-7  h-7 font-extrabold">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+
+          <div className="dr-menu ">
+          <Link to="/addproduct">Add Product</Link>
+          <Link to="/show-product">Show Products</Link>
+          </div>
+          </span>
+        
+      </li> : role==="1" && <li className="ml-0 lg:mx-2">
+      <Link to="/show-product">Show Products</Link>
+          </li>
+        }
           <li className="ml-0 lg:mx-2">
             <Link className="py-[5px] my-[5PX]" to="/addshop">
               Add Shop
@@ -354,27 +298,62 @@ const Sidebar = () => {
           </li>
           {menuItems}
           
-          <li className="ml-0 lg:mx-2">
-            <Link className="py-[5px] my-[5PX]" to="/shop-report">
+          {
+          <li  className="hover:mb-40 mx-0 lg:mx-2" >
+          <span className="hovmenu hover:bg-white hover:text-black ">REPORTS 
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="ml-2 inline-block w-7  h-7 font-extrabold">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+
+          <div className="dr-menu ">
+          {
+            role==="0" && <Link className="py-[5px] my-[5PX]" to="/viewregion">
+            Zone Report
+          </Link>
+          }
+          {
+            (role==="0" || role==="1") && <Link className="py-[5px] my-[5PX]" to="/product-stock-report">
+            Product Stock Report
+          </Link>
+          }
+          {
+            (role==="0" || role==="1") && <Link className="py-[5px] my-[5PX]" to="/product-sales-report">
+            Product Sales Report
+          </Link>
+          }
+          {
+            (role==="0" || role==="1") && <Link className="py-[5px] my-[5PX]" to="/admin-send-product-report">
+            Distribution to ASM Report
+          </Link>
+          }
+          {
+            (role!=="3") && <Link className="py-[5px] my-[5PX]" to="/asm-send-product-report">
+            Distribution to SR Report
+          </Link>
+          }
+          
+          
+          <Link className="py-[5px] my-[5PX]" to="/shop-report">
               Shop Report
             </Link>
-          </li>
-
-          <li className="ml-0 lg:mx-2">
-            <Link className="py-[5px] my-[5PX]" to="/sales-report">
+          <Link className="py-[5px] my-[5PX]" to="/sales-report">
               Sales Report
             </Link>
-          </li>
-          <li className="ml-0 lg:mx-2">
             <Link className="py-[5px] my-[5PX]" to="/cash-collection-report">
               Cash Collection Report
             </Link>
-          </li>
+
+          </div>
+          </span>
+        
+      </li>
+        }
           <li className="ml-0 lg:mx-2">
             <Link className="py-[5px] my-[5PX]" to="/change-password">
               Change Password
             </Link>
           </li>
+          
         </ul>
       </div>
     </div>

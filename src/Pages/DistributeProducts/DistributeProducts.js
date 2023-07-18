@@ -218,7 +218,7 @@ const DistributeProducts = () => {
               <input
                 type="number"
                 placeholder="Number of Pieces"
-                className=" input input-bordered w-1/2"
+                className=" input input-bordered w-full lg:w-1/2"
                 name="numOfPieces"
                 id="numOfPieces"
                 min={1}
@@ -265,7 +265,7 @@ const DistributeProducts = () => {
               </label>
               <select
                 name="selectAsm"
-                className=" input input-bordered w-1/2 mb-4"
+                className=" input input-bordered w-full lg:w-1/2 mb-4"
                 required
               >
                 <option></option>
