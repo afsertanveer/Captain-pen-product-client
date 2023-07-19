@@ -360,7 +360,6 @@ const AddAndAssignShop = () => {
               onChange={e=>setManagedBy(e.target.value)}
               name="select_region"
               className=" input input-bordered w-full lg:w-1/2 mb-4"
-              required
             >
               <option></option>
               {srs.length > 0 &&

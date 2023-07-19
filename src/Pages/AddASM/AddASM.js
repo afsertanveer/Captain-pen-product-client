@@ -23,7 +23,23 @@ const AddASM = () => {
         },
       })
         .then((res) => res.json())
-        .then((data) => setRegions(data));
+        .then((data) =>{
+         fetch("http://localhost:5000/users?role=2",{
+          method: "GET",
+          headers: {
+          "content-type": "application/json",
+        },          
+         }).then(res=>res.json())
+         .then(userData=>{
+          if(userData.length>0){
+            const result = data.filter(rg => !userData.some(user => rg._id === user.region_id));
+            setRegions(result)
+          }else{
+            
+          setRegions(data)
+          }
+         }).catch(err=>console.log(err))
+        }).catch(err=>console.log(err));
     } else {
       fetch(`http://localhost:5000/region?assigned=${userId}`, {
         method: "GET",
@@ -33,8 +49,22 @@ const AddASM = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setRegions(data);
-        });
+          fetch("http://localhost:5000/users?role=2",{
+          method: "GET",
+          headers: {
+          "content-type": "application/json",
+        },          
+         }).then(res=>res.json())
+         .then(userData=>{
+          if(userData.length>0){
+            const result = data.filter(rg => !userData.some(user => rg._id === user.region_id));
+            setRegions(result)
+          }else{
+            
+          setRegions(data)
+          }
+         })
+        }).catch(err=>console.log(err))
     }
   }, [username, role, navigate, userId]);
   const setPassword = (event) => {
@@ -110,6 +140,7 @@ const AddASM = () => {
     .then(data=>{
         if(data.acknowledged){
             toast.success('An ASM is successfully addded');
+            window.location.reload(false);
         }
     })
     .catch(err=>toast.error("Duplicate username found"))

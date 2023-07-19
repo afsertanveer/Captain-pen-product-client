@@ -1,52 +1,55 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../Loader/Loader";
 import Pagination from "../../Shared/Pagination/Pagination";
 import { toast } from "react-hot-toast";
-import Loader from "../../Loader/Loader";
 
-const ShowAllShops = () => {
+const ShopUnderASM = () => {
   const username = localStorage.getItem("username");
   const role = localStorage.getItem("role");
+  const userId = localStorage.getItem("user_id");
   const navigate = useNavigate();
   const [shops, setShops] = useState([]);
+  const [asmSrs,setAsmSrs] = useState([]);
   const [district, setDistrict] = useState([]);
   const [thana, setThana] = useState([]);
   const [subD, setSubD] = useState([]);
-  const [users,setUsers] = useState([]);
-  const [srs,setSrs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [pagiNationData,setPagiNationData] = useState({}); 
+  const [regionId,setRegionId] = useState(""); 
   const [singleShop,setSingleShop] = useState({});
-  const [pagiNationData,setPagiNationData] = useState({});
-  const [isLoading,setIsLoading] = useState(false);
   const handlePageClick = (event) => {
     let clickedPage = parseInt(event.selected) + 1;
     if (event.selected > 0) {
-      
-      fetch(
-        `http://localhost:5000/paginated-shops?page=${clickedPage}`,{
-          method:"GET"
-        }
-      )
-      .then(res=>res.json())
-      .then((data) => {
-       setShops(data.shopdata);
-        setPagiNationData(data.paginateData);
+      setIsLoading(true);
+      fetch(`http://localhost:5000/paginated-regional-shops?regionId=${regionId}&page=${clickedPage}`, {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+        },
       })
-      .catch((e) => {
+        .then((res) => res.json())
+        .then((data) => {
+          setIsLoading(false)
+          setShops(data.shopdata);
+          setPagiNationData(data.paginateData);
+        }).catch((e) => {
         console.log(e);
         setPagiNationData({});
       });
     } else {
-      fetch(
-        `http://localhost:5000/paginated-shops?&page=1`,{
-          method:"GET"
-        }
-      )
-      .then(res=>res.json())
-      .then((data ) => {
-       setShops(data.shopdata);
-        setPagiNationData(data.paginateData);
+      fetch(`http://localhost:5000/paginated-regional-shops?regionId=${regionId}&page=1`, {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+        },
       })
-      .catch((e) => {
+        .then((res) => res.json())
+        .then((data) => {
+          setIsLoading(false)
+          setShops(data.shopdata);
+          setPagiNationData(data.paginateData);
+        }).catch((e) => {
         console.log(e);
         setPagiNationData({});
       });
@@ -102,36 +105,45 @@ const ShowAllShops = () => {
   }
   useEffect(() => {
     setIsLoading(true);
-    if (username === null || role !== "0") {
+    if (username === null || role !== "2") {
       localStorage.clear();
       navigate("/");
     }
-    fetch("http://localhost:5000/users", {
+    fetch(`http://localhost:5000/users/${userId}`, {
       method: "GET",
       headers: {
         "content-type": "application/json",
       },
     })
       .then((res) => res.json())
-      .then((data) =>{ 
-        setUsers(data);
-        setSrs(data.filter(d=>d.role==='3'));
-        setIsLoading(false);
-    }).catch(err=>console.log(err));
-    fetch("http://localhost:5000/paginated-shops?page=1", {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) =>{ 
-        setShops(data.shopdata);
-        setPagiNationData(data.paginateData);
-        setIsLoading(false);
-    }).catch(err=>console.log(err));
-
-
+      .then((data) => {
+        setRegionId(data[0].region_id)
+        fetch(`http://localhost:5000/paginated-regional-shops?regionId=${data[0]?.region_id}`, {
+            method: "GET",
+            headers: {
+              "content-type": "application/json",
+            },
+          })
+            .then((res) => res.json())
+            .then((shopData) => {
+                setShops(shopData.shopdata);
+                setPagiNationData(shopData.paginateData);              
+                setIsLoading(false)
+            }).catch(err=>console.log(err));
+      }).catch(err=>console.log(err));
+      
+      fetch(`http://localhost:5000/users?managed_by=${userId}`, {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((srData) => {
+            console.log(srData);
+            setAsmSrs(srData);
+          setIsLoading(false)
+        }).catch(err=>console.log(err));
     fetch("http://localhost:5000/district", {
       method: "GET",
       headers: {
@@ -139,10 +151,11 @@ const ShowAllShops = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) =>{ 
-        setDistrict(data)
+      .then((data) => {
+        setDistrict(data)      
         setIsLoading(false);
-      }).catch(err=>console.log(err));
+      })
+      .catch(err=>console.log(err))
 
     fetch("http://localhost:5000/subdistrict", {
       method: "GET",
@@ -151,10 +164,11 @@ const ShowAllShops = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) =>{ 
-        setSubD(data)
+      .then((data) => {
+        setSubD(data)        
         setIsLoading(false);
-      }).catch(err=>console.log(err));
+      })
+      .catch(err=>console.log(err))
 
     fetch("http://localhost:5000/thana", {
       method: "GET",
@@ -164,20 +178,18 @@ const ShowAllShops = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setThana(data)
+        setThana(data);
         setIsLoading(false);
-      }).catch(err=>console.log(err));
-  }, [username, role, navigate]);
+      }).catch(err=>console.log(err))
+  }, [username, role, navigate, userId]);
   return (
     <div>
-      {
-        isLoading && <Loader></Loader>
-      }
-      <div className="text-center my-6">
-        <p className="text-4xl font-bold">All shops</p>
+      <div className="text-center">
+        <p className="text-4xl font-bold mb-4">Shops</p>
       </div>
-      <div className='overflow-x-auto w-full'>
-            <table className='mx-auto   w-full whitespace-nowrap rounded-lg bg-white divide-y  overflow-hidden'>
+      {isLoading && <Loader></Loader>}
+      <div className='table-class overflow-x-auto w-full'>
+        <table className='mx-auto w-full whitespace-nowrap rounded-lg bg-white divide-y  overflow-hidden'>
           <thead>
             <tr>
               <th>Shop Name</th>
@@ -186,12 +198,12 @@ const ShowAllShops = () => {
               <th>Division</th>
               <th>District</th>
               <th>Upozilla/Thana</th>
-              <th>Managed By</th>
+              <th>Manage By</th>
               <th>Edit</th>
             </tr>
           </thead>
           <tbody>
-            {shops.length > 0 &&
+            {shops?.length > 0 &&
               shops.map((it) => (
                 <tr key={it._id}>
                   <td>{it.shop_name}</td>
@@ -204,16 +216,16 @@ const ShowAllShops = () => {
                         .label}
                   </td>
                   <td>
-                    {
-                    it.thana? (thana?.length>0 && thana?.filter(th=>th.value===it.thana)[0]?.label) : (subD?.length>0 && subD?.filter(sub=>sub.value===it.subdistrict)[0].label)
-                    
-                    }
+                    {it.thana
+                      ? thana?.length > 0 &&
+                        thana?.filter((th) => th.value === it.thana)[0]?.label
+                      : subD?.length > 0 &&
+                        subD?.filter((sub) => sub.value === it.subdistrict)[0]
+                          .label}
                   </td>
-                  <td>{it.managed_by===''?  <label htmlFor="edit-modal" onClick={()=>setSingleShop(it)} className="ml-4 btn bg-green-900 text-white">
+                  <td>{it.managed_by!=='' ? asmSrs.filter(sr=>sr._id===it.managed_by)[0]?.name   :<label htmlFor="edit-modal" onClick={()=>setSingleShop(it)} className="ml-4 btn bg-green-900 text-white">
                         Assign SR
-                      </label>
-                      :
-                       users.filter(u=>u._id===it.managed_by)[0]?.name}
+                      </label>}
                   </td>
                   <td>
                   <label htmlFor="edit-shop" onClick={()=>setSingleShop(it)} className="ml-4 btn bg-green-900 text-white">
@@ -296,8 +308,8 @@ const ShowAllShops = () => {
               
             >
               <option></option>
-              {srs.length > 0 &&
-                srs.map((sr) => (
+              {asmSrs.length > 0 &&
+                asmSrs.map((sr) => (
                   singleShop.region_id===sr.region_id && <option key={sr._id} value={sr._id} 
                     selected={singleShop.managed_by===sr._id}
                   >
@@ -337,8 +349,8 @@ const ShowAllShops = () => {
               className=" input input-bordered w-full lg:w-1/2 mb-4"
             >
               <option></option>
-              {srs.length > 0 &&
-                srs.map((sr) => (
+              {asmSrs.length > 0 &&
+                asmSrs.map((sr) => (
                   <option key={sr._id} value={sr._id}>
                     {sr.name}
                   </option>
@@ -366,4 +378,4 @@ const ShowAllShops = () => {
   );
 };
 
-export default ShowAllShops;
+export default ShopUnderASM;

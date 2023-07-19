@@ -145,7 +145,10 @@ const ShowDistributedProducts = () => {
     .then(data=>{
       setUsers(data)
       setIsLoading(false);
-    }).catch(err=>console.log(err))
+    }).catch(err=>{
+      console.log(err);
+      setIsLoading(false)
+    })
   }, [id,role,navigate]);
   return (
     <div>

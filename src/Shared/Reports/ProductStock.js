@@ -10,7 +10,7 @@ const ProductStock = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [products,setProducts] = useState([]);
-  const [allProducts,setAllProducts] = useState([]);
+  // const [allProducts,setAllProducts] = useState([]);
   const [totalProduct,setTotalProduct] = useState(0);
   const [totalCost,setTotalCost] = useState(0);
   const [filteredProduct,setFilteredProduct] = useState(null);
@@ -18,7 +18,6 @@ const ProductStock = () => {
   const [filteredSecondaryCategory,setFilteredSecondaryCategory] = useState(null);
   let serial = 1 ;
   let excelData =[];
-  console.log(allProducts);
   // let allExcelData = [];
   const productExcelData = [];
   const setExcelDataBundle = (allProducts) => {
@@ -149,17 +148,20 @@ const ProductStock = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        if(data.length>0){
+        const productData = data;
         let tot= 0;
         let pieces = 0;
         if(data.length>0){
-            for(let i=0;i<data.length;i++){
-                pieces =pieces + parseInt(data[i].total_pieces);
-                 tot = tot + (parseInt(data[i].total_pieces)* parseInt(data[i].unit_price))
+            for(let i=0;i<productData.length;i++){
+                pieces =pieces + parseInt(productData[i]?.total_pieces);
+                 tot = tot + (parseInt(productData[i]?.total_pieces)* parseInt(productData[i]?.unit_price))
             }
         }
         setTotalProduct(pieces);
         setTotalCost(tot);
         setIsLoading(false);
+        }
       });
     fetch(`http://localhost:5000/paginate-product`, {
       method: "GET",
@@ -173,14 +175,14 @@ const ProductStock = () => {
         setPagiNationData(data.paginateData);
         setIsLoading(false);
       });
-    fetch(`http://localhost:5000/all-product-d`, {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setAllProducts(data));
+    // fetch(`http://localhost:5000/all-product-d`, {
+    //   method: "GET",
+    //   headers: {
+    //     "content-type": "application/json",
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => setAllProducts(data));
   }, [username, navigate, role]);
   return (
     <div>

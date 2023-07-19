@@ -95,7 +95,7 @@ const AddShop = () => {
         .then((res) => res.json())
         .then((data) => {
           setRegions(data);
-        });
+        }).catch(err=>console.log(err));
     } else if (role === "1") {
       fetch(`http://localhost:5000/region?assigned=${userId}`, {
         method: "GET",
@@ -106,7 +106,7 @@ const AddShop = () => {
         .then((res) => res.json())
         .then((data) => {
           setRegions(data);
-        });
+        }).catch(err=>console.log(err));
     } else {
       fetch(`http://localhost:5000/users/${userId}`, {
         method: "GET",
@@ -128,7 +128,7 @@ const AddShop = () => {
             .then(data=>{
               setSelectedRegion(data);
                 setRegions(data);
-            })
+            }).catch(err=>console.log(err))
 
             fetch(`http://localhost:5000/users?role=3&region_id=${regionId}`, {
               method: "GET",
@@ -139,7 +139,7 @@ const AddShop = () => {
               .then((res) => res.json())
               .then((data) => {
                 setManagedBy(data[0]?._id);
-              });
+              }).catch(err=>console.log(err));
           } else {
             fetch(`http://localhost:5000/region/${regionId}`, {
               method: "GET",
@@ -152,7 +152,7 @@ const AddShop = () => {
                 setSelectedRegion(data);
                 setRegions(data);
                 setManagedBy(userId);
-              });
+              }).catch(err=>console.log(err));
           }
         });
     }
@@ -180,7 +180,7 @@ const AddShop = () => {
         },
       })
         .then((res) => res.json())
-        .then((data) => setUpozilla(data));
+        .then((data) => setUpozilla(data)).catch(err=>console.log(err));
     }
   }, [
     navigate,

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import imgLogo from "../../assets/images/logo/logo-rmv.png";
 import './Sidebar.css';
@@ -12,31 +12,36 @@ const Sidebar = () => {
   let menuItems;
   if (role === "0") {
     menuItems = (
-      <>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/show-all-shops">
+      <> 
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/show-all-shops">
             View All Shops
-          </Link>
-        </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/addregion">
+          </NavLink>
+        </li> 
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/addregion">
             Add Region
-          </Link>
+          </NavLink>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/super-sr">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/super-sr">
             My SR
-          </Link>
+          </NavLink>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/distribute-product-super-sr">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/distribute-product">
+            Distribute Products To ASM
+          </NavLink>
+        </li>
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/distribute-product-super-sr">
             Distribute Products to SR
-          </Link>
+          </NavLink>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/show-distributed-product">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/show-distributed-product">
             Show Distribute Products
-          </Link>
+          </NavLink>
         </li>
       </>
     );
@@ -45,30 +50,30 @@ const Sidebar = () => {
     menuItems = (
       <>
         
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/my-asm">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/my-asm">
             My ASM
-          </Link>
+          </NavLink>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/sr-under-me">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/sr-under-me">
             SR Under Me
-          </Link>
+          </NavLink>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/shop-under-me">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/shop-under-me">
             Shop Under Me
-          </Link>
+          </NavLink>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/distribute-product">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/distribute-product">
             Distribute Products To ASM
-          </Link>
+          </NavLink>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/show-distributed-product">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/show-distributed-product">
             Show Distribute Products
-          </Link>
+          </NavLink>
         </li>
       </>
     );
@@ -76,35 +81,40 @@ const Sidebar = () => {
   if (role === "2") {
     menuItems = (
       <>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/my-sr">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/show-asm-shops">
+            Shop Under Me
+          </NavLink>
+        </li>
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/my-sr">
             My SR
-          </Link>
+          </NavLink>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/recieved-product">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/recieved-product">
             Recieved Products
-          </Link>
+          </NavLink>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/available-product">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/available-product">
             Available Products
-          </Link>
+          </NavLink>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/distribute-product-to-sr">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/distribute-product-to-sr">
             Distribute to SR
-          </Link>
+          </NavLink>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/return-product-from-sr">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/return-product-from-sr">
             Return from SR
-          </Link>
+          </NavLink>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/show-distributed-product">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/show-distributed-product">
             Show Distribute Products
-          </Link>
+          </NavLink>
         </li>
       </>
     );
@@ -112,36 +122,36 @@ const Sidebar = () => {
   if (role === "3") {
     menuItems = (
       <>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/recieved-product">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/recieved-product">
             Recieved Products
-          </Link>
+          </NavLink>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/available-product-sr">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/available-product-sr">
             Available Products
-          </Link>
+          </NavLink>
         </li>
 
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/view-shops">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/view-shops">
             My Shops
-          </Link>
+          </NavLink>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/distribute-product-to-shop">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/distribute-product-to-shop">
             Distribute to Shop
-          </Link>
+          </NavLink>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/distribution-to-shop">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/distribution-to-shop">
             Show Shop Distribution
-          </Link>
+          </NavLink>
         </li>
-        <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/shop-transaction">
+        <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px]" to="/shop-transaction">
             My Shop Transaction
-          </Link>
+          </NavLink>
         </li>
       </>
     );
@@ -184,7 +194,7 @@ const Sidebar = () => {
         <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
         <ul className="menu  pb-4 bg-green-900 border-0">
           <li className="flex flex-row justify-around items-center">
-            <Link
+            <NavLink
               to={`${username === null ? "/" : "/home"}`}
               className=" normal-case text-xl mt-2 hover:bg-green-900"
             >
@@ -193,7 +203,7 @@ const Sidebar = () => {
                 alt="logo"
                 className="w-[80px] h-[40px] lg:w-[60px] lg:h-[60px]"
               />
-            </Link>
+            </NavLink>
             <Link
               onClick={() => handleLogOut()}
               className="btn btn-outline  rounded-lg mt-2  text-white font-extrabold"
@@ -222,11 +232,11 @@ const Sidebar = () => {
           </svg>
 
           <div className="dr-menu ">
-            <Link to="/addadmin">Add Unit</Link>
-            <Link to="/show-unit">Show Units</Link>
-            <Link to="/add-factory-item">Add Factory Item</Link>
-            <Link to="/show-factory-item">Show Factory Item</Link>
-            <Link to="/factory-report">Factory Report</Link>
+            <NavLink to="/add-unit">Add Unit</NavLink>
+            <NavLink to="/show-unit">Show Units</NavLink>
+            <NavLink to="/add-factory-item">Add Factory Item</NavLink>
+            <NavLink to="/show-factory-item">Show Factory Item</NavLink>
+            <NavLink to="/factory-report">Factory Report</NavLink>
           </div>
           </span>
         
@@ -240,10 +250,10 @@ const Sidebar = () => {
           </svg>
 
           <div className="dr-menu ">
-            { role==="0" && <Link to="/addadmin">Add Admin</Link>}
-            { (role==="0" || role==="1") && <Link to="/add-asm">Add ASM</Link>}
-           { role!=='3' && <Link to="/add-sr">Add SR</Link>}           
-           { role==="0" && <Link to="/view-users">View All Users</Link>}
+            { role==="0" && <NavLink to="/addadmin">Add Admin</NavLink>}
+            { (role==="0" || role==="1") && <NavLink to="/add-asm">Add ASM</NavLink>}
+           { role!=='3' && <NavLink to="/add-sr">Add SR</NavLink>}           
+           { role==="0" && <NavLink to="/view-users">View All Users</NavLink>}
           </div>
           </span>
         
@@ -257,8 +267,8 @@ const Sidebar = () => {
           </svg>
 
           <div className="dr-menu ">
-          <Link to="/add-primary-item">Add Primary Items</Link>
-          <Link to="/show-items">Show Items</Link>
+          <NavLink to="/add-primary-item">Add Primary Items</NavLink>
+          <NavLink to="/show-items">Show Items</NavLink>
           </div>
           </span>
         
@@ -272,35 +282,35 @@ const Sidebar = () => {
           </svg>
 
           <div className="dr-menu ">
-          <Link to="/addproduct">Add Product</Link>
-          <Link to="/show-product">Show Products</Link>
+          <NavLink to="/addproduct">Add Product</NavLink>
+          <NavLink to="/show-product">Show Products</NavLink>
           </div>
           </span>
         
-      </li> : role==="1" && <li className="ml-0 lg:mx-2">
-      <Link to="/show-product">Show Products</Link>
+      </li> : role==="1" && <li className="ml-0 lg:mx-2  ">
+      <NavLink to="/show-product">Show Products</NavLink>
           </li>
         }
           {
             role==="3"? <>
-            <li className="ml-0 lg:mx-2">
-            <Link className="py-[5px] my-[5PX]" to="/addshop">
+            <li className="ml-0 lg:mx-2 active:bg-white">
+            <NavLink className="py-[5px] my-[5px]" to="/addshop">
               Add Shop
-            </Link>
+            </NavLink>
           </li></>
           :
           <>
-          <li className="ml-0 lg:mx-2">
-          <Link className="py-[5px] my-[5PX]" to="/addshopbyothers">
+          <li className="ml-0 lg:mx-2  ">
+          <NavLink className="py-[5px] my-[5px] " to="/addshopbyothers">
             Add Shop
-          </Link>
+          </NavLink>
         </li>
         </>
           }
           {menuItems}
           
           {
-          <li  className="hover:mb-40 mx-0 lg:mx-2" >
+          <li   className="hover:mb-40 mx-0 lg:mx-2" >
           <span className="hovmenu hover:bg-white hover:text-black ">REPORTS 
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="ml-2 inline-block w-7  h-7 font-extrabold">
           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -308,51 +318,51 @@ const Sidebar = () => {
 
           <div className="dr-menu ">
           {
-            role==="0" && <Link className="py-[5px] my-[5PX]" to="/viewregion">
+            role==="0" && <NavLink className="py-[5px] my-[5px]" to="/viewregion">
             Zone Report
-          </Link>
+          </NavLink>
           }
           {
-            (role==="0" || role==="1") && <Link className="py-[5px] my-[5PX]" to="/product-stock-report">
+            (role==="0" || role==="1") && <NavLink className="py-[5px] my-[5px]" to="/product-stock-report">
             Product Stock Report
-          </Link>
+          </NavLink>
           }
           {
-            (role==="0" || role==="1") && <Link className="py-[5px] my-[5PX]" to="/product-sales-report">
+            (role==="0" || role==="1") && <NavLink className="py-[5px] my-[5px]" to="/product-sales-report">
             Product Sales Report
-          </Link>
+          </NavLink>
           }
           {
-            (role==="0" || role==="1") && <Link className="py-[5px] my-[5PX]" to="/admin-send-product-report">
+            (role==="0" || role==="1") && <NavLink className="py-[5px] my-[5px]" to="/admin-send-product-report">
             Distribution to ASM Report
-          </Link>
+          </NavLink>
           }
           {
-            (role!=="3") && <Link className="py-[5px] my-[5PX]" to="/asm-send-product-report">
+            (role!=="3") && <NavLink className="py-[5px] my-[5px]" to="/asm-send-product-report">
             Distribution to SR Report
-          </Link>
+          </NavLink>
           }
           
           
-          <Link className="py-[5px] my-[5PX]" to="/shop-report">
+          <NavLink className="py-[5px] my-[5px]" to="/shop-report">
               Shop Report
-            </Link>
-          <Link className="py-[5px] my-[5PX]" to="/sales-report">
+            </NavLink>
+          <NavLink className="py-[5px] my-[5px]" to="/sales-report">
               Sales Report
-            </Link>
-            <Link className="py-[5px] my-[5PX]" to="/cash-collection-report">
+            </NavLink>
+            <NavLink className="py-[5px] my-[5px]" to="/cash-collection-report">
               Cash Collection Report
-            </Link>
+            </NavLink>
 
           </div>
           </span>
         
       </li>
         }
-          <li className="ml-0 lg:mx-2">
-            <Link className="py-[5px] my-[5PX]" to="/change-password">
+          <li className="ml-0 lg:mx-2  ">
+            <NavLink className="py-[5px] my-[5px]" to="/change-password">
               Change Password
-            </Link>
+            </NavLink>
           </li>
           
         </ul>

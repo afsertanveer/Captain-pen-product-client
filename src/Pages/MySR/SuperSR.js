@@ -25,7 +25,7 @@ const SuperSR = () => {
   return (
     <div>
       <div className="text-center">
-        <p className="text-4xl font-bold">My SR</p>
+        <p className="text-4xl font-bold my-12">My SR</p>
       </div>
       <div className='table-class overflow-x-auto w-full'>
         <table className='mx-auto w-full whitespace-nowrap rounded-lg bg-white divide-y  overflow-hidden'>

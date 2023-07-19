@@ -92,7 +92,8 @@ const ShopReport = () => {
       singleItem.shopAddress = shopAddress;
       singleItem.totalDue = totalDue;
       singleItem.srName = srName;
-      singleItem.asmName = asmName;
+      singleItem.asmName = asmName;      
+      console.log(asmName);
       singleItem.zoneName = zoneName;
       singleItem.totalCashCollection = totalCashCollection;
       singleItem.currentDue = totalDue- totalCashCollection;
@@ -461,7 +462,7 @@ const ShopReport = () => {
                 <td>{se.totalDue}</td>
                 <td>{se.totalCashCollection}</td>
                 <td>{se.currentDue}</td>
-                {role==='0' && <td>{se.zoneName}</td>}
+                {(role==='0'||role==='1') && <td>{se.zoneName}</td>}
                 {role!=='3'&& <td>{se.srName}</td>}
                 {(role==='0' || role==='1') && <td>{se.asmName}</td>}
                 {role==='0' && <td>{se.adminName}</td>}

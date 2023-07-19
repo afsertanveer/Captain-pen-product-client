@@ -258,6 +258,7 @@ const FactoryReport = () => {
               <th>Increase Amount</th>
               <th>Decrease Amount</th>
               <th>Done By</th>
+              <th>Remarks</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -276,6 +277,9 @@ const FactoryReport = () => {
                   <td>{it.increase_amount===0? "-" : it.increase_amount}</td>
                   <td>{it.decrease_amount===0? "-" : it.decrease_amount}</td>
                   <td>{it.user}</td>
+                  <td>{it.increase_amount>0? (it.previous_stock + '(Previous Stock) + ' + it.increase_amount + '(Increased Amount) = '  + it.current_stock +'(Current Stock)') :
+                    (it.previous_stock + ' (Previous Stock) - ' + it.decrease_amount + ' (Decreased Amount)= ' + it.current_stock +'(Current Stock)')
+                  }</td>
                   <td> 
                     {
                       role==="0"? 

@@ -52,6 +52,7 @@ import AddFactoryItem from "../Pages/Factory/AddFactoryItem";
 import ShowFactoryItem from "../Pages/Factory/ShowFactoryItem";
 import FactoryReport from "../Pages/Factory/FactoryReport";
 import AddAndAssignShop from "../Pages/AddShop/AddAndAssignShop";
+import ShopUnderASM from "../Pages/ShowShops/ShopUnderASM";
 
 const router = createBrowserRouter([
   {
@@ -89,6 +90,10 @@ const router = createBrowserRouter([
       {
         path:'/show-all-shops',
         element:<ShowAllShops></ShowAllShops>
+      },
+      {
+        path:'/show-asm-shops',
+        element:<ShopUnderASM></ShopUnderASM>
       },
       {
         path:'/show-cv',

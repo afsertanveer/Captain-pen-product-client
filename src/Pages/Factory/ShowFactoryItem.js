@@ -104,7 +104,7 @@ const ShowFactoryItem = () => {
     const increaseAmount = e.target.amount.value;
     const decreaseAmount = 0;
     const item_name = singleItem.item_name;
-    const previousStock = singleItem.initial_amount;
+    const previousStock = singleItem.current_amount;
     const currentStock = (parseInt(previousStock) + parseInt(increaseAmount)).toString();
     const time= new Date();
     const factoryStock= {
@@ -147,7 +147,7 @@ const ShowFactoryItem = () => {
     const decreaseAmount = e.target.amount.value;
     const increaseAmount = 0;
     const item_name = singleItem.item_name;
-    const previousStock = singleItem.initial_amount;
+    const previousStock = singleItem.current_amount;
     const currentStock = (parseInt(previousStock) - parseInt(decreaseAmount)).toString();
     const time= new Date();
     console.log(currentStock);

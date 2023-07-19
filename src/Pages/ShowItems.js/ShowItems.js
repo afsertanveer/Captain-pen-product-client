@@ -42,7 +42,7 @@ const ShowItems = () => {
     })
       .then((res) => res.json())
       .then((data) => setItems(data));
-  })
+  },[username,role,navigate])
   return (
     <div>
       <div className="text-center">
