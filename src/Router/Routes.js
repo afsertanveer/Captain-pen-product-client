@@ -96,7 +96,7 @@ const router = createBrowserRouter([
         element:<ShopUnderASM></ShopUnderASM>
       },
       {
-        path:'/show-cv',
+        path:'/show-cv/:id',
         element:<ShowCV></ShowCV>
       },
       {

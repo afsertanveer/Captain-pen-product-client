@@ -12,7 +12,7 @@ const AvailableProductSr = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    if (role === "0" || role === "1") {
+    if (role === "0" || role === "1" || userId===undefined) {
       localStorage.clear();
       navigate("/");
     }

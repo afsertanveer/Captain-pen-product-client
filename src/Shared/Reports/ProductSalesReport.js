@@ -6,6 +6,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import Pagination from "../Pagination/Pagination";
 import { exportToCSV, fileName } from "../../utils/exportCSV";
+import { toast } from "react-hot-toast";
 
 const ProductSalesReport = () => {
   const username = localStorage.getItem("username");
@@ -43,7 +44,8 @@ const ProductSalesReport = () => {
   const setExcelBundleData = (salesData) => {
     let excelData = [];    
     let count = 1;
-     salesData.forEach((s) => {
+    console.log(salesData);
+     salesData?.forEach((s) => {
       const singleItem = {};
       singleItem.serialIndex = count;
       singleItem.transactionId = s.transactionDetails.transaction_id;
@@ -184,9 +186,14 @@ const ProductSalesReport = () => {
       )
       .then(res=>res.json())
       .then((data ) => {
-        setSales(data.data)
+        console.log(data);
+        if(data.data){
+          setSales(data.data)
         salesExcel = setExcelBundleData(sales);
         setPagiNationData(data.paginateData);
+        }else{
+          toast.error("no data");
+        }
       })
       .catch((e) => {
         console.log(e);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ShowCV = () => {
   const userId = localStorage.getItem("user_id");
@@ -8,12 +8,14 @@ const ShowCV = () => {
   const navigate = useNavigate();
   const [cvImages, setCvImages] = useState([]);
 
+  const params = useParams()
+
   useEffect(() => {
-    if (userId === null || role !== "3") {
+    if (userId === null || role === "3") {
       localStorage.clear();
       navigate("/");
     }
-    fetch(`http://localhost:5000/users/${userId}`, {
+    fetch(`http://localhost:5000/users/${params.id}`, {
       method: "GET",
       headers: {
         "content-type": "application/json",
@@ -23,9 +25,10 @@ const ShowCV = () => {
       .then((data) => {
         if (data.length > 0) {
           setCvImages(data[0]?.cv);
+          console.log(data);
         }
       });
-  }, [userId, role, navigate]);
+  }, [userId, role, navigate,params]);
   return (
     <div>
       <div className="text-center font-bold text-primary text-4xl">MY CV</div>
@@ -34,10 +37,13 @@ const ShowCV = () => {
           cvImages.map((img, idx) => (
             <div key={idx} className="p-4 my-6  border-2 border-black">
               <img
-                src={img.img}
-                alt="cv-images"
-                className="w-[400px] h-[600px]"
-              />
+                        src={
+                          process.env.REACT_APP_API_HOST +
+                          "/" +
+                          img.img
+                        }
+                        alt=""
+                      />
             </div>
           ))}
       </div>

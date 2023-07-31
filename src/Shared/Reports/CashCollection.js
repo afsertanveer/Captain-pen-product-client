@@ -6,6 +6,7 @@ import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import Pagination from "../Pagination/Pagination";
+import { toast } from "react-hot-toast";
 
 const CashCollection = () => {
   const username = localStorage.getItem("username");
@@ -208,7 +209,7 @@ const CashCollection = () => {
             key: "selection",
           },
         ]);
-      });
+      }).catch(e=>console.log(e));
       e.target.reset();
       document.getElementById('my-modal').checked = false;
   };
@@ -304,7 +305,7 @@ const CashCollection = () => {
             setSRUsers(data.filter((d) => d.managed_by === userId));
           }
           setIsLoading(false);
-        });
+        }).catch(e=>console.log(e));
     }
     fetch("http://localhost:5000/shop", {
       method: "GET",
@@ -328,7 +329,7 @@ const CashCollection = () => {
                   }
                 }
               }
-            });
+            }).catch(e=>console.log(e));
         } else if (role === "2") {
           if (data.length > 0) {
             fetch(`http://localhost:5000/users/${userId}`, {
@@ -359,17 +360,21 @@ const CashCollection = () => {
         }
 
         setIsLoading(false);
-      });
+      }).catch(e=>console.log(e))
 
     fetch("http://localhost:5000/cash-collection-report", {
       method: "GET",
     })
       .then((res) => res.json())
       .then((data) => {
-        setCashCollectionReport(data.data);
-        setPagiNationData(data.paginateData);
-        setIsLoading(false);
-      });
+        if(data.data){
+          setCashCollectionReport(data.data);
+          setPagiNationData(data.paginateData);
+          setIsLoading(false);
+        }else{
+          toast.error("No data Found Yet")
+        }
+      }).catch(e=>console.log(e))
   }, [username, navigate, userId, role]);
   return (
     <div>

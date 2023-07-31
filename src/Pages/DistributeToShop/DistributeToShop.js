@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import axios from "axios";
 
 const DistributeToShop = () => {
   const username = localStorage.getItem("username");
   const role = localStorage.getItem("role");
   const userId = localStorage.getItem("user_id");
   const navigate = useNavigate();
-
-  const imageHostKey = "ebd4060c9b00b8b0232d789d6ffbf217";
 
   const [products, setProducts] = useState([]);
   const [productList, setProductList] = useState([]);
@@ -25,10 +24,9 @@ const DistributeToShop = () => {
   const [paymenetError, setPaymentError] = useState("");
   const [transactionId, setTransactionId] = useState(0);
   const [dueInfo, setDueInfo] = useState([]);
-  const [discount,setDiscount] = useState(0);
+  const [discount, setDiscount] = useState(0);
   const [isDueAvailable, setIsDueAvailable] = useState(false);
-  const [saveTotal,setSaveTotal] = useState(0);
-  let imgLinks = [];
+  const [saveTotal, setSaveTotal] = useState(0);
 
   const addProduct = (e) => {
     e.preventDefault();
@@ -159,138 +157,118 @@ const DistributeToShop = () => {
       });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const currentDate = new Date();
     const senderId = localStorage.getItem("user_id");
     const recieverId = event.target.selectAsm.value;
     const totalBill = parseFloat(document.getElementById("total").value);
-    let paid=0;
-    if(document.getElementById("pay").value!==''){
-       paid = parseFloat(document.getElementById("pay").value);
+    let paid = 0;
+    if (document.getElementById("pay").value !== "") {
+      paid = parseFloat(document.getElementById("pay").value);
     }
     const due = totalBill - paid;
     const selected = [...selectedProductList];
     let img = event.target.attach_image1.files;
     let formData = new FormData();
 
-    const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`;
-
-    let transaction = {};
     let dueEntry = {};
     const numbOfImages = img.length;
-    if(numbOfImages<=4){
-      for(let i=0;i<img.length;i++){     
-      
-        formData.append("image", img[i]);
-            fetch(url, {
-            method: "POST",
-            body: formData,
-          })
-            .then((res) => res.json())
-            .then((imgData) => {
-             imgLinks.push(imgData.data.url);
-            });
-      
+    if (numbOfImages <= 4) {
+      for (let i = 0; i < img.length; i++) {
+        const oneImage = img[i];
+        console.log(oneImage);
+        formData.append("files", oneImage);
       }
-      
-        setTimeout(()=>{
-          transaction = {
-            transaction_id: transactionId,
-            shop_id: recieverId,
-            seller_id: senderId,
-            total_bill: totalBill,
-            due: due,
-            discount,
-            bill_img: imgLinks,
-            issue_date: currentDate,
-          };
-          const updatedDue = (
-            parseFloat(dueInfo[0] ? dueInfo[0].due : 0) + parseFloat(due)
-          )
-            .toFixed(2)
-            .toString();
-          dueEntry = {
-            shop_id: recieverId,
-            seller_id: senderId,
-            due: updatedDue,
-            issue_date: currentDate,
-          };
-          selected.forEach((item) => {
-            item.transaction_id = transactionId;
-            item.sender_id = senderId;
-            item.reciever_id = recieverId;
-            item.recieved_date = currentDate;
-          });
-          setSelectedProductList(selected);
-          selectedProductList.forEach((item) => {
-            fetch("http://localhost:5000/distributed-product-to-shop", {
-              method: "POST",
+      const transId = parseInt(transactionId)
+      formData.append("transaction_id", transId);
+      formData.append("shop_id", recieverId);
+      formData.append("seller_id", senderId);
+      formData.append("total_bill", totalBill);
+      formData.append("due", due);
+      formData.append("discount", discount);
+      formData.append("issue_date", currentDate);
+      for (var pair of formData.entries()) {
+        console.log(pair[0] + ", " + pair[1]);
+      }
+      const updatedDue = (
+        parseFloat(dueInfo[0] ? dueInfo[0].due : 0) + parseFloat(due)
+      )
+        .toFixed(2)
+        .toString();
+      dueEntry = {
+        shop_id: recieverId,
+        seller_id: senderId,
+        due: updatedDue,
+        issue_date: currentDate,
+      };
+      selected.forEach((item) => {
+        item.transaction_id = transactionId;
+        item.sender_id = senderId;
+        item.reciever_id = recieverId;
+        item.recieved_date = currentDate;
+      });
+      setSelectedProductList(selected);
+      selectedProductList.forEach((item) => {
+        fetch("http://localhost:5000/distributed-product-to-shop", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(item),
+        })
+          .then((res) => res.json())
+          .then((data) => {})
+          .catch((error) => setUpdateError(error));
+      });
+      if (updateError === "") {
+        toast.success("Succesfully distributed and stock updated");
+
+        const result = await axios.post(
+          `http://localhost:5000/transaction`,
+          formData
+        );
+        if (result) {
+          if (isDueAvailable) {
+            const id = dueInfo[0]?._id;
+            fetch(`http://localhost:5000/due/${id}`, {
+              method: "PUT",
               headers: {
                 "content-type": "application/json",
               },
-              body: JSON.stringify(item),
+              body: JSON.stringify(dueEntry),
             })
               .then((res) => res.json())
-              .then((data) => {})
-              .catch((error) => setUpdateError(error));
-          });
-          if (updateError === "") {
-            toast.success("Succesfully distributed and stock updated");
-  
-            fetch("http://localhost:5000/transaction", {
-              method: "POST",
-              headers: {
-                "content-type": "application/json",
-              },
-              body: JSON.stringify(transaction),
-            })
-              .then((res) => res.json())
-              .then((data) => {
-                if (data.acknowledged) {
-                  if (isDueAvailable) {
-                    const id = dueInfo[0]?._id;
-                    fetch(`http://localhost:5000/due/${id}`, {
-                      method: "PUT",
-                      headers: {
-                        "content-type": "application/json",
-                      },
-                      body: JSON.stringify(dueEntry),
-                    })
-                      .then((res) => res.json())
-                      .then((updateDueData) => {
-                        if (updateDueData.acknowledged) {
-                          setUpdateError("");
-                          setPaymentError("");
-                        }
-                      });
-                  } else {
-                    fetch("http://localhost:5000/due", {
-                      method: "POST",
-                      headers: {
-                        "content-type": "application/json",
-                      },
-                      body: JSON.stringify(dueEntry),
-                    })
-                      .then((res) => res.json())
-                      .then((dueData) => {
-                        if (dueData.acknowledged) {
-                          setUpdateError("");
-                          setPaymentError("");
-                        }
-                      });
-                  }
+              .then((updateDueData) => {
+                if (updateDueData.acknowledged) {
+                  setUpdateError("");
+                  setPaymentError("");
                 }
-              })
-              .catch((err) => setUpdateError(err));
+              });
           } else {
-            toast.error(`${updateError}`);
+            fetch("http://localhost:5000/due", {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify(dueEntry),
+            })
+              .then((res) => res.json())
+              .then((dueData) => {
+                if (dueData.acknowledged) {
+                  setUpdateError("");
+                  setPaymentError("");
+                }
+              });
           }
-          setSelectedProductList([]);
-          navigate('/distribution-to-shop');
-          event.target.reset();
-        },10000)
-    }else{
+        } else {
+          toast.error(`${updateError}`);
+        }
+      }
+      setSelectedProductList([]);
+      event.target.reset();
+      navigate("/distribution-to-shop");
+    } else {
       toast.error("Cannot Upload more than 4 images");
     }
   };
@@ -302,22 +280,22 @@ const DistributeToShop = () => {
       document.getElementById("pay").value = "";
     }
   };
-  const handleDiscount = e =>{
-    const discountAmount =parseFloat( e.target.value);
-    if(isNaN(discountAmount)===false){
-      if(discountAmount>parseFloat(saveTotal)){
-        document.getElementById("discount").value = 0;        
-        document.getElementById('total').value= saveTotal;
+  const handleDiscount = (e) => {
+    const discountAmount = parseFloat(e.target.value);
+    if (isNaN(discountAmount) === false) {
+      if (discountAmount > parseFloat(saveTotal)) {
+        document.getElementById("discount").value = 0;
+        document.getElementById("total").value = saveTotal;
         setDiscount(0);
-      }else{
-        document.getElementById('total').value=parseFloat(saveTotal)-discountAmount;
+      } else {
+        document.getElementById("total").value =
+          parseFloat(saveTotal) - discountAmount;
         setDiscount(discountAmount);
       }
-    }else{
-      document.getElementById('total').value= saveTotal;
+    } else {
+      document.getElementById("total").value = saveTotal;
     }
-    
-  }
+  };
   useEffect(() => {
     if (username === null || role !== "3") {
       localStorage.clear();
@@ -500,7 +478,7 @@ const DistributeToShop = () => {
             </>
           )}
         </div>
-        <div className="form-control">          
+        <div className="form-control">
           <div className="form-control">
             <label className="label">
               <span className="label-text font-bold">Discount</span>
@@ -512,7 +490,7 @@ const DistributeToShop = () => {
               className=" input input-bordered w-full lg:w-1/2 text-green-500"
               name="discount"
               id="discount"
-              min={1}
+              min={0}
               defaultValue={"0"}
             />
           </div>

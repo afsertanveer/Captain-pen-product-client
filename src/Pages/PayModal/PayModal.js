@@ -1,9 +1,9 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 
 const PayModal = ({modalProps}) => {
   const {shopId,sellerId,due} = modalProps;
-  const imageHostKey = "ebd4060c9b00b8b0232d789d6ffbf217";
   const [searchAmountError, setSearchAmountError] = useState("");
   const handleSearchAmount = (e) => {
     const amount = parseInt(e.target.value);
@@ -14,48 +14,24 @@ const PayModal = ({modalProps}) => {
       setSearchAmountError("");
     }
   };
-  const handleRecoveryPay = (e) => {
+  const handleRecoveryPay = async(e) => {
     e.preventDefault();
     const form = e.target;
     const amount = form.searched_amount.value;
     const image = e.target.bill.files[0];
     const currentDate = new Date();
     const formData = new FormData();
-    formData.append("image", image);
-
-    const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`;
-    fetch(url, {
-      method: "POST",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((imgData) => {
-        if (imgData.success) {
-          console.log(imgData.data.url);
-          const recoveryTransaction = {
-            shop_id: shopId,
-            seller_id: sellerId,
-            paying_amount: amount,
-            bill_link: imgData.data.url,
-            issue_date: currentDate,
-          };
-          fetch("http://localhost:5000/due-recovery", {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-            },
-            body: JSON.stringify(recoveryTransaction),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.acknowledged) {
-                toast.success("Payment successfull");
-                form.reset();
-                window.location.reload(false);
-              }
-            });
-        }
-      });
+    formData.append("file", image);
+    formData.append('shop_id',shopId);
+    formData.append('seller_id',sellerId);
+    formData.append('paying_amount',amount);
+    formData.append('issue_date',currentDate);
+    const result =await axios.post(`http://localhost:5000/due-recovery`,formData)
+      if(result){
+        form.reset();
+        toast.success("Payment successfull");
+        window.location.reload(false);
+      }
   };
   return (
     <>

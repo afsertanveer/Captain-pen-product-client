@@ -403,10 +403,14 @@ const SalesReport = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setSales(data.data);
+        if(data.data){
+          setSales(data.data);
         setPagiNationData(data.paginateData);
         setCurrentPage(1);
         setIsLoading(false);
+        }else{
+          toast.error("No Data");
+        }
       });
   }, [username, navigate, userId, role,currentPage]);
   return (
